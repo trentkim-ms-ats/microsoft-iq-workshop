@@ -1,0 +1,15 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/ontology/relationshipType/1.0.0/schema.json",
+  "id": "d2da3261-bb03-57da-882c-bc476c6259eb",
+  "namespace": "usertypes",
+  "name": "Return_references_Product",
+  "displayName": "Return references Product",
+  "description": "1:N (Product → Return)",
+  "namespaceType": "Custom",
+  "source": {
+    "entityTypeId": "042ce244-ff8c-59a4-a7ca-1f1aa284d76f"
+  },
+  "target": {
+    "entityTypeId": "58d69719-52fc-51ea-aef6-0fa527041d62"
+  }
+}

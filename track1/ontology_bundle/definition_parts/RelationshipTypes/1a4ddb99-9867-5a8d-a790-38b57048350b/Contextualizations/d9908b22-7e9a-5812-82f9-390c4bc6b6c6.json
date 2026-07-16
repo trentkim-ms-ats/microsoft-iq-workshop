@@ -1,0 +1,24 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/ontology/contextualization/1.0.0/schema.json",
+  "id": "d9908b22-7e9a-5812-82f9-390c4bc6b6c6",
+  "relationshipTypeId": "1a4ddb99-9867-5a8d-a790-38b57048350b",
+  "dataBindingTable": {
+    "sourceType": "LakehouseTable",
+    "workspaceId": "00000000-0000-0000-0000-000000000000",
+    "itemId": "00000000-0000-0000-0000-000000000000",
+    "sourceTableName": "campaign_attribution",
+    "sourceSchema": "dbo"
+  },
+  "sourceKeyRefBindings": [
+    {
+      "sourceColumnName": "campaign_id",
+      "targetPropertyId": "5800ea7b-80e3-5d09-acbc-295bab21e042"
+    }
+  ],
+  "targetKeyRefBindings": [
+    {
+      "sourceColumnName": "order_id",
+      "targetPropertyId": "8b0ccb4d-8ba9-50a6-9291-917de6f1bf85"
+    }
+  ]
+}

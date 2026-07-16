@@ -1,0 +1,15 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/ontology/relationshipType/1.0.0/schema.json",
+  "id": "77783302-78d2-5401-9831-ab615a37ff9a",
+  "namespace": "usertypes",
+  "name": "Order_belongs_to_Channel",
+  "displayName": "Order belongs_to Channel",
+  "description": "1:N (Channel → Order)",
+  "namespaceType": "Custom",
+  "source": {
+    "entityTypeId": "b2536c03-09ae-559f-bda3-ba431fcb9640"
+  },
+  "target": {
+    "entityTypeId": "7136b51e-8ea5-5ad9-8c23-153d1751a190"
+  }
+}

@@ -1,0 +1,302 @@
+# =============================================================================
+# Track1 Ontology Contract (선언적 정의 계약)
+# -----------------------------------------------------------------------------
+# 부록 B "선언적 일괄 정의 방식"의 원본 계약 파일입니다.
+# 이 파일 하나가 온톨로지의 단일 진실 원천(single source of truth)입니다.
+#   - entities:      엔터티(=Entity Type)와 속성(=Property), 원천 테이블/PK
+#   - relationships: FK로 뒷받침되는 물리 관계 (Contextualization 생성 대상)
+#   - logical_relationships: FK가 없는 다중 홉 논리 관계 (관계 타입만 생성)
+#
+# generate_definition.py 가 이 파일을 읽어 Fabric Ontology definition parts(JSON)
+# 들을 생성합니다. 컬럼/타입은 track1/data 의 실제 CSV 스키마와 1:1 정합.
+# =============================================================================
+
+ontology:
+  display_name: retail_track1_ontology_v1
+  description: "Track1 리테일 온톨로지 - 14 엔터티 / 17 물리관계 / 3 논리관계"
+
+# -----------------------------------------------------------------------------
+# 엔터티 (Entity Type + Property 인라인)
+#   primary_key: 문자열(단일) 또는 리스트(복합키)
+#   display:     displayNameProperty 로 사용할 컬럼 (미지정 시 primary_key 첫 컬럼)
+#   source:      Lakehouse Delta 테이블명 (= CSV 파일명 stem)
+#   fields:      속성 목록 (컬럼명 그대로; 타입은 generate_definition.py 규칙으로 추론)
+# -----------------------------------------------------------------------------
+entities:
+
+  Customer:
+    source: customers
+    primary_key: customer_id
+    display: customer_id
+    fields: [customer_id, customer_segment, customer_tier, join_date]
+
+  Product:
+    source: products
+    primary_key: product_id
+    display: product_name
+    fields: [product_id, product_name, category, unit_price, currency]
+
+  Channel:
+    source: channels
+    primary_key: channel_id
+    display: channel_name
+    fields: [channel_id, channel_name]
+
+  Campaign:
+    source: campaigns
+    primary_key: campaign_id
+    display: campaign_name
+    fields: [campaign_id, campaign_name, campaign_type, channel_id, start_date, end_date]
+
+  Promotion:
+    source: promotions
+    primary_key: promotion_id
+    display: promotion_name
+    fields: [promotion_id, promotion_name, promotion_type, discount_amount, start_date, end_date]
+
+  Order:
+    source: orders
+    primary_key: order_id
+    display: order_id
+    fields: [order_id, customer_id, channel_id, order_date, order_status,
+             gross_amount, discount_applied, net_amount, order_value, currency]
+
+  OrderItem:
+    source: order_items
+    primary_key: [order_id, product_id]   # 복합키
+    display: order_id
+    fields: [order_id, product_id, quantity, sales_amount]
+
+  Payment:
+    source: payments
+    primary_key: payment_id
+    display: payment_id
+    fields: [payment_id, order_id, payment_status, approved_amount, approved_at]
+
+  Shipment:
+    source: shipments
+    primary_key: shipment_id
+    display: shipment_id
+    fields: [shipment_id, order_id, shipment_status, delivered_at]
+
+  Return:
+    source: returns
+    primary_key: return_id
+    display: return_id
+    fields: [return_id, order_id, product_id, customer_id, return_reason, return_date]
+
+  SupportTicket:
+    source: support_tickets
+    primary_key: ticket_id
+    display: ticket_id
+    fields: [ticket_id, customer_id, order_id, ticket_type, ticket_reason, created_at]
+
+  InventorySnapshot:
+    source: inventory_snapshots
+    primary_key: snapshot_id
+    display: snapshot_id
+    fields: [snapshot_id, product_id, snapshot_date, on_hand_qty, reserved_qty]
+
+  OrderPromotion:
+    source: order_promotions
+    primary_key: [order_id, promotion_id]   # 복합키(브릿지)
+    display: order_id
+    fields: [order_id, promotion_id]
+
+  CampaignAttribution:
+    source: campaign_attribution
+    primary_key: [campaign_id, order_id]    # 복합키(브릿지)
+    display: campaign_id
+    fields: [campaign_id, order_id, customer_id, attribution_model, attributed_revenue]
+
+# -----------------------------------------------------------------------------
+# 물리 관계 (FK 기반) - RelationshipTypes + Contextualizations 생성
+#   from_entity : 부모(1측, 참조 대상)
+#   to_entity   : 자식(N측, FK 보유 테이블)
+#   binding_table : 조인 근거가 되는 Delta 테이블
+#   from_key    : binding_table 안에서 from_entity(부모)를 가리키는 컬럼(FK)
+#   to_key      : binding_table 안에서 to_entity(자식)를 식별하는 컬럼
+#   cardinality : 카디널리티 표기(문서/검증용)
+#   display_name: 실습지 정규 목록의 관계 표기(동사형)
+# -----------------------------------------------------------------------------
+relationships:
+
+  - name: Customer_places_Order
+    display_name: "Customer places Order"
+    from_entity: Customer
+    to_entity: Order
+    binding_table: orders
+    from_key: customer_id
+    to_key: order_id
+    cardinality: "1:N"
+
+  - name: Order_belongs_to_Channel
+    display_name: "Order belongs_to Channel"
+    from_entity: Channel
+    to_entity: Order
+    binding_table: orders
+    from_key: channel_id
+    to_key: order_id
+    cardinality: "1:N"
+
+  - name: Order_has_Payment
+    display_name: "Order has Payment"
+    from_entity: Order
+    to_entity: Payment
+    binding_table: payments
+    from_key: order_id
+    to_key: payment_id
+    cardinality: "1:N"
+
+  - name: Order_fulfilled_by_Shipment
+    display_name: "Order fulfilled_by Shipment"
+    from_entity: Order
+    to_entity: Shipment
+    binding_table: shipments
+    from_key: order_id
+    to_key: shipment_id
+    cardinality: "1:N"
+
+  - name: Order_includes_OrderItem
+    display_name: "Order includes OrderItem"
+    from_entity: Order
+    to_entity: OrderItem
+    binding_table: order_items
+    from_key: order_id
+    to_key: order_id
+    cardinality: "1:N"
+
+  - name: OrderItem_references_Product
+    display_name: "OrderItem references Product"
+    from_entity: Product
+    to_entity: OrderItem
+    binding_table: order_items
+    from_key: product_id
+    to_key: order_id
+    cardinality: "1:N"
+
+  - name: Order_has_Return
+    display_name: "Order has Return"
+    from_entity: Order
+    to_entity: Return
+    binding_table: returns
+    from_key: order_id
+    to_key: return_id
+    cardinality: "1:N"
+
+  - name: Return_references_Product
+    display_name: "Return references Product"
+    from_entity: Product
+    to_entity: Return
+    binding_table: returns
+    from_key: product_id
+    to_key: return_id
+    cardinality: "1:N"
+
+  - name: Return_requested_by_Customer
+    display_name: "Return requested_by Customer"
+    from_entity: Customer
+    to_entity: Return
+    binding_table: returns
+    from_key: customer_id
+    to_key: return_id
+    cardinality: "1:N"
+
+  - name: Customer_raises_SupportTicket
+    display_name: "Customer raises SupportTicket"
+    from_entity: Customer
+    to_entity: SupportTicket
+    binding_table: support_tickets
+    from_key: customer_id
+    to_key: ticket_id
+    cardinality: "1:N"
+
+  - name: SupportTicket_relates_to_Order
+    display_name: "SupportTicket relates_to Order"
+    from_entity: Order
+    to_entity: SupportTicket
+    binding_table: support_tickets
+    from_key: order_id
+    to_key: ticket_id
+    cardinality: "1:N"
+
+  - name: Product_has_InventorySnapshot
+    display_name: "Product has InventorySnapshot"
+    from_entity: Product
+    to_entity: InventorySnapshot
+    binding_table: inventory_snapshots
+    from_key: product_id
+    to_key: snapshot_id
+    cardinality: "1:N"
+
+  - name: Order_receives_OrderPromotion
+    display_name: "Order receives OrderPromotion"
+    from_entity: Order
+    to_entity: OrderPromotion
+    binding_table: order_promotions
+    from_key: order_id
+    to_key: promotion_id
+    cardinality: "1:N"
+
+  - name: OrderPromotion_points_to_Promotion
+    display_name: "OrderPromotion points_to Promotion"
+    from_entity: Promotion
+    to_entity: OrderPromotion
+    binding_table: order_promotions
+    from_key: promotion_id
+    to_key: order_id
+    cardinality: "1:N"
+
+  - name: Campaign_drives_CampaignAttribution
+    display_name: "Campaign drives CampaignAttribution"
+    from_entity: Campaign
+    to_entity: CampaignAttribution
+    binding_table: campaign_attribution
+    from_key: campaign_id
+    to_key: order_id
+    cardinality: "1:N"
+
+  - name: CampaignAttribution_points_to_Order
+    display_name: "CampaignAttribution points_to Order"
+    from_entity: Order
+    to_entity: CampaignAttribution
+    binding_table: campaign_attribution
+    from_key: order_id
+    to_key: campaign_id
+    cardinality: "1:N"
+
+  - name: CampaignAttribution_points_to_Customer
+    display_name: "CampaignAttribution points_to Customer"
+    from_entity: Customer
+    to_entity: CampaignAttribution
+    binding_table: campaign_attribution
+    from_key: customer_id
+    to_key: campaign_id
+    cardinality: "1:N"
+
+# -----------------------------------------------------------------------------
+# 논리 관계 (FK 없는 다중 홉/파생) - RelationshipTypes 만 생성, Contextualization 없음
+#   실제 조인은 브릿지/팩트 테이블을 경유하므로 단일 FK로 바인딩하지 않습니다.
+# -----------------------------------------------------------------------------
+logical_relationships:
+
+  - name: Promotion_influences_Order
+    display_name: "Promotion influences Order (logical)"
+    from_entity: Promotion
+    to_entity: Order
+    cardinality: "N:M"
+    derived_via: "order_promotions + orders"
+
+  - name: Campaign_influences_Order
+    display_name: "Campaign influences Order (logical)"
+    from_entity: Campaign
+    to_entity: Order
+    cardinality: "N:M"
+    derived_via: "campaign_attribution"
+
+  - name: Customer_purchases_Product
+    display_name: "Customer purchases Product (logical)"
+    from_entity: Customer
+    to_entity: Product
+    cardinality: "N:M"
+    derived_via: "orders + order_items"

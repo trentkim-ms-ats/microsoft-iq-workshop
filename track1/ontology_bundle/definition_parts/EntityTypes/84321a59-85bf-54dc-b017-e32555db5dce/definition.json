@@ -1,0 +1,48 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/ontology/entityType/1.0.0/schema.json",
+  "id": "84321a59-85bf-54dc-b017-e32555db5dce",
+  "namespace": "usertypes",
+  "baseEntityTypeId": null,
+  "name": "InventorySnapshot",
+  "description": "InventorySnapshot (source: inventory_snapshots)",
+  "entityIdParts": [
+    "2cee04bd-f39c-5d01-b190-43b9423693fe"
+  ],
+  "displayNamePropertyId": "2cee04bd-f39c-5d01-b190-43b9423693fe",
+  "namespaceType": "Custom",
+  "visibility": "Visible",
+  "properties": [
+    {
+      "id": "2cee04bd-f39c-5d01-b190-43b9423693fe",
+      "name": "snapshot_id",
+      "valueType": "String",
+      "sourceColumnName": "snapshot_id"
+    },
+    {
+      "id": "9ed3f279-72ab-59f9-9fc8-5e70fd7131bb",
+      "name": "product_id",
+      "valueType": "String",
+      "sourceColumnName": "product_id"
+    },
+    {
+      "id": "ee55019a-34e6-52cb-bac0-aef01b9e97f7",
+      "name": "snapshot_date",
+      "valueType": "DateTime",
+      "sourceColumnName": "snapshot_date"
+    },
+    {
+      "id": "6cd8afd0-a0d1-519b-b7ca-9f25b90b8e88",
+      "name": "on_hand_qty",
+      "valueType": "BigInt",
+      "sourceColumnName": "on_hand_qty"
+    },
+    {
+      "id": "6d4e6b80-7962-5983-bd85-124b9d4df3f6",
+      "name": "reserved_qty",
+      "valueType": "BigInt",
+      "sourceColumnName": "reserved_qty"
+    }
+  ],
+  "timeseriesProperties": [],
+  "untypedProperties": []
+}

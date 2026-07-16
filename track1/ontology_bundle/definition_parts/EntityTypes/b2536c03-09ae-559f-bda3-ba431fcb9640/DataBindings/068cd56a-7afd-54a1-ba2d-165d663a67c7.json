@@ -1,0 +1,24 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/ontology/dataBinding/1.0.0/schema.json",
+  "id": "068cd56a-7afd-54a1-ba2d-165d663a67c7",
+  "dataBindingConfiguration": {
+    "dataBindingType": "NonTimeSeries",
+    "propertyBindings": [
+      {
+        "sourceColumnName": "channel_id",
+        "targetPropertyId": "f38db104-5682-52c1-8a9f-f73e9272ff75"
+      },
+      {
+        "sourceColumnName": "channel_name",
+        "targetPropertyId": "1ca5aae7-4aef-5d3b-a6d5-fbbf01e11a8f"
+      }
+    ],
+    "sourceTableProperties": {
+      "sourceType": "LakehouseTable",
+      "workspaceId": "00000000-0000-0000-0000-000000000000",
+      "itemId": "00000000-0000-0000-0000-000000000000",
+      "sourceTableName": "channels",
+      "sourceSchema": "dbo"
+    }
+  }
+}

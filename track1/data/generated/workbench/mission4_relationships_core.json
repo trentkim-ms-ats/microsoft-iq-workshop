@@ -1,0 +1,22 @@
+[
+  "Customer places Order",
+  "Order belongs_to Channel",
+  "Order has Payment",
+  "Order fulfilled_by Shipment",
+  "Order includes OrderItem",
+  "OrderItem references Product",
+  "Order has Return",
+  "Return references Product",
+  "Return requested_by Customer",
+  "Customer raises SupportTicket",
+  "SupportTicket relates_to Order",
+  "Product has InventorySnapshot",
+  "Order receives OrderPromotion",
+  "OrderPromotion points_to Promotion",
+  "Campaign drives CampaignAttribution",
+  "CampaignAttribution points_to Order",
+  "CampaignAttribution points_to Customer",
+  "Promotion influences Order (logical)",
+  "Campaign influences Order (logical)",
+  "Customer purchases Product (logical)"
+]

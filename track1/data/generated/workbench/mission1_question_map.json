@@ -1,0 +1,60 @@
+[
+  {
+    "id": "Q1",
+    "question": "결제 실패가 캠페인 전환율에 미치는 영향은 무엇인가?",
+    "tables": [
+      "campaigns",
+      "campaign_attribution",
+      "customers",
+      "orders",
+      "payments"
+    ]
+  },
+  {
+    "id": "Q2",
+    "question": "배송 지연은 반품률과 고객 만족도에 어떤 영향을 미치는가?",
+    "tables": [
+      "shipments",
+      "returns",
+      "support_tickets",
+      "orders",
+      "customers",
+      "channels"
+    ]
+  },
+  {
+    "id": "Q3",
+    "question": "프로모션 유형별 할인 전략이 매출총이익과 재구매율에 미치는 영향은 무엇인가?",
+    "tables": [
+      "promotions",
+      "order_promotions",
+      "orders",
+      "order_items",
+      "products",
+      "customers"
+    ]
+  },
+  {
+    "id": "Q4",
+    "question": "재고 부족/품절 경험은 주문 취소율과 고객센터 문의량에 어떤 영향을 미치는가?",
+    "tables": [
+      "inventory_snapshots",
+      "products",
+      "orders",
+      "support_tickets",
+      "channels"
+    ]
+  },
+  {
+    "id": "Q5",
+    "question": "채널·고객등급별 반품 사유 패턴은 재구매율에 어떤 차이를 만드는가?",
+    "tables": [
+      "returns",
+      "orders",
+      "customers",
+      "channels",
+      "order_items",
+      "products"
+    ]
+  }
+]

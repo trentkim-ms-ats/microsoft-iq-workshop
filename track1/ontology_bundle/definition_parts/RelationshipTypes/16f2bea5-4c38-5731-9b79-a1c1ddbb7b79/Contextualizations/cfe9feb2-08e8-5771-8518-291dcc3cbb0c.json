@@ -1,0 +1,24 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/ontology/contextualization/1.0.0/schema.json",
+  "id": "cfe9feb2-08e8-5771-8518-291dcc3cbb0c",
+  "relationshipTypeId": "16f2bea5-4c38-5731-9b79-a1c1ddbb7b79",
+  "dataBindingTable": {
+    "sourceType": "LakehouseTable",
+    "workspaceId": "00000000-0000-0000-0000-000000000000",
+    "itemId": "00000000-0000-0000-0000-000000000000",
+    "sourceTableName": "payments",
+    "sourceSchema": "dbo"
+  },
+  "sourceKeyRefBindings": [
+    {
+      "sourceColumnName": "order_id",
+      "targetPropertyId": "ae3b9e82-623b-52c5-bd5f-71d8e9306109"
+    }
+  ],
+  "targetKeyRefBindings": [
+    {
+      "sourceColumnName": "payment_id",
+      "targetPropertyId": "4d0ce16a-28c1-501b-bba2-2a203e72c9b5"
+    }
+  ]
+}

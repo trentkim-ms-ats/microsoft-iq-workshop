@@ -1,0 +1,36 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/ontology/dataBinding/1.0.0/schema.json",
+  "id": "78278e04-2ad9-5305-bc63-a6d7787ab216",
+  "dataBindingConfiguration": {
+    "dataBindingType": "NonTimeSeries",
+    "propertyBindings": [
+      {
+        "sourceColumnName": "payment_id",
+        "targetPropertyId": "4d0ce16a-28c1-501b-bba2-2a203e72c9b5"
+      },
+      {
+        "sourceColumnName": "order_id",
+        "targetPropertyId": "31e0662c-92fe-5b7f-ba06-3e5db485a267"
+      },
+      {
+        "sourceColumnName": "payment_status",
+        "targetPropertyId": "3a7c1dd8-1184-5606-addb-ee3abe1cb1c9"
+      },
+      {
+        "sourceColumnName": "approved_amount",
+        "targetPropertyId": "23034d62-9782-5fd6-83bb-975a08a5b2eb"
+      },
+      {
+        "sourceColumnName": "approved_at",
+        "targetPropertyId": "429014f8-decb-505e-8632-701321710d9d"
+      }
+    ],
+    "sourceTableProperties": {
+      "sourceType": "LakehouseTable",
+      "workspaceId": "00000000-0000-0000-0000-000000000000",
+      "itemId": "00000000-0000-0000-0000-000000000000",
+      "sourceTableName": "payments",
+      "sourceSchema": "dbo"
+    }
+  }
+}

@@ -1,0 +1,28 @@
+From: =?UTF-8?B?6rmA7ISc7Jew?= <ceo@contoso-workshop.example>
+To: 박준호 <cfo@contoso-workshop.example>, 이현지 <cdo@contoso-workshop.example>, 최민석 <marketing@contoso-workshop.example>, 정도윤 <payments@contoso-workshop.example>
+Cc: 한유진 <growth@contoso-workshop.example>
+Date: Sun, 17 May 2026 23:40:00 GMT
+Subject: =?UTF-8?B?W+umrOuNlOyLrV0gNeyblCDrp6Tstpwg6riJ6529IOydtOyKiCDqs7XsnKA=?=
+Message-ID: <em01.track2@contoso-workshop.example>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Track2-Sample: true
+X-Track2-Thread: sales-drop
+X-Track2-Keywords: SummerPush;결제 실패;전환율
+
+SummerPush 기간 중 매출과 주문 전환이 계획보다 낮다는 보고를 받았습니다.
+
+Track1 결제 2,004건: Success 670, Failed 667, RetrySuccess 666, 상태 결측 1건(PAY00019). RetrySuccess는 상태와 재시도 여부가 섞인 비표준 코드다.
+
+결제 실패가 실제 전환 손실인지, 귀속 데이터 누락인지 구분해 내일 리더십 회의 전까지 근거 링크와 함께 회신해 주세요.
+
+AeroPhone X 등 핵심 상품의 재고·배송 이슈가 동시에 영향을 주었는지도 확인 바랍니다.
+
+
+
+감사합니다.
+
+김서연
+CEO | Contoso Commerce (가상)
+본 메일은 Track2 워크숍용 가상 콘텐츠입니다.

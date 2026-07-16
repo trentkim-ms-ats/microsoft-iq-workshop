@@ -1,0 +1,100 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "logicAppName": {
+      "type": "string",
+      "defaultValue": "track3-daily-briefing-la"
+    },
+    "runnerWebhookUrl": {
+      "type": "string",
+      "metadata": {
+        "description": "HTTPS endpoint that runs tools/run_track3_daily_briefing.py (Function/App/Container endpoint)"
+      }
+    },
+    "runnerWebhookKey": {
+      "type": "securestring",
+      "defaultValue": ""
+    },
+    "pipelineVersion": {
+      "type": "string",
+      "defaultValue": "prod-2026-07"
+    },
+    "promptVersion": {
+      "type": "string",
+      "defaultValue": "p3.2"
+    },
+    "modelVersion": {
+      "type": "string",
+      "defaultValue": "foundry-responses-v1"
+    },
+    "toolsetVersion": {
+      "type": "string",
+      "defaultValue": "fabriciq-1.4+workiq-2.1"
+    }
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Logic/workflows",
+      "apiVersion": "2019-05-01",
+      "name": "[parameters('logicAppName')]",
+      "location": "[resourceGroup().location]",
+      "properties": {
+        "state": "Enabled",
+        "definition": {
+          "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+          "contentVersion": "1.0.0.0",
+          "parameters": {},
+          "triggers": {
+            "Recurrence": {
+              "type": "Recurrence",
+              "recurrence": {
+                "frequency": "Week",
+                "interval": 1,
+                "timeZone": "Korea Standard Time",
+                "schedule": {
+                  "hours": [
+                    8
+                  ],
+                  "minutes": [
+                    30
+                  ],
+                  "weekDays": [
+                    "Monday",
+                    "Tuesday",
+                    "Wednesday",
+                    "Thursday",
+                    "Friday"
+                  ]
+                }
+              }
+            }
+          },
+          "actions": {
+            "Invoke_Track3_Runner": {
+              "type": "Http",
+              "inputs": {
+                "method": "POST",
+                "uri": "[parameters('runnerWebhookUrl')]",
+                "headers": {
+                  "Content-Type": "application/json",
+                  "x-runner-key": "[parameters('runnerWebhookKey')]"
+                },
+                "body": {
+                  "pipelineVersion": "[parameters('pipelineVersion')]",
+                  "promptVersion": "[parameters('promptVersion')]",
+                  "modelVersion": "[parameters('modelVersion')]",
+                  "toolsetVersion": "[parameters('toolsetVersion')]",
+                  "runFallbackCheck": false
+                }
+              },
+              "runAfter": {}
+            }
+          },
+          "outputs": {}
+        },
+        "parameters": {}
+      }
+    }
+  ]
+}

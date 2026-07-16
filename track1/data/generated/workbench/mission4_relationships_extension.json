@@ -1,0 +1,5 @@
+[
+  "Payment relates_to Return (logical)",
+  "Shipment relates_to Return (logical)",
+  "Order applies Promotion (logical path)"
+]

@@ -1,0 +1,99 @@
+{
+  "runContext": {
+    "scenarioId": "Q1",
+    "executionMode": "simulation",
+    "mode": "both-down",
+    "runAt": "2026-07-15T05:46:59.505710+00:00",
+    "retryPolicy": {
+      "maxRetries": 3,
+      "retryDelaysSec": [
+        5,
+        10,
+        20
+      ]
+    },
+    "release": {
+      "pipelineVersion": "track3-sim-v1",
+      "promptVersion": "track3-prompt-v1",
+      "modelVersion": "foundry-responses-v1",
+      "toolsetVersion": "fabriciq-v1+workiq-v1"
+    }
+  },
+  "toolStatus": {
+    "toolA": {
+      "status": "fail",
+      "attempts": 4,
+      "logs": [
+        {
+          "attempt": 1,
+          "status": "fail",
+          "error": "simulated_tool_failure"
+        },
+        {
+          "attempt": 2,
+          "status": "fail",
+          "error": "simulated_tool_failure"
+        },
+        {
+          "attempt": 3,
+          "status": "fail",
+          "error": "simulated_tool_failure"
+        },
+        {
+          "attempt": 4,
+          "status": "fail",
+          "error": "simulated_tool_failure"
+        }
+      ]
+    },
+    "toolB": {
+      "status": "fail",
+      "attempts": 4,
+      "logs": [
+        {
+          "attempt": 1,
+          "status": "fail",
+          "error": "simulated_tool_failure"
+        },
+        {
+          "attempt": 2,
+          "status": "fail",
+          "error": "simulated_tool_failure"
+        },
+        {
+          "attempt": 3,
+          "status": "fail",
+          "error": "simulated_tool_failure"
+        },
+        {
+          "attempt": 4,
+          "status": "fail",
+          "error": "simulated_tool_failure"
+        }
+      ]
+    }
+  },
+  "response": {
+    "question": "결제 실패가 캠페인 전환율에 미치는 영향은 무엇인가?",
+    "overallStatus": "blocked",
+    "summary": "Q1 실행 결과: blocked",
+    "keyFindings": [
+      "정형·비정형 도구가 모두 실패해 분석을 지속할 수 없습니다."
+    ],
+    "warnings": [
+      "Tool A/B 모두 실패: 답변 생성을 중단하고 차단 원인 및 복구 조치만 반환합니다."
+    ],
+    "recommendedActions": [
+      "권한/토큰 상태를 먼저 복구합니다.",
+      "인덱스 범위와 커넥터 상태를 재점검합니다.",
+      "복구 후 표준 질문 Q1으로 재시도합니다."
+    ],
+    "evidenceLinks": [],
+    "sourceTrace": [],
+    "qualityChecks": {
+      "hasStructuredMetric": false,
+      "hasEvidenceLink": false,
+      "hasBothSources": false
+    }
+  }
+}

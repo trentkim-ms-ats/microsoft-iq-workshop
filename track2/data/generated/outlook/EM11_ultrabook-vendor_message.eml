@@ -1,0 +1,26 @@
+From: =?UTF-8?B?7Jik7KeA7ZuI?= <inventory@contoso-workshop.example>
+To: 윤가영 <logistics@contoso-workshop.example>, 최민석 <marketing@contoso-workshop.example>, 배수민 <cs@contoso-workshop.example>
+Cc: 이현지 <cdo@contoso-workshop.example>
+Date: Sat, 16 May 2026 04:45:00 GMT
+Subject: =?UTF-8?B?VWx0cmFCb29rIDE1IOqzteq4iSDsnbzsoJUg67CPIOqzoOqwnSDqs7Xsp4Ag6riw7KSA?=
+Message-ID: <em11.track2@contoso-workshop.example>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Track2-Sample: true
+X-Track2-Thread: ultrabook-vendor
+X-Track2-Keywords: UltraBook 15;S09003;O09003
+
+UltraBook 15은 on_hand 6, reserved 40으로 부족 상태입니다.
+
+O09003/SH09003은 InTransit이며 T09003 NoTrackingUpdate가 연결됩니다.
+
+입고 확정 전 신규 약속일을 단정하지 말고 추적정보 갱신과 선제 공지를 우선해 주세요.
+
+
+
+감사합니다.
+
+오지훈
+재고 운영 리드 | Contoso Commerce (가상)
+본 메일은 Track2 워크숍용 가상 콘텐츠입니다.

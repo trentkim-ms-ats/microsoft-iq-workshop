@@ -1,0 +1,29 @@
+{
+  "key_rule": "<entity>_id (snake_case)",
+  "datetime_rule": "DATE/TIMESTAMP type normalization",
+  "order_status_map": {
+    "Completed": "PAID",
+    "Cancelled": "CANCELLED",
+    "NEW": "NEW",
+    "PAID": "PAID",
+    "SHIPPED": "SHIPPED",
+    "RETURNED": "RETURNED"
+  },
+  "payment_status_map": {
+    "Success": "AUTHORIZED",
+    "RetrySuccess": "AUTHORIZED",
+    "Failed": "FAILED",
+    "INITIATED": "INITIATED",
+    "AUTHORIZED": "AUTHORIZED",
+    "FAILED": "FAILED",
+    "REFUNDED": "REFUNDED"
+  },
+  "shipment_status_map": {
+    "Delivered": "DELIVERED",
+    "Delayed": "DELAYED",
+    "InTransit": "IN_TRANSIT",
+    "READY": "READY",
+    "DELIVERED": "DELIVERED",
+    "DELAYED": "DELAYED"
+  }
+}

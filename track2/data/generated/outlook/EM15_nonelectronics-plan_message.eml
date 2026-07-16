@@ -1,0 +1,28 @@
+From: =?UTF-8?B?7LWc66+87ISd?= <marketing@contoso-workshop.example>
+To: 오지훈 <inventory@contoso-workshop.example>, 배수민 <cs@contoso-workshop.example>
+Cc: 한유진 <growth@contoso-workshop.example>
+Date: Fri, 05 Jun 2026 00:10:00 GMT
+Subject: =?UTF-8?B?67mE7KCE7J6QIOy5tO2FjOqzoOumrCDrs7TsobAg7IaM7J6sIOuwjyDsnqzqs6Ag7ZmV7J24IOyalOyyrQ==?=
+Message-ID: <em15.track2@contoso-workshop.example>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Track2-Sample: true
+X-Track2-Thread: nonelectronics-plan
+X-Track2-Keywords: ComfyChair Home;DailyTee Cotton;BackToSchool;번들
+
+전자 핵심 상품 노출 제한 기간을 보완하기 위해 홈·패션 카테고리 보조 소재를 검토 중입니다.
+
+Track1 명명 상품: UltraBook 15(P00001, Electronics, 13.70), DailyTee Cotton(P00002, Fashion, 17.40), ComfyChair Home(P00003, Home, 21.10), AeroPhone X(P00005, Electronics, 28.50), SmartWatch Pro(P00006, Electronics, 32.20). P00050은 unit_price=0 이상값으로 카탈로그 검증에서 제외한다.
+
+ComfyChair Home 단독 소재와 DailyTee Cotton 번들 소재의 가용 재고를 확인해 주세요. P00050 이상값(price 0)은 노출에서 제외합니다.
+
+상세 설명 개선(NotAsDescribed/SizeIssue 대응) 완료 후 BackToSchool 보조로 배치하겠습니다.
+
+
+
+감사합니다.
+
+최민석
+마케팅 리드 | Contoso Commerce (가상)
+본 메일은 Track2 워크숍용 가상 콘텐츠입니다.

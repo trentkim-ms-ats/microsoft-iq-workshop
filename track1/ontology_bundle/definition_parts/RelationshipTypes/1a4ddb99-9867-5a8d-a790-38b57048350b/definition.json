@@ -1,0 +1,15 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/ontology/relationshipType/1.0.0/schema.json",
+  "id": "1a4ddb99-9867-5a8d-a790-38b57048350b",
+  "namespace": "usertypes",
+  "name": "Campaign_drives_CampaignAttribution",
+  "displayName": "Campaign drives CampaignAttribution",
+  "description": "1:N (Campaign → CampaignAttribution)",
+  "namespaceType": "Custom",
+  "source": {
+    "entityTypeId": "f2f8ca50-f931-5a64-b34b-f4bf6fc4748d"
+  },
+  "target": {
+    "entityTypeId": "93454448-8bdd-5629-8de3-a051469b74c6"
+  }
+}

@@ -1,0 +1,14 @@
+# Track3 daily leadership briefing (KST 08:30 on weekdays)
+# If your server timezone is UTC, use: 30 23 * * 0-4
+# If your server timezone is KST, use: 30 8 * * 1-5
+#
+# Example below assumes UTC server timezone.
+# Optional Foundry refinement env:
+# - AZURE_AI_FOUNDRY_RESPONSES_ENDPOINT, AZURE_AI_FOUNDRY_MODEL
+# - AZURE_AI_FOUNDRY_API_KEY or AZURE_AI_FOUNDRY_BEARER_TOKEN
+30 23 * * 0-4 cd /opt/data-platform-workshop && /usr/bin/python3 tools/run_track3_daily_briefing.py \
+  --pipeline-version prod-2026-07 \
+  --prompt-version p3.2 \
+  --model-version foundry-responses-v1 \
+  --toolset-version fabriciq-1.4+workiq-2.1 \
+  >> /var/log/track3-daily-briefing.log 2>&1

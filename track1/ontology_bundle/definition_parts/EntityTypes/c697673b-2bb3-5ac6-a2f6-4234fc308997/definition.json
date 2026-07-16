@@ -1,0 +1,48 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/ontology/entityType/1.0.0/schema.json",
+  "id": "c697673b-2bb3-5ac6-a2f6-4234fc308997",
+  "namespace": "usertypes",
+  "baseEntityTypeId": null,
+  "name": "Payment",
+  "description": "Payment (source: payments)",
+  "entityIdParts": [
+    "4d0ce16a-28c1-501b-bba2-2a203e72c9b5"
+  ],
+  "displayNamePropertyId": "4d0ce16a-28c1-501b-bba2-2a203e72c9b5",
+  "namespaceType": "Custom",
+  "visibility": "Visible",
+  "properties": [
+    {
+      "id": "4d0ce16a-28c1-501b-bba2-2a203e72c9b5",
+      "name": "payment_id",
+      "valueType": "String",
+      "sourceColumnName": "payment_id"
+    },
+    {
+      "id": "31e0662c-92fe-5b7f-ba06-3e5db485a267",
+      "name": "order_id",
+      "valueType": "String",
+      "sourceColumnName": "order_id"
+    },
+    {
+      "id": "3a7c1dd8-1184-5606-addb-ee3abe1cb1c9",
+      "name": "payment_status",
+      "valueType": "String",
+      "sourceColumnName": "payment_status"
+    },
+    {
+      "id": "23034d62-9782-5fd6-83bb-975a08a5b2eb",
+      "name": "approved_amount",
+      "valueType": "Double",
+      "sourceColumnName": "approved_amount"
+    },
+    {
+      "id": "429014f8-decb-505e-8632-701321710d9d",
+      "name": "approved_at",
+      "valueType": "DateTime",
+      "sourceColumnName": "approved_at"
+    }
+  ],
+  "timeseriesProperties": [],
+  "untypedProperties": []
+}

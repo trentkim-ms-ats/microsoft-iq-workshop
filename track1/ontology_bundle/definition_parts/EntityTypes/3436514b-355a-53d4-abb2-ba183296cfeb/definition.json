@@ -1,0 +1,43 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/ontology/entityType/1.0.0/schema.json",
+  "id": "3436514b-355a-53d4-abb2-ba183296cfeb",
+  "namespace": "usertypes",
+  "baseEntityTypeId": null,
+  "name": "OrderItem",
+  "description": "OrderItem (source: order_items)",
+  "entityIdParts": [
+    "86f05d10-7817-5744-8b30-d90aeb7026d8",
+    "8e07f4f5-3bf6-51fc-aa2d-c1072c50f788"
+  ],
+  "displayNamePropertyId": "86f05d10-7817-5744-8b30-d90aeb7026d8",
+  "namespaceType": "Custom",
+  "visibility": "Visible",
+  "properties": [
+    {
+      "id": "86f05d10-7817-5744-8b30-d90aeb7026d8",
+      "name": "order_id",
+      "valueType": "String",
+      "sourceColumnName": "order_id"
+    },
+    {
+      "id": "8e07f4f5-3bf6-51fc-aa2d-c1072c50f788",
+      "name": "product_id",
+      "valueType": "String",
+      "sourceColumnName": "product_id"
+    },
+    {
+      "id": "bbacf853-8860-5e40-9cd2-ae079ae5d84a",
+      "name": "quantity",
+      "valueType": "BigInt",
+      "sourceColumnName": "quantity"
+    },
+    {
+      "id": "c7811ebc-b783-5bfa-afab-3226ce843080",
+      "name": "sales_amount",
+      "valueType": "Double",
+      "sourceColumnName": "sales_amount"
+    }
+  ],
+  "timeseriesProperties": [],
+  "untypedProperties": []
+}

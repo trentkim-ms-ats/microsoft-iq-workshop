@@ -1,0 +1,26 @@
+# Track3 daily briefing + notifications (KST 08:30 weekdays)
+# Assumes UTC host timezone: 30 23 * * 0-4
+# Adjust to 30 8 * * 1-5 if host is already in KST.
+#
+# Required env vars before installing this cron:
+# - TRACK3_TEAMS_WEBHOOK_URL
+# - TRACK3_SMTP_HOST, TRACK3_SMTP_PORT, TRACK3_SMTP_USER, TRACK3_SMTP_PASSWORD
+# - TRACK3_EMAIL_FROM, TRACK3_EMAIL_TO
+# - AZURE_AI_FOUNDRY_RESPONSES_ENDPOINT, AZURE_AI_FOUNDRY_MODEL (optional refinement)
+# - AZURE_AI_FOUNDRY_API_KEY or AZURE_AI_FOUNDRY_BEARER_TOKEN (optional refinement)
+30 23 * * 0-4 cd /opt/data-platform-workshop && /usr/bin/python3 tools/run_track3_daily_briefing.py \
+  --pipeline-version prod-2026-07 \
+  --prompt-version p3.2 \
+  --model-version foundry-responses-v1 \
+  --toolset-version fabriciq-1.4+workiq-2.1 \
+  && /usr/bin/python3 tools/send_track3_notifications.py \
+  --reports-dir track3/data/generated/reports \
+  --teams-webhook-url "$TRACK3_TEAMS_WEBHOOK_URL" \
+  --email-enabled \
+  --smtp-host "$TRACK3_SMTP_HOST" \
+  --smtp-port "${TRACK3_SMTP_PORT:-587}" \
+  --smtp-user "$TRACK3_SMTP_USER" \
+  --smtp-password "$TRACK3_SMTP_PASSWORD" \
+  --email-from "$TRACK3_EMAIL_FROM" \
+  --email-to "$TRACK3_EMAIL_TO" \
+  >> /var/log/track3-daily-briefing.log 2>&1

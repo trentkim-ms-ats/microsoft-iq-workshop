@@ -1,0 +1,54 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/ontology/entityType/1.0.0/schema.json",
+  "id": "f2f8ca50-f931-5a64-b34b-f4bf6fc4748d",
+  "namespace": "usertypes",
+  "baseEntityTypeId": null,
+  "name": "Campaign",
+  "description": "Campaign (source: campaigns)",
+  "entityIdParts": [
+    "5800ea7b-80e3-5d09-acbc-295bab21e042"
+  ],
+  "displayNamePropertyId": "431b799d-a696-5661-9e39-8ed6616f8058",
+  "namespaceType": "Custom",
+  "visibility": "Visible",
+  "properties": [
+    {
+      "id": "5800ea7b-80e3-5d09-acbc-295bab21e042",
+      "name": "campaign_id",
+      "valueType": "String",
+      "sourceColumnName": "campaign_id"
+    },
+    {
+      "id": "431b799d-a696-5661-9e39-8ed6616f8058",
+      "name": "campaign_name",
+      "valueType": "String",
+      "sourceColumnName": "campaign_name"
+    },
+    {
+      "id": "1571e529-e180-5bc1-a221-a0552df4daa4",
+      "name": "campaign_type",
+      "valueType": "String",
+      "sourceColumnName": "campaign_type"
+    },
+    {
+      "id": "69368c1a-ba2a-5923-bf5d-a9a595889e9c",
+      "name": "channel_id",
+      "valueType": "String",
+      "sourceColumnName": "channel_id"
+    },
+    {
+      "id": "86da8a18-695b-58aa-bfbc-9a4dde60da43",
+      "name": "start_date",
+      "valueType": "DateTime",
+      "sourceColumnName": "start_date"
+    },
+    {
+      "id": "cb7b90bd-fb52-5aef-86c8-5f11191a3754",
+      "name": "end_date",
+      "valueType": "DateTime",
+      "sourceColumnName": "end_date"
+    }
+  ],
+  "timeseriesProperties": [],
+  "untypedProperties": []
+}

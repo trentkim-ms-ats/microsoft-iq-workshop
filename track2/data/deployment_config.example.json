@@ -1,0 +1,74 @@
+{
+  "graphBaseUrl": "https://graph.microsoft.com/v1.0",
+  "sharePoint": {
+    "siteId": "<SITE_ID>",
+    "driveId": "<DOCUMENT_LIBRARY_DRIVE_ID>",
+    "rootFolder": "Track2-Sample"
+  },
+  "oneDrive": {
+    "userId": "<SAMPLE_USER_UPN_OR_ID>",
+    "rootFolder": "Track2-Sample"
+  },
+  "outlook": {
+    "senders": {
+      "ceo": "<CEO_SAMPLE_UPN>",
+      "cfo": "<CFO_SAMPLE_UPN>",
+      "cdo": "<CDO_SAMPLE_UPN>",
+      "marketing": "<MARKETING_SAMPLE_UPN>",
+      "growth": "<GROWTH_SAMPLE_UPN>",
+      "payments": "<PAYMENTS_SAMPLE_UPN>",
+      "inventory": "<INVENTORY_SAMPLE_UPN>",
+      "logistics": "<LOGISTICS_SAMPLE_UPN>",
+      "cs": "<CS_SAMPLE_UPN>",
+      "crm": "<CRM_SAMPLE_UPN>",
+      "data": "<DATA_SAMPLE_UPN>",
+      "finance": "<FINANCE_SAMPLE_UPN>"
+    },
+    "recipients": {
+      "ceo": "<CEO_SAMPLE_ADDRESS>",
+      "cfo": "<CFO_SAMPLE_ADDRESS>",
+      "cdo": "<CDO_SAMPLE_ADDRESS>",
+      "marketing": "<MARKETING_SAMPLE_ADDRESS>",
+      "growth": "<GROWTH_SAMPLE_ADDRESS>",
+      "payments": "<PAYMENTS_SAMPLE_ADDRESS>",
+      "inventory": "<INVENTORY_SAMPLE_ADDRESS>",
+      "logistics": "<LOGISTICS_SAMPLE_ADDRESS>",
+      "cs": "<CS_SAMPLE_ADDRESS>",
+      "crm": "<CRM_SAMPLE_ADDRESS>",
+      "data": "<DATA_SAMPLE_ADDRESS>",
+      "finance": "<FINANCE_SAMPLE_ADDRESS>"
+    }
+  },
+  "teams": {
+    "channels": {
+      "cs-tier2": {
+        "teamId": "<TEAM_ID>",
+        "channelId": "<CS_TIER2_CHANNEL_ID>"
+      },
+      "inventory": {
+        "teamId": "<TEAM_ID>",
+        "channelId": "<INVENTORY_CHANNEL_ID>"
+      },
+      "logistics": {
+        "teamId": "<TEAM_ID>",
+        "channelId": "<LOGISTICS_CHANNEL_ID>"
+      },
+      "payments": {
+        "teamId": "<TEAM_ID>",
+        "channelId": "<PAYMENTS_CHANNEL_ID>"
+      },
+      "campaign-ops": {
+        "teamId": "<TEAM_ID>",
+        "channelId": "<CAMPAIGN_OPS_CHANNEL_ID>"
+      },
+      "data-quality": {
+        "teamId": "<TEAM_ID>",
+        "channelId": "<DATA_QUALITY_CHANNEL_ID>"
+      },
+      "leadership-briefing": {
+        "teamId": "<TEAM_ID>",
+        "channelId": "<LEADERSHIP_BRIEFING_CHANNEL_ID>"
+      }
+    }
+  }
+}

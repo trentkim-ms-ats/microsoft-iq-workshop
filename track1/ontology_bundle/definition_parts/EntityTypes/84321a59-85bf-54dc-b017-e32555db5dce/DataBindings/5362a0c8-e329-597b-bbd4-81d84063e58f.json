@@ -1,0 +1,36 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/ontology/dataBinding/1.0.0/schema.json",
+  "id": "5362a0c8-e329-597b-bbd4-81d84063e58f",
+  "dataBindingConfiguration": {
+    "dataBindingType": "NonTimeSeries",
+    "propertyBindings": [
+      {
+        "sourceColumnName": "snapshot_id",
+        "targetPropertyId": "2cee04bd-f39c-5d01-b190-43b9423693fe"
+      },
+      {
+        "sourceColumnName": "product_id",
+        "targetPropertyId": "9ed3f279-72ab-59f9-9fc8-5e70fd7131bb"
+      },
+      {
+        "sourceColumnName": "snapshot_date",
+        "targetPropertyId": "ee55019a-34e6-52cb-bac0-aef01b9e97f7"
+      },
+      {
+        "sourceColumnName": "on_hand_qty",
+        "targetPropertyId": "6cd8afd0-a0d1-519b-b7ca-9f25b90b8e88"
+      },
+      {
+        "sourceColumnName": "reserved_qty",
+        "targetPropertyId": "6d4e6b80-7962-5983-bd85-124b9d4df3f6"
+      }
+    ],
+    "sourceTableProperties": {
+      "sourceType": "LakehouseTable",
+      "workspaceId": "00000000-0000-0000-0000-000000000000",
+      "itemId": "00000000-0000-0000-0000-000000000000",
+      "sourceTableName": "inventory_snapshots",
+      "sourceSchema": "dbo"
+    }
+  }
+}

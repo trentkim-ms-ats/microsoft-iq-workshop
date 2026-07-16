@@ -1,0 +1,15 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/ontology/relationshipType/1.0.0/schema.json",
+  "id": "f7f8aaa9-5480-5b97-ab2e-be22a6515d64",
+  "namespace": "usertypes",
+  "name": "Customer_places_Order",
+  "displayName": "Customer places Order",
+  "description": "1:N (Customer → Order)",
+  "namespaceType": "Custom",
+  "source": {
+    "entityTypeId": "246a376f-906c-5c57-a37f-72f5222f72a4"
+  },
+  "target": {
+    "entityTypeId": "7136b51e-8ea5-5ad9-8c23-153d1751a190"
+  }
+}

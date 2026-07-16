@@ -1,0 +1,16 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/ontology/relationshipType/1.0.0/schema.json",
+  "id": "9e2ea3d5-874f-51f7-926b-e463c1ca6d07",
+  "namespace": "usertypes",
+  "name": "Promotion_influences_Order",
+  "displayName": "Promotion influences Order (logical)",
+  "description": "LOGICAL N:M derived via order_promotions + orders",
+  "isLogical": true,
+  "namespaceType": "Custom",
+  "source": {
+    "entityTypeId": "5f124986-abff-53fd-8c90-237b814cdd25"
+  },
+  "target": {
+    "entityTypeId": "7136b51e-8ea5-5ad9-8c23-153d1751a190"
+  }
+}

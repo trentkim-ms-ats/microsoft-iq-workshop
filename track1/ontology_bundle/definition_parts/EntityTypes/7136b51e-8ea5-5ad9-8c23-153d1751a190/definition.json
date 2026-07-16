@@ -1,0 +1,78 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/ontology/entityType/1.0.0/schema.json",
+  "id": "7136b51e-8ea5-5ad9-8c23-153d1751a190",
+  "namespace": "usertypes",
+  "baseEntityTypeId": null,
+  "name": "Order",
+  "description": "Order (source: orders)",
+  "entityIdParts": [
+    "ae3b9e82-623b-52c5-bd5f-71d8e9306109"
+  ],
+  "displayNamePropertyId": "ae3b9e82-623b-52c5-bd5f-71d8e9306109",
+  "namespaceType": "Custom",
+  "visibility": "Visible",
+  "properties": [
+    {
+      "id": "ae3b9e82-623b-52c5-bd5f-71d8e9306109",
+      "name": "order_id",
+      "valueType": "String",
+      "sourceColumnName": "order_id"
+    },
+    {
+      "id": "8a40d237-de83-5af0-98e4-4c38330dbb51",
+      "name": "customer_id",
+      "valueType": "String",
+      "sourceColumnName": "customer_id"
+    },
+    {
+      "id": "a4d22947-b386-5e98-9517-1cbb9221dca8",
+      "name": "channel_id",
+      "valueType": "String",
+      "sourceColumnName": "channel_id"
+    },
+    {
+      "id": "2ac9bd4a-4654-50f6-98cb-7ba8525445a6",
+      "name": "order_date",
+      "valueType": "DateTime",
+      "sourceColumnName": "order_date"
+    },
+    {
+      "id": "e02f27f3-d8f9-5988-b1d7-a509336a422b",
+      "name": "order_status",
+      "valueType": "String",
+      "sourceColumnName": "order_status"
+    },
+    {
+      "id": "aa1d4ccf-de5c-5530-8d79-f93bad298295",
+      "name": "gross_amount",
+      "valueType": "Double",
+      "sourceColumnName": "gross_amount"
+    },
+    {
+      "id": "17a97ddb-01bd-5a6c-9d0a-fdc1d2420a16",
+      "name": "discount_applied",
+      "valueType": "Double",
+      "sourceColumnName": "discount_applied"
+    },
+    {
+      "id": "e2ad376a-db1b-5fa9-b4d2-e577aeb6fba4",
+      "name": "net_amount",
+      "valueType": "Double",
+      "sourceColumnName": "net_amount"
+    },
+    {
+      "id": "2d7aa373-aba9-5b53-979a-25601fd42be6",
+      "name": "order_value",
+      "valueType": "Double",
+      "sourceColumnName": "order_value"
+    },
+    {
+      "id": "a4587952-c958-52ee-9b2e-d455925b746c",
+      "name": "currency",
+      "valueType": "String",
+      "sourceColumnName": "currency"
+    }
+  ],
+  "timeseriesProperties": [],
+  "untypedProperties": []
+}

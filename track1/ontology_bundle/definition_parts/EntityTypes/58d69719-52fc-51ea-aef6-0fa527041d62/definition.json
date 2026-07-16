@@ -1,0 +1,54 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/ontology/entityType/1.0.0/schema.json",
+  "id": "58d69719-52fc-51ea-aef6-0fa527041d62",
+  "namespace": "usertypes",
+  "baseEntityTypeId": null,
+  "name": "Return",
+  "description": "Return (source: returns)",
+  "entityIdParts": [
+    "082e92dc-acc9-5317-9eac-b3323cab3495"
+  ],
+  "displayNamePropertyId": "082e92dc-acc9-5317-9eac-b3323cab3495",
+  "namespaceType": "Custom",
+  "visibility": "Visible",
+  "properties": [
+    {
+      "id": "082e92dc-acc9-5317-9eac-b3323cab3495",
+      "name": "return_id",
+      "valueType": "String",
+      "sourceColumnName": "return_id"
+    },
+    {
+      "id": "08ec778c-d080-50f2-82d1-23e3782d5ec8",
+      "name": "order_id",
+      "valueType": "String",
+      "sourceColumnName": "order_id"
+    },
+    {
+      "id": "cde1583b-283e-59c0-a824-d10a67aa3ef2",
+      "name": "product_id",
+      "valueType": "String",
+      "sourceColumnName": "product_id"
+    },
+    {
+      "id": "74d97227-edb3-5436-b13c-c092c6371e12",
+      "name": "customer_id",
+      "valueType": "String",
+      "sourceColumnName": "customer_id"
+    },
+    {
+      "id": "648de32f-4e41-579c-b6e7-bf6ef6c3fa50",
+      "name": "return_reason",
+      "valueType": "String",
+      "sourceColumnName": "return_reason"
+    },
+    {
+      "id": "76de24e5-562f-5d7c-8c2a-36ac5e7f5446",
+      "name": "return_date",
+      "valueType": "DateTime",
+      "sourceColumnName": "return_date"
+    }
+  ],
+  "timeseriesProperties": [],
+  "untypedProperties": []
+}

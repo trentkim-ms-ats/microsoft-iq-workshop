@@ -1,0 +1,94 @@
+{
+  "runContext": {
+    "scenarioId": "Q1",
+    "executionMode": "simulation",
+    "mode": "tool-b-down",
+    "runAt": "2026-07-15T05:46:59.466972+00:00",
+    "retryPolicy": {
+      "maxRetries": 3,
+      "retryDelaysSec": [
+        5,
+        10,
+        20
+      ]
+    },
+    "release": {
+      "pipelineVersion": "track3-sim-v1",
+      "promptVersion": "track3-prompt-v1",
+      "modelVersion": "foundry-responses-v1",
+      "toolsetVersion": "fabriciq-v1+workiq-v1"
+    }
+  },
+  "toolStatus": {
+    "toolA": {
+      "status": "ok",
+      "attempts": 1,
+      "logs": [
+        {
+          "attempt": 1,
+          "status": "ok"
+        }
+      ]
+    },
+    "toolB": {
+      "status": "fail",
+      "attempts": 4,
+      "logs": [
+        {
+          "attempt": 1,
+          "status": "fail",
+          "error": "simulated_tool_failure"
+        },
+        {
+          "attempt": 2,
+          "status": "fail",
+          "error": "simulated_tool_failure"
+        },
+        {
+          "attempt": 3,
+          "status": "fail",
+          "error": "simulated_tool_failure"
+        },
+        {
+          "attempt": 4,
+          "status": "fail",
+          "error": "simulated_tool_failure"
+        }
+      ]
+    }
+  },
+  "response": {
+    "question": "결제 실패가 캠페인 전환율에 미치는 영향은 무엇인가?",
+    "overallStatus": "partial",
+    "summary": "Q1 실행 결과: partial",
+    "keyFindings": [
+      "핵심 캠페인 4개를 비교했고 최고 전환율은 BackToSchool, 최저 전환율은 VIPRetention이다.",
+      "payment_status가 Success/RetrySuccess가 아닌 주문은 결제 실패/미확정으로 분류했다."
+    ],
+    "warnings": [
+      "업무 문서 근거 없음"
+    ],
+    "recommendedActions": [
+      "Tool B(WorkIQ) 권한/인덱스 최신성을 확인합니다.",
+      "복구 후 동일 질문으로 근거 링크를 재수집합니다."
+    ],
+    "evidenceLinks": [],
+    "sourceTrace": [
+      {
+        "iq": "FabricIQ",
+        "role": "structured",
+        "origin": "track1-csv-simulation",
+        "semanticKeys": [
+          "CampaignId",
+          "OrderId",
+          "PaymentStatus"
+        ]
+      }
+    ],
+    "qualityChecks": {
+      "hasStructuredMetric": true,
+      "hasEvidenceLink": false,
+      "hasBothSources": false
+    }
+  }
+}

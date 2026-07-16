@@ -1,0 +1,24 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/ontology/dataBinding/1.0.0/schema.json",
+  "id": "4a81e7de-1e3f-5969-bd3a-5567e82fb7fc",
+  "dataBindingConfiguration": {
+    "dataBindingType": "NonTimeSeries",
+    "propertyBindings": [
+      {
+        "sourceColumnName": "order_id",
+        "targetPropertyId": "982f0657-1dc6-55b3-88bf-78062f6a8c81"
+      },
+      {
+        "sourceColumnName": "promotion_id",
+        "targetPropertyId": "450ad398-dab0-59aa-9c09-5ac94cc2422c"
+      }
+    ],
+    "sourceTableProperties": {
+      "sourceType": "LakehouseTable",
+      "workspaceId": "00000000-0000-0000-0000-000000000000",
+      "itemId": "00000000-0000-0000-0000-000000000000",
+      "sourceTableName": "order_promotions",
+      "sourceSchema": "dbo"
+    }
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/ontology/dataBinding/1.0.0/schema.json",
+  "id": "24a9cfa6-068f-5b82-b1e1-dc0a4daf0636",
+  "dataBindingConfiguration": {
+    "dataBindingType": "NonTimeSeries",
+    "propertyBindings": [
+      {
+        "sourceColumnName": "shipment_id",
+        "targetPropertyId": "16473555-6cc0-59f4-89e7-266aed1975d0"
+      },
+      {
+        "sourceColumnName": "order_id",
+        "targetPropertyId": "68c230da-bd85-5566-a34b-b104dfc9aff5"
+      },
+      {
+        "sourceColumnName": "shipment_status",
+        "targetPropertyId": "5159511b-bc0a-5662-8e3d-0342bb2e79c3"
+      },
+      {
+        "sourceColumnName": "delivered_at",
+        "targetPropertyId": "ed18f536-dd82-5838-a36e-5c4793bdbd92"
+      }
+    ],
+    "sourceTableProperties": {
+      "sourceType": "LakehouseTable",
+      "workspaceId": "00000000-0000-0000-0000-000000000000",
+      "itemId": "00000000-0000-0000-0000-000000000000",
+      "sourceTableName": "shipments",
+      "sourceSchema": "dbo"
+    }
+  }
+}

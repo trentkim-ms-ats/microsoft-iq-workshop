@@ -1,0 +1,26 @@
+From: =?UTF-8?B?7J6E7LGE7JuQ?= <data@contoso-workshop.example>
+To: 이현지 <cdo@contoso-workshop.example>, 정도윤 <payments@contoso-workshop.example>, 오지훈 <inventory@contoso-workshop.example>, 윤가영 <logistics@contoso-workshop.example>, 배수민 <cs@contoso-workshop.example>
+Cc: 최민석 <marketing@contoso-workshop.example>
+Date: Wed, 27 May 2026 00:00:00 GMT
+Subject: =?UTF-8?B?W+uNsOydtO2EsCDtkojsp4hdIFRyYWNrMSDssKjri6gg7J207IqIIOuwjyBUcmFjazIg7J247JqpIOyjvOydmA==?=
+Message-ID: <em09.track2@contoso-workshop.example>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Track2-Sample: true
+X-Track2-Thread: data-quality
+X-Track2-Keywords: PAY90001;T90001;SH00001;O00007
+
+Track1 의도 이슈: FK 고아 PAY90001->O99999, T90001->C99999; SH00001 중복; 결측 5건; 이상값 P00050/PR00050/S00050/O00033; 금액 불일치 O00007(+10), O00600(-25).
+
+미보정 수치를 M365 문서에서 확정값처럼 인용하지 말고 품질 경고와 기준 시각을 표시해 주세요.
+
+제한 문서인 데이터 품질 개선 등록부는 Data-Stewards 그룹만 접근하도록 유지합니다.
+
+
+
+감사합니다.
+
+임채원
+데이터 품질 리드 | Contoso Commerce (가상)
+본 메일은 Track2 워크숍용 가상 콘텐츠입니다.

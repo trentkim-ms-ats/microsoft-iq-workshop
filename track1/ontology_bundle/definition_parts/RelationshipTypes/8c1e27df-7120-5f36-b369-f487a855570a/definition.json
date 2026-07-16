@@ -1,0 +1,15 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/ontology/relationshipType/1.0.0/schema.json",
+  "id": "8c1e27df-7120-5f36-b369-f487a855570a",
+  "namespace": "usertypes",
+  "name": "Order_receives_OrderPromotion",
+  "displayName": "Order receives OrderPromotion",
+  "description": "1:N (Order → OrderPromotion)",
+  "namespaceType": "Custom",
+  "source": {
+    "entityTypeId": "7136b51e-8ea5-5ad9-8c23-153d1751a190"
+  },
+  "target": {
+    "entityTypeId": "1200b806-1fa4-57b1-88e8-7107d5674200"
+  }
+}

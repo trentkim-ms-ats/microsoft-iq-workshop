@@ -1,0 +1,6 @@
+entity,source_table,source_column,standard_column,ontology_property,note
+Order,orders,order_status,order_status_std,Order.status,status code normalization
+Payment,payments,payment_status,payment_status_std,Payment.status,RetrySuccess -> AUTHORIZED
+Shipment,shipments,shipment_status,shipment_status_std,Shipment.status,CamelCase -> UPPER_SNAKE
+Campaign,campaign_attribution,campaign_id,campaign_id,Campaign.campaign_id,bridge mapping
+SupportTicket,support_tickets,ticket_reason,ticket_reason_std,SupportTicket.reason,controlled vocabulary

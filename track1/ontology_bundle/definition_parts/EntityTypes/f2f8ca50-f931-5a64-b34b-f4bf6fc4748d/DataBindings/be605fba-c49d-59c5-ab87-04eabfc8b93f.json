@@ -1,0 +1,40 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/ontology/dataBinding/1.0.0/schema.json",
+  "id": "be605fba-c49d-59c5-ab87-04eabfc8b93f",
+  "dataBindingConfiguration": {
+    "dataBindingType": "NonTimeSeries",
+    "propertyBindings": [
+      {
+        "sourceColumnName": "campaign_id",
+        "targetPropertyId": "5800ea7b-80e3-5d09-acbc-295bab21e042"
+      },
+      {
+        "sourceColumnName": "campaign_name",
+        "targetPropertyId": "431b799d-a696-5661-9e39-8ed6616f8058"
+      },
+      {
+        "sourceColumnName": "campaign_type",
+        "targetPropertyId": "1571e529-e180-5bc1-a221-a0552df4daa4"
+      },
+      {
+        "sourceColumnName": "channel_id",
+        "targetPropertyId": "69368c1a-ba2a-5923-bf5d-a9a595889e9c"
+      },
+      {
+        "sourceColumnName": "start_date",
+        "targetPropertyId": "86da8a18-695b-58aa-bfbc-9a4dde60da43"
+      },
+      {
+        "sourceColumnName": "end_date",
+        "targetPropertyId": "cb7b90bd-fb52-5aef-86c8-5f11191a3754"
+      }
+    ],
+    "sourceTableProperties": {
+      "sourceType": "LakehouseTable",
+      "workspaceId": "00000000-0000-0000-0000-000000000000",
+      "itemId": "00000000-0000-0000-0000-000000000000",
+      "sourceTableName": "campaigns",
+      "sourceSchema": "dbo"
+    }
+  }
+}

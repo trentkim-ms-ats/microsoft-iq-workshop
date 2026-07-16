@@ -1,0 +1,15 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/ontology/relationshipType/1.0.0/schema.json",
+  "id": "bc51e53d-c177-599f-8e88-8d4ba29adc05",
+  "namespace": "usertypes",
+  "name": "SupportTicket_relates_to_Order",
+  "displayName": "SupportTicket relates_to Order",
+  "description": "1:N (Order → SupportTicket)",
+  "namespaceType": "Custom",
+  "source": {
+    "entityTypeId": "7136b51e-8ea5-5ad9-8c23-153d1751a190"
+  },
+  "target": {
+    "entityTypeId": "1d8921ef-0112-5b12-be28-9e5f5d5cb7d0"
+  }
+}

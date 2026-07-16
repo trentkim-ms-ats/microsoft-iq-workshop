@@ -1,0 +1,15 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/ontology/relationshipType/1.0.0/schema.json",
+  "id": "0f77f31f-816c-59ad-8cc6-d528950fcf6c",
+  "namespace": "usertypes",
+  "name": "Return_requested_by_Customer",
+  "displayName": "Return requested_by Customer",
+  "description": "1:N (Customer → Return)",
+  "namespaceType": "Custom",
+  "source": {
+    "entityTypeId": "246a376f-906c-5c57-a37f-72f5222f72a4"
+  },
+  "target": {
+    "entityTypeId": "58d69719-52fc-51ea-aef6-0fa527041d62"
+  }
+}

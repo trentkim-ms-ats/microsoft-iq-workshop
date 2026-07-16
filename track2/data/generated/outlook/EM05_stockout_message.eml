@@ -1,0 +1,26 @@
+From: =?UTF-8?B?7Jik7KeA7ZuI?= <inventory@contoso-workshop.example>
+To: 윤가영 <logistics@contoso-workshop.example>, 배수민 <cs@contoso-workshop.example>, 최민석 <marketing@contoso-workshop.example>
+Cc: 이현지 <cdo@contoso-workshop.example>
+Date: Sat, 16 May 2026 00:15:00 GMT
+Subject: =?UTF-8?B?W+q4tOq4iV0g7ZW17IusIOyDge2SiCDsnqzqs6Ag67aA7KGxIOuwjyDsuqDtjpjsnbgg64W47LacIOyhsOyglSDsmpTssq0=?=
+Message-ID: <em05.track2@contoso-workshop.example>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Track2-Sample: true
+X-Track2-Thread: stockout
+X-Track2-Keywords: AeroPhone X;SmartWatch Pro;UltraBook 15
+
+2026-05-16 재고 스냅샷: AeroPhone X 4/예약 30(S09001), SmartWatch Pro 3/예약 25(S09002), UltraBook 15 6/예약 40(S09003).
+
+예약수량이 가용재고를 크게 초과합니다. 신규 캠페인 노출과 배송 약속을 즉시 재검토해 주세요.
+
+상품별 영향 주문은 O09001, O09002, O09003이며 물류/CS 상태를 같은 스레드에 회신 바랍니다.
+
+
+
+감사합니다.
+
+오지훈
+재고 운영 리드 | Contoso Commerce (가상)
+본 메일은 Track2 워크숍용 가상 콘텐츠입니다.

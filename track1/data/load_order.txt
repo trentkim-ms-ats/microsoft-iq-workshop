@@ -1,0 +1,16 @@
+Recommended load order for Track1 CSV files:
+
+1) channels.csv
+2) customers.csv
+3) products.csv
+4) campaigns.csv
+5) promotions.csv
+6) orders.csv
+7) order_items.csv
+8) payments.csv
+9) shipments.csv
+10) returns.csv
+11) inventory_snapshots.csv
+12) order_promotions.csv
+13) campaign_attribution.csv
+14) support_tickets.csv

@@ -1,0 +1,30 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/ontology/entityType/1.0.0/schema.json",
+  "id": "b2536c03-09ae-559f-bda3-ba431fcb9640",
+  "namespace": "usertypes",
+  "baseEntityTypeId": null,
+  "name": "Channel",
+  "description": "Channel (source: channels)",
+  "entityIdParts": [
+    "f38db104-5682-52c1-8a9f-f73e9272ff75"
+  ],
+  "displayNamePropertyId": "1ca5aae7-4aef-5d3b-a6d5-fbbf01e11a8f",
+  "namespaceType": "Custom",
+  "visibility": "Visible",
+  "properties": [
+    {
+      "id": "f38db104-5682-52c1-8a9f-f73e9272ff75",
+      "name": "channel_id",
+      "valueType": "String",
+      "sourceColumnName": "channel_id"
+    },
+    {
+      "id": "1ca5aae7-4aef-5d3b-a6d5-fbbf01e11a8f",
+      "name": "channel_name",
+      "valueType": "String",
+      "sourceColumnName": "channel_name"
+    }
+  ],
+  "timeseriesProperties": [],
+  "untypedProperties": []
+}

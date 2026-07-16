@@ -1,0 +1,80 @@
+name: Track3 Daily Briefing
+
+on:
+  workflow_dispatch:
+    inputs:
+      pipeline_version:
+        description: "Pipeline version tag"
+        required: false
+        default: "prod-2026-07"
+      prompt_version:
+        description: "Prompt version tag"
+        required: false
+        default: "p3.2"
+      model_version:
+        description: "Model version tag"
+        required: false
+        default: "foundry-responses-v1"
+      toolset_version:
+        description: "Toolset version tag"
+        required: false
+        default: "fabriciq-1.4+workiq-2.1"
+      run_fallback_check:
+        description: "Run fallback scenarios"
+        required: false
+        type: boolean
+        default: false
+  # KST 08:30 (Mon-Fri) == UTC 23:30 (Sun-Thu)
+  schedule:
+    - cron: "30 23 * * 0-4"
+
+jobs:
+  run-track3-daily-briefing:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      AZURE_AI_FOUNDRY_RESPONSES_ENDPOINT: ${{ secrets.AZURE_AI_FOUNDRY_RESPONSES_ENDPOINT }}
+      AZURE_AI_FOUNDRY_MODEL: ${{ secrets.AZURE_AI_FOUNDRY_MODEL }}
+      AZURE_AI_FOUNDRY_API_KEY: ${{ secrets.AZURE_AI_FOUNDRY_API_KEY }}
+      AZURE_AI_FOUNDRY_BEARER_TOKEN: ${{ secrets.AZURE_AI_FOUNDRY_BEARER_TOKEN }}
+      INPUT_PIPELINE_VERSION: ${{ inputs.pipeline_version }}
+      INPUT_PROMPT_VERSION: ${{ inputs.prompt_version }}
+      INPUT_MODEL_VERSION: ${{ inputs.model_version }}
+      INPUT_TOOLSET_VERSION: ${{ inputs.toolset_version }}
+      INPUT_RUN_FALLBACK_CHECK: ${{ inputs.run_fallback_check }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Run Track3 daily briefing pipeline
+        shell: bash
+        run: |
+          set -euo pipefail
+          PIPELINE_VERSION="${INPUT_PIPELINE_VERSION:-prod-2026-07}"
+          PROMPT_VERSION="${INPUT_PROMPT_VERSION:-p3.2}"
+          MODEL_VERSION="${INPUT_MODEL_VERSION:-foundry-responses-v1}"
+          TOOLSET_VERSION="${INPUT_TOOLSET_VERSION:-fabriciq-1.4+workiq-2.1}"
+          EXTRA_ARGS=""
+          if [[ "${INPUT_RUN_FALLBACK_CHECK:-false}" == "true" ]]; then
+            EXTRA_ARGS="--run-fallback-check"
+          fi
+
+          python tools/run_track3_daily_briefing.py \
+            --pipeline-version "${PIPELINE_VERSION}" \
+            --prompt-version "${PROMPT_VERSION}" \
+            --model-version "${MODEL_VERSION}" \
+            --toolset-version "${TOOLSET_VERSION}" \
+            ${EXTRA_ARGS}
+
+      - name: Upload Track3 reports artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: track3-daily-reports
+          path: |
+            track3/data/generated/reports/*
+            track3/data/generated/responses/*.json

@@ -1,0 +1,40 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/ontology/dataBinding/1.0.0/schema.json",
+  "id": "f84ea33f-42ff-5cd1-871e-fc6802dd50f3",
+  "dataBindingConfiguration": {
+    "dataBindingType": "NonTimeSeries",
+    "propertyBindings": [
+      {
+        "sourceColumnName": "ticket_id",
+        "targetPropertyId": "2aa27d0e-0594-58ef-b256-bd589fbd0df1"
+      },
+      {
+        "sourceColumnName": "customer_id",
+        "targetPropertyId": "5b6f903d-7a93-5a6e-81c5-2dd6ee277b73"
+      },
+      {
+        "sourceColumnName": "order_id",
+        "targetPropertyId": "3804ba7c-8105-5c38-a98b-f8a5ee071c1d"
+      },
+      {
+        "sourceColumnName": "ticket_type",
+        "targetPropertyId": "5abda041-4ad4-52d7-9f24-2778e86fd353"
+      },
+      {
+        "sourceColumnName": "ticket_reason",
+        "targetPropertyId": "b03c0dab-1dc2-5bc3-8470-b987ad7b991d"
+      },
+      {
+        "sourceColumnName": "created_at",
+        "targetPropertyId": "392b17b2-d952-5abf-9255-338538c753ec"
+      }
+    ],
+    "sourceTableProperties": {
+      "sourceType": "LakehouseTable",
+      "workspaceId": "00000000-0000-0000-0000-000000000000",
+      "itemId": "00000000-0000-0000-0000-000000000000",
+      "sourceTableName": "support_tickets",
+      "sourceSchema": "dbo"
+    }
+  }
+}

@@ -1,0 +1,54 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/ontology/entityType/1.0.0/schema.json",
+  "id": "5f124986-abff-53fd-8c90-237b814cdd25",
+  "namespace": "usertypes",
+  "baseEntityTypeId": null,
+  "name": "Promotion",
+  "description": "Promotion (source: promotions)",
+  "entityIdParts": [
+    "4a1704a9-7c33-5c1f-90fb-c922705002d8"
+  ],
+  "displayNamePropertyId": "36222885-2a6a-50b3-96f5-46efb4d1d9d5",
+  "namespaceType": "Custom",
+  "visibility": "Visible",
+  "properties": [
+    {
+      "id": "4a1704a9-7c33-5c1f-90fb-c922705002d8",
+      "name": "promotion_id",
+      "valueType": "String",
+      "sourceColumnName": "promotion_id"
+    },
+    {
+      "id": "36222885-2a6a-50b3-96f5-46efb4d1d9d5",
+      "name": "promotion_name",
+      "valueType": "String",
+      "sourceColumnName": "promotion_name"
+    },
+    {
+      "id": "d1cae7da-7193-50e4-bb63-6079d3938e7b",
+      "name": "promotion_type",
+      "valueType": "String",
+      "sourceColumnName": "promotion_type"
+    },
+    {
+      "id": "afd84b76-22f6-5929-a899-c23031e49098",
+      "name": "discount_amount",
+      "valueType": "Double",
+      "sourceColumnName": "discount_amount"
+    },
+    {
+      "id": "9870bb5c-1f27-5601-9805-91c374e9ec12",
+      "name": "start_date",
+      "valueType": "DateTime",
+      "sourceColumnName": "start_date"
+    },
+    {
+      "id": "d866f6bd-87f8-5149-a4ee-b302b624c824",
+      "name": "end_date",
+      "valueType": "DateTime",
+      "sourceColumnName": "end_date"
+    }
+  ],
+  "timeseriesProperties": [],
+  "untypedProperties": []
+}

@@ -1,0 +1,15 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/ontology/relationshipType/1.0.0/schema.json",
+  "id": "bddb2801-2333-5541-a15d-79e2379c28f8",
+  "namespace": "usertypes",
+  "name": "Order_has_Return",
+  "displayName": "Order has Return",
+  "description": "1:N (Order → Return)",
+  "namespaceType": "Custom",
+  "source": {
+    "entityTypeId": "7136b51e-8ea5-5ad9-8c23-153d1751a190"
+  },
+  "target": {
+    "entityTypeId": "58d69719-52fc-51ea-aef6-0fa527041d62"
+  }
+}

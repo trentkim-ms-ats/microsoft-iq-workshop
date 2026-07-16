@@ -1,0 +1,42 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/ontology/entityType/1.0.0/schema.json",
+  "id": "246a376f-906c-5c57-a37f-72f5222f72a4",
+  "namespace": "usertypes",
+  "baseEntityTypeId": null,
+  "name": "Customer",
+  "description": "Customer (source: customers)",
+  "entityIdParts": [
+    "42e6242b-7179-5932-b492-13be19fe178b"
+  ],
+  "displayNamePropertyId": "42e6242b-7179-5932-b492-13be19fe178b",
+  "namespaceType": "Custom",
+  "visibility": "Visible",
+  "properties": [
+    {
+      "id": "42e6242b-7179-5932-b492-13be19fe178b",
+      "name": "customer_id",
+      "valueType": "String",
+      "sourceColumnName": "customer_id"
+    },
+    {
+      "id": "1ea5383a-8aa1-5a13-b28d-acc9cb3ef73d",
+      "name": "customer_segment",
+      "valueType": "String",
+      "sourceColumnName": "customer_segment"
+    },
+    {
+      "id": "4d0302b6-24b2-53ce-9b5a-acf9ac809409",
+      "name": "customer_tier",
+      "valueType": "String",
+      "sourceColumnName": "customer_tier"
+    },
+    {
+      "id": "afb8e858-8e80-5657-9a0f-4f5f184f02c2",
+      "name": "join_date",
+      "valueType": "DateTime",
+      "sourceColumnName": "join_date"
+    }
+  ],
+  "timeseriesProperties": [],
+  "untypedProperties": []
+}

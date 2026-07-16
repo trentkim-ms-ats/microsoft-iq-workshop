@@ -1,0 +1,56 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/ontology/dataBinding/1.0.0/schema.json",
+  "id": "aef605a5-496e-5109-a641-bbacce89fb1c",
+  "dataBindingConfiguration": {
+    "dataBindingType": "NonTimeSeries",
+    "propertyBindings": [
+      {
+        "sourceColumnName": "order_id",
+        "targetPropertyId": "ae3b9e82-623b-52c5-bd5f-71d8e9306109"
+      },
+      {
+        "sourceColumnName": "customer_id",
+        "targetPropertyId": "8a40d237-de83-5af0-98e4-4c38330dbb51"
+      },
+      {
+        "sourceColumnName": "channel_id",
+        "targetPropertyId": "a4d22947-b386-5e98-9517-1cbb9221dca8"
+      },
+      {
+        "sourceColumnName": "order_date",
+        "targetPropertyId": "2ac9bd4a-4654-50f6-98cb-7ba8525445a6"
+      },
+      {
+        "sourceColumnName": "order_status",
+        "targetPropertyId": "e02f27f3-d8f9-5988-b1d7-a509336a422b"
+      },
+      {
+        "sourceColumnName": "gross_amount",
+        "targetPropertyId": "aa1d4ccf-de5c-5530-8d79-f93bad298295"
+      },
+      {
+        "sourceColumnName": "discount_applied",
+        "targetPropertyId": "17a97ddb-01bd-5a6c-9d0a-fdc1d2420a16"
+      },
+      {
+        "sourceColumnName": "net_amount",
+        "targetPropertyId": "e2ad376a-db1b-5fa9-b4d2-e577aeb6fba4"
+      },
+      {
+        "sourceColumnName": "order_value",
+        "targetPropertyId": "2d7aa373-aba9-5b53-979a-25601fd42be6"
+      },
+      {
+        "sourceColumnName": "currency",
+        "targetPropertyId": "a4587952-c958-52ee-9b2e-d455925b746c"
+      }
+    ],
+    "sourceTableProperties": {
+      "sourceType": "LakehouseTable",
+      "workspaceId": "00000000-0000-0000-0000-000000000000",
+      "itemId": "00000000-0000-0000-0000-000000000000",
+      "sourceTableName": "orders",
+      "sourceSchema": "dbo"
+    }
+  }
+}

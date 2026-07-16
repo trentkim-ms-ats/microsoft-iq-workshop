@@ -1,0 +1,28 @@
+From: =?UTF-8?B?6rmA7ISc7Jew?= <ceo@contoso-workshop.example>
+To: 최민석 <marketing@contoso-workshop.example>, 박준호 <cfo@contoso-workshop.example>, 이현지 <cdo@contoso-workshop.example>
+Cc: 정도윤 <payments@contoso-workshop.example>, 오지훈 <inventory@contoso-workshop.example>, 윤가영 <logistics@contoso-workshop.example>, 배수민 <cs@contoso-workshop.example>
+Date: Sat, 11 Jul 2026 00:30:00 GMT
+Subject: =?UTF-8?B?UkU6IEJhY2tUb1NjaG9vbCDsuqDtjpjsnbgg7KGw6rG067aAIOyKueyduCDsmpTssq0=?=
+Message-ID: <em12.track2@contoso-workshop.example>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Track2-Sample: true
+X-Track2-Thread: backtoschool
+X-Track2-Keywords: BackToSchool;AeroPhone X;SmartWatch Pro;UltraBook 15
+In-Reply-To: <em10.track2@contoso-workshop.example>
+References: <em10.track2@contoso-workshop.example>
+
+조건부 Go로 승인합니다.
+
+AeroPhone X, SmartWatch Pro, UltraBook 15의 노출 제한과 배송 약속 변경을 적용하고 결제 Failed/RetrySuccess를 분리 보고해 주세요.
+
+최종 브리핑에는 FabricIQ 지표, WorkIQ 원본 링크, 품질 경고, 담당자와 기한을 포함해야 합니다.
+
+
+
+감사합니다.
+
+김서연
+CEO | Contoso Commerce (가상)
+본 메일은 Track2 워크숍용 가상 콘텐츠입니다.

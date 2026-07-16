@@ -1,0 +1,15 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/ontology/relationshipType/1.0.0/schema.json",
+  "id": "ed9c01cc-564a-5c60-a3d7-501c32ca22bf",
+  "namespace": "usertypes",
+  "name": "OrderPromotion_points_to_Promotion",
+  "displayName": "OrderPromotion points_to Promotion",
+  "description": "1:N (Promotion → OrderPromotion)",
+  "namespaceType": "Custom",
+  "source": {
+    "entityTypeId": "5f124986-abff-53fd-8c90-237b814cdd25"
+  },
+  "target": {
+    "entityTypeId": "1200b806-1fa4-57b1-88e8-7107d5674200"
+  }
+}

@@ -1,0 +1,26 @@
+From: =?UTF-8?B?7LWc66+87ISd?= <marketing@contoso-workshop.example>
+To: 김서연 <ceo@contoso-workshop.example>, 박준호 <cfo@contoso-workshop.example>, 이현지 <cdo@contoso-workshop.example>
+Cc: 정도윤 <payments@contoso-workshop.example>, 오지훈 <inventory@contoso-workshop.example>, 윤가영 <logistics@contoso-workshop.example>, 배수민 <cs@contoso-workshop.example>
+Date: Fri, 10 Jul 2026 06:20:00 GMT
+Subject: =?UTF-8?B?QmFja1RvU2Nob29sIOy6oO2OmOyduCDsobDqsbTrtoAg7Iq57J24IOyalOyyrQ==?=
+Message-ID: <em10.track2@contoso-workshop.example>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Track2-Sample: true
+X-Track2-Thread: backtoschool
+X-Track2-Keywords: BackToSchool;OnlineMall;Go/No-Go
+
+BackToSchool(CA00002)은 2026-07-15 시작 예정입니다.
+
+현재 귀속 추출에서 BackToSchool은 5개 귀속행/3,987.76 귀속매출(실패 2, 재시도성공 2, 성공 1), FlashWeek는 4개 귀속행/2,450.26 귀속매출(실패 2, 재시도성공 1, 성공 1)이다.
+
+핵심 상품 재고와 배송 약속, 결제 실패/재시도 지표를 조건으로 캠페인 조건부 Go 승인을 요청합니다.
+
+
+
+감사합니다.
+
+최민석
+마케팅 리드 | Contoso Commerce (가상)
+본 메일은 Track2 워크숍용 가상 콘텐츠입니다.

@@ -1,0 +1,15 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/ontology/relationshipType/1.0.0/schema.json",
+  "id": "7281138c-5c70-5a48-9ad3-ef8b80c6080f",
+  "namespace": "usertypes",
+  "name": "CampaignAttribution_points_to_Customer",
+  "displayName": "CampaignAttribution points_to Customer",
+  "description": "1:N (Customer → CampaignAttribution)",
+  "namespaceType": "Custom",
+  "source": {
+    "entityTypeId": "246a376f-906c-5c57-a37f-72f5222f72a4"
+  },
+  "target": {
+    "entityTypeId": "93454448-8bdd-5629-8de3-a051469b74c6"
+  }
+}

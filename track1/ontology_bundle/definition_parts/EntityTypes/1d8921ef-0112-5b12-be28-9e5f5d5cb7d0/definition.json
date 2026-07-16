@@ -1,0 +1,54 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/ontology/entityType/1.0.0/schema.json",
+  "id": "1d8921ef-0112-5b12-be28-9e5f5d5cb7d0",
+  "namespace": "usertypes",
+  "baseEntityTypeId": null,
+  "name": "SupportTicket",
+  "description": "SupportTicket (source: support_tickets)",
+  "entityIdParts": [
+    "2aa27d0e-0594-58ef-b256-bd589fbd0df1"
+  ],
+  "displayNamePropertyId": "2aa27d0e-0594-58ef-b256-bd589fbd0df1",
+  "namespaceType": "Custom",
+  "visibility": "Visible",
+  "properties": [
+    {
+      "id": "2aa27d0e-0594-58ef-b256-bd589fbd0df1",
+      "name": "ticket_id",
+      "valueType": "String",
+      "sourceColumnName": "ticket_id"
+    },
+    {
+      "id": "5b6f903d-7a93-5a6e-81c5-2dd6ee277b73",
+      "name": "customer_id",
+      "valueType": "String",
+      "sourceColumnName": "customer_id"
+    },
+    {
+      "id": "3804ba7c-8105-5c38-a98b-f8a5ee071c1d",
+      "name": "order_id",
+      "valueType": "String",
+      "sourceColumnName": "order_id"
+    },
+    {
+      "id": "5abda041-4ad4-52d7-9f24-2778e86fd353",
+      "name": "ticket_type",
+      "valueType": "String",
+      "sourceColumnName": "ticket_type"
+    },
+    {
+      "id": "b03c0dab-1dc2-5bc3-8470-b987ad7b991d",
+      "name": "ticket_reason",
+      "valueType": "String",
+      "sourceColumnName": "ticket_reason"
+    },
+    {
+      "id": "392b17b2-d952-5abf-9255-338538c753ec",
+      "name": "created_at",
+      "valueType": "DateTime",
+      "sourceColumnName": "created_at"
+    }
+  ],
+  "timeseriesProperties": [],
+  "untypedProperties": []
+}

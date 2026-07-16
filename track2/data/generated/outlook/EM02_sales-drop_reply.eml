@@ -1,0 +1,28 @@
+From: =?UTF-8?B?7KCV64+E7Jyk?= <payments@contoso-workshop.example>
+To: 김서연 <ceo@contoso-workshop.example>, 박준호 <cfo@contoso-workshop.example>, 이현지 <cdo@contoso-workshop.example>
+Cc: 최민석 <marketing@contoso-workshop.example>, 한유진 <growth@contoso-workshop.example>
+Date: Mon, 18 May 2026 02:05:00 GMT
+Subject: =?UTF-8?B?UkU6IFvrpqzrjZTsi61dIDXsm5Qg66ek7LacIOq4ieudvSDsnbTsiogg6rO17Jyg?=
+Message-ID: <em02.track2@contoso-workshop.example>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Track2-Sample: true
+X-Track2-Thread: sales-drop
+X-Track2-Keywords: SummerPush;RetrySuccess;PAY00019
+In-Reply-To: <em01.track2@contoso-workshop.example>
+References: <em01.track2@contoso-workshop.example>
+
+결제 원천을 확인한 결과 Failed와 RetrySuccess가 거의 같은 규모로 관측됩니다.
+
+RetrySuccess를 단순 성공으로 합치면 최초 승인율 저하가 가려집니다. AUTHORIZED + is_retry=true로 분리해 다시 보고하겠습니다.
+
+PAY00019 상태 결측과 PAY90001 고아 주문 참조는 품질 검증 대상에서 별도 표시하겠습니다.
+
+
+
+감사합니다.
+
+정도윤
+결제 플랫폼 리드 | Contoso Commerce (가상)
+본 메일은 Track2 워크숍용 가상 콘텐츠입니다.

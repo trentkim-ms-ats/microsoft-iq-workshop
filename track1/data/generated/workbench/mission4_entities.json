@@ -1,0 +1,16 @@
+[
+  "Customer",
+  "Product",
+  "Channel",
+  "Campaign",
+  "Promotion",
+  "Order",
+  "OrderItem",
+  "Payment",
+  "Shipment",
+  "Return",
+  "SupportTicket",
+  "InventorySnapshot",
+  "OrderPromotion",
+  "CampaignAttribution"
+]

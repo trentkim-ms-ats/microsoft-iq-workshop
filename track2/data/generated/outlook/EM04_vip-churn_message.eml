@@ -1,0 +1,26 @@
+From: =?UTF-8?B?7Iah7ZWY64qY?= <crm@contoso-workshop.example>
+To: 배수민 <cs@contoso-workshop.example>, 최민석 <marketing@contoso-workshop.example>, 임채원 <data@contoso-workshop.example>
+Cc: 이현지 <cdo@contoso-workshop.example>
+Date: Fri, 15 May 2026 01:10:00 GMT
+Subject: =?UTF-8?B?VklQUmV0ZW50aW9uIOuMgOyDgSBQbGF0aW51bSDqs6DqsJ0g7J207YOIIOqyveqzoA==?=
+Message-ID: <em04.track2@contoso-workshop.example>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Track2-Sample: true
+X-Track2-Thread: vip-churn
+X-Track2-Keywords: VIPRetention;Platinum;DailyTee Cotton
+
+VIPRetention 대상 중 Platinum 고객의 반품 및 문의 신호를 검토해 주세요.
+
+C00003은 New/Platinum이며, C00007은 Platinum이지만 customer_segment가 비어 있어 자동 세그먼트 판단에서 제외해야 합니다.
+
+DailyTee Cotton 반품 미팅 노트와 원본 주문·배송·반품 링크를 확인한 후 고객 접촉안을 제안해 주세요.
+
+
+
+감사합니다.
+
+송하늘
+CRM 리드 | Contoso Commerce (가상)
+본 메일은 Track2 워크숍용 가상 콘텐츠입니다.

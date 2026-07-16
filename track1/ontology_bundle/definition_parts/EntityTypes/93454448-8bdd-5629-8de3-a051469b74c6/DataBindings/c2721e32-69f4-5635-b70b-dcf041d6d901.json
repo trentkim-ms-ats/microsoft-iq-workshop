@@ -1,0 +1,36 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/ontology/dataBinding/1.0.0/schema.json",
+  "id": "c2721e32-69f4-5635-b70b-dcf041d6d901",
+  "dataBindingConfiguration": {
+    "dataBindingType": "NonTimeSeries",
+    "propertyBindings": [
+      {
+        "sourceColumnName": "campaign_id",
+        "targetPropertyId": "ef602933-ef22-531c-b558-944bf72ea957"
+      },
+      {
+        "sourceColumnName": "order_id",
+        "targetPropertyId": "8b0ccb4d-8ba9-50a6-9291-917de6f1bf85"
+      },
+      {
+        "sourceColumnName": "customer_id",
+        "targetPropertyId": "f19b82c6-d0dc-5ed3-8c51-51c5f57c11b2"
+      },
+      {
+        "sourceColumnName": "attribution_model",
+        "targetPropertyId": "66359793-620d-5a44-9251-7bd49e1d71c8"
+      },
+      {
+        "sourceColumnName": "attributed_revenue",
+        "targetPropertyId": "dfac4786-fcd0-58a3-95f9-7893920028a0"
+      }
+    ],
+    "sourceTableProperties": {
+      "sourceType": "LakehouseTable",
+      "workspaceId": "00000000-0000-0000-0000-000000000000",
+      "itemId": "00000000-0000-0000-0000-000000000000",
+      "sourceTableName": "campaign_attribution",
+      "sourceSchema": "dbo"
+    }
+  }
+}

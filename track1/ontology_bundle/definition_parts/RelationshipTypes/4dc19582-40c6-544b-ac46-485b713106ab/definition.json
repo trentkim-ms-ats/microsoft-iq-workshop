@@ -1,0 +1,15 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/ontology/relationshipType/1.0.0/schema.json",
+  "id": "4dc19582-40c6-544b-ac46-485b713106ab",
+  "namespace": "usertypes",
+  "name": "Customer_raises_SupportTicket",
+  "displayName": "Customer raises SupportTicket",
+  "description": "1:N (Customer → SupportTicket)",
+  "namespaceType": "Custom",
+  "source": {
+    "entityTypeId": "246a376f-906c-5c57-a37f-72f5222f72a4"
+  },
+  "target": {
+    "entityTypeId": "1d8921ef-0112-5b12-be28-9e5f5d5cb7d0"
+  }
+}

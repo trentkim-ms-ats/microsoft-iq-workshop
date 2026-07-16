@@ -1,0 +1,26 @@
+From: =?UTF-8?B?67Cw7IiY66+8?= <cs@contoso-workshop.example>
+To: 송하늘 <crm@contoso-workshop.example>, 한유진 <growth@contoso-workshop.example>, 임채원 <data@contoso-workshop.example>
+Cc: 이현지 <cdo@contoso-workshop.example>
+Date: Mon, 25 May 2026 07:30:00 GMT
+Subject: =?UTF-8?B?67CY7ZKIIOyCrOycoCDsm5TqsIQg7JqU7JW9IC0g7LGE64SQIOuwjyDqs6DqsJ3rk7HquIkg6rKA7Yag?=
+Message-ID: <em07.track2@contoso-workshop.example>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Track2-Sample: true
+X-Track2-Thread: returns
+X-Track2-Keywords: NotAsDescribed;LateDelivery;MobileApp;OfflineStore
+
+반품 1,000건은 LateDelivery/NotAsDescribed/ChangedMind/Damaged 각 200건, SizeIssue 199건, 사유 결측 1건(R00011)이며 MobileApp과 OfflineStore에 각 500건 집중됐다.
+
+R00011은 반품 사유가 비어 있어 임의 분류하지 않았습니다.
+
+VIPRetention과 연결할 때 반품 사유, 배송 상태, 고객등급을 함께 보고 원본 링크를 유지해 주세요.
+
+
+
+감사합니다.
+
+배수민
+CS 티어2 리드 | Contoso Commerce (가상)
+본 메일은 Track2 워크숍용 가상 콘텐츠입니다.

@@ -1,0 +1,40 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/ontology/dataBinding/1.0.0/schema.json",
+  "id": "dc731572-6b4b-552f-9a43-21106effa864",
+  "dataBindingConfiguration": {
+    "dataBindingType": "NonTimeSeries",
+    "propertyBindings": [
+      {
+        "sourceColumnName": "return_id",
+        "targetPropertyId": "082e92dc-acc9-5317-9eac-b3323cab3495"
+      },
+      {
+        "sourceColumnName": "order_id",
+        "targetPropertyId": "08ec778c-d080-50f2-82d1-23e3782d5ec8"
+      },
+      {
+        "sourceColumnName": "product_id",
+        "targetPropertyId": "cde1583b-283e-59c0-a824-d10a67aa3ef2"
+      },
+      {
+        "sourceColumnName": "customer_id",
+        "targetPropertyId": "74d97227-edb3-5436-b13c-c092c6371e12"
+      },
+      {
+        "sourceColumnName": "return_reason",
+        "targetPropertyId": "648de32f-4e41-579c-b6e7-bf6ef6c3fa50"
+      },
+      {
+        "sourceColumnName": "return_date",
+        "targetPropertyId": "76de24e5-562f-5d7c-8c2a-36ac5e7f5446"
+      }
+    ],
+    "sourceTableProperties": {
+      "sourceType": "LakehouseTable",
+      "workspaceId": "00000000-0000-0000-0000-000000000000",
+      "itemId": "00000000-0000-0000-0000-000000000000",
+      "sourceTableName": "returns",
+      "sourceSchema": "dbo"
+    }
+  }
+}

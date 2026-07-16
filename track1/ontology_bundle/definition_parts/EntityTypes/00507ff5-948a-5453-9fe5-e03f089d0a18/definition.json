@@ -1,0 +1,42 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/ontology/entityType/1.0.0/schema.json",
+  "id": "00507ff5-948a-5453-9fe5-e03f089d0a18",
+  "namespace": "usertypes",
+  "baseEntityTypeId": null,
+  "name": "Shipment",
+  "description": "Shipment (source: shipments)",
+  "entityIdParts": [
+    "16473555-6cc0-59f4-89e7-266aed1975d0"
+  ],
+  "displayNamePropertyId": "16473555-6cc0-59f4-89e7-266aed1975d0",
+  "namespaceType": "Custom",
+  "visibility": "Visible",
+  "properties": [
+    {
+      "id": "16473555-6cc0-59f4-89e7-266aed1975d0",
+      "name": "shipment_id",
+      "valueType": "String",
+      "sourceColumnName": "shipment_id"
+    },
+    {
+      "id": "68c230da-bd85-5566-a34b-b104dfc9aff5",
+      "name": "order_id",
+      "valueType": "String",
+      "sourceColumnName": "order_id"
+    },
+    {
+      "id": "5159511b-bc0a-5662-8e3d-0342bb2e79c3",
+      "name": "shipment_status",
+      "valueType": "String",
+      "sourceColumnName": "shipment_status"
+    },
+    {
+      "id": "ed18f536-dd82-5838-a36e-5c4793bdbd92",
+      "name": "delivered_at",
+      "valueType": "DateTime",
+      "sourceColumnName": "delivered_at"
+    }
+  ],
+  "timeseriesProperties": [],
+  "untypedProperties": []
+}

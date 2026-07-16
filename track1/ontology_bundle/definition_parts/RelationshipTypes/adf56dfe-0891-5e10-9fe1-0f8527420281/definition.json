@@ -1,0 +1,15 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/ontology/relationshipType/1.0.0/schema.json",
+  "id": "adf56dfe-0891-5e10-9fe1-0f8527420281",
+  "namespace": "usertypes",
+  "name": "Order_fulfilled_by_Shipment",
+  "displayName": "Order fulfilled_by Shipment",
+  "description": "1:N (Order → Shipment)",
+  "namespaceType": "Custom",
+  "source": {
+    "entityTypeId": "7136b51e-8ea5-5ad9-8c23-153d1751a190"
+  },
+  "target": {
+    "entityTypeId": "00507ff5-948a-5453-9fe5-e03f089d0a18"
+  }
+}

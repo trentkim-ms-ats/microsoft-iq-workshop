@@ -1,0 +1,49 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/ontology/entityType/1.0.0/schema.json",
+  "id": "93454448-8bdd-5629-8de3-a051469b74c6",
+  "namespace": "usertypes",
+  "baseEntityTypeId": null,
+  "name": "CampaignAttribution",
+  "description": "CampaignAttribution (source: campaign_attribution)",
+  "entityIdParts": [
+    "ef602933-ef22-531c-b558-944bf72ea957",
+    "8b0ccb4d-8ba9-50a6-9291-917de6f1bf85"
+  ],
+  "displayNamePropertyId": "ef602933-ef22-531c-b558-944bf72ea957",
+  "namespaceType": "Custom",
+  "visibility": "Visible",
+  "properties": [
+    {
+      "id": "ef602933-ef22-531c-b558-944bf72ea957",
+      "name": "campaign_id",
+      "valueType": "String",
+      "sourceColumnName": "campaign_id"
+    },
+    {
+      "id": "8b0ccb4d-8ba9-50a6-9291-917de6f1bf85",
+      "name": "order_id",
+      "valueType": "String",
+      "sourceColumnName": "order_id"
+    },
+    {
+      "id": "f19b82c6-d0dc-5ed3-8c51-51c5f57c11b2",
+      "name": "customer_id",
+      "valueType": "String",
+      "sourceColumnName": "customer_id"
+    },
+    {
+      "id": "66359793-620d-5a44-9251-7bd49e1d71c8",
+      "name": "attribution_model",
+      "valueType": "String",
+      "sourceColumnName": "attribution_model"
+    },
+    {
+      "id": "dfac4786-fcd0-58a3-95f9-7893920028a0",
+      "name": "attributed_revenue",
+      "valueType": "Double",
+      "sourceColumnName": "attributed_revenue"
+    }
+  ],
+  "timeseriesProperties": [],
+  "untypedProperties": []
+}

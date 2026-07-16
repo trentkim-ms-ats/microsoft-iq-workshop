@@ -1,0 +1,15 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/ontology/relationshipType/1.0.0/schema.json",
+  "id": "71eb5cda-0793-5c17-ab63-ec28af40cc76",
+  "namespace": "usertypes",
+  "name": "OrderItem_references_Product",
+  "displayName": "OrderItem references Product",
+  "description": "1:N (Product → OrderItem)",
+  "namespaceType": "Custom",
+  "source": {
+    "entityTypeId": "042ce244-ff8c-59a4-a7ca-1f1aa284d76f"
+  },
+  "target": {
+    "entityTypeId": "3436514b-355a-53d4-abb2-ba183296cfeb"
+  }
+}

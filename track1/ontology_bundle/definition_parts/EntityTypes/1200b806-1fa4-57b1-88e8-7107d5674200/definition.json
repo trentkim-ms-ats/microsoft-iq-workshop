@@ -1,0 +1,31 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/ontology/entityType/1.0.0/schema.json",
+  "id": "1200b806-1fa4-57b1-88e8-7107d5674200",
+  "namespace": "usertypes",
+  "baseEntityTypeId": null,
+  "name": "OrderPromotion",
+  "description": "OrderPromotion (source: order_promotions)",
+  "entityIdParts": [
+    "982f0657-1dc6-55b3-88bf-78062f6a8c81",
+    "450ad398-dab0-59aa-9c09-5ac94cc2422c"
+  ],
+  "displayNamePropertyId": "982f0657-1dc6-55b3-88bf-78062f6a8c81",
+  "namespaceType": "Custom",
+  "visibility": "Visible",
+  "properties": [
+    {
+      "id": "982f0657-1dc6-55b3-88bf-78062f6a8c81",
+      "name": "order_id",
+      "valueType": "String",
+      "sourceColumnName": "order_id"
+    },
+    {
+      "id": "450ad398-dab0-59aa-9c09-5ac94cc2422c",
+      "name": "promotion_id",
+      "valueType": "String",
+      "sourceColumnName": "promotion_id"
+    }
+  ],
+  "timeseriesProperties": [],
+  "untypedProperties": []
+}

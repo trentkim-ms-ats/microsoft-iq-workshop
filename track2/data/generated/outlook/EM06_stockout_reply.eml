@@ -1,0 +1,28 @@
+From: =?UTF-8?B?7Jyk6rCA7JiB?= <logistics@contoso-workshop.example>
+To: 오지훈 <inventory@contoso-workshop.example>, 배수민 <cs@contoso-workshop.example>, 최민석 <marketing@contoso-workshop.example>
+Cc: 이현지 <cdo@contoso-workshop.example>
+Date: Sat, 16 May 2026 23:50:00 GMT
+Subject: =?UTF-8?B?UkU6IFvquLTquIldIO2VteyLrCDsg4Htkogg7J6s6rOgIOu2gOyhsSDrsI8g7Lqg7Y6Y7J24IOuFuOy2nCDsobDsoJUg7JqU7LKt?=
+Message-ID: <em06.track2@contoso-workshop.example>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Track2-Sample: true
+X-Track2-Thread: stockout
+X-Track2-Keywords: SH09001;SH09002;SH09003;배송 지연
+In-Reply-To: <em05.track2@contoso-workshop.example>
+References: <em05.track2@contoso-workshop.example>
+
+연결 주문/배송/CS: AeroPhone X O09001-SH09001 Delayed-T09001 NoTrackingUpdate, SmartWatch Pro O09002-SH09002 Delayed-T09002 LateDelivery, UltraBook 15 O09003-SH09003 InTransit-T09003 NoTrackingUpdate.
+
+AeroPhone X와 SmartWatch Pro는 지연 상태이며 UltraBook 15은 운송 중이지만 추적정보 문의가 발생했습니다.
+
+오늘 14시까지 약속일 재산정과 고객 공지 대상 목록을 공유하겠습니다.
+
+
+
+감사합니다.
+
+윤가영
+물류 운영 리드 | Contoso Commerce (가상)
+본 메일은 Track2 워크숍용 가상 콘텐츠입니다.

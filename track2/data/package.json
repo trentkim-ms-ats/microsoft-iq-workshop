@@ -1,0 +1,12 @@
+{
+  "name": "track2-m365-sample-data",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Generates realistic four-source M365 sample content for the Track2 WorkIQ workshop.",
+  "scripts": {
+    "generate": "node generate_samples.js"
+  },
+  "dependencies": {
+    "docx": "9.5.1"
+  }
+}

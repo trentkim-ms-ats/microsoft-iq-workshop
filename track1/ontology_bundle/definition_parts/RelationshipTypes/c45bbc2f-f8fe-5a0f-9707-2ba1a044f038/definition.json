@@ -1,0 +1,16 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/ontology/relationshipType/1.0.0/schema.json",
+  "id": "c45bbc2f-f8fe-5a0f-9707-2ba1a044f038",
+  "namespace": "usertypes",
+  "name": "Campaign_influences_Order",
+  "displayName": "Campaign influences Order (logical)",
+  "description": "LOGICAL N:M derived via campaign_attribution",
+  "isLogical": true,
+  "namespaceType": "Custom",
+  "source": {
+    "entityTypeId": "f2f8ca50-f931-5a64-b34b-f4bf6fc4748d"
+  },
+  "target": {
+    "entityTypeId": "7136b51e-8ea5-5ad9-8c23-153d1751a190"
+  }
+}

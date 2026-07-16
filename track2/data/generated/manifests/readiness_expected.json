@@ -1,0 +1,85 @@
+{
+  "packageVersion": "1.0.0",
+  "generatedAt": "2026-07-16T14:59:29.418Z",
+  "fictionalDataOnly": true,
+  "primaryContentCount": 60,
+  "sourceCounts": {
+    "SharePoint": 15,
+    "Outlook": 15,
+    "TeamsThreads": 18,
+    "TeamsMessages": 55,
+    "OneDrive": 12
+  },
+  "requiredKeywordCoverage": {
+    "SummerPush": [
+      "SharePoint",
+      "Outlook",
+      "Teams"
+    ],
+    "VIPRetention": [
+      "SharePoint",
+      "Outlook",
+      "OneDrive"
+    ],
+    "AeroPhone X": [
+      "SharePoint",
+      "Outlook",
+      "Teams"
+    ],
+    "SmartWatch Pro": [
+      "SharePoint",
+      "Outlook",
+      "Teams"
+    ],
+    "UltraBook 15": [
+      "SharePoint",
+      "Outlook",
+      "Teams"
+    ],
+    "DailyTee Cotton": [
+      "SharePoint",
+      "Outlook",
+      "Teams",
+      "OneDrive"
+    ],
+    "ComfyChair Home": [
+      "SharePoint",
+      "Outlook",
+      "Teams",
+      "OneDrive"
+    ],
+    "Platinum": [
+      "SharePoint",
+      "Outlook",
+      "Teams",
+      "OneDrive"
+    ],
+    "Silver": [
+      "SharePoint",
+      "Outlook",
+      "Teams",
+      "OneDrive"
+    ],
+    "BackToSchool": [
+      "SharePoint",
+      "Outlook",
+      "Teams",
+      "OneDrive"
+    ],
+    "FlashWeek": [
+      "SharePoint",
+      "Outlook",
+      "Teams",
+      "OneDrive"
+    ]
+  },
+  "intentionalTrack2QualityCases": [
+    "Draft documents",
+    "Restricted ACL documents",
+    "Aero Phone X alias in Teams",
+    "Track1 data-quality warnings",
+    "Campaign attribution coverage limitation",
+    "Missing customer segment (C00007) kept separate",
+    "P00050 zero-price outlier excluded from catalog"
+  ]
+}

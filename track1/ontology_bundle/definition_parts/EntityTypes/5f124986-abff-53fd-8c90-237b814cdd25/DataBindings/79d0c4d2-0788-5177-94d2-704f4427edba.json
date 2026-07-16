@@ -1,0 +1,40 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/ontology/dataBinding/1.0.0/schema.json",
+  "id": "79d0c4d2-0788-5177-94d2-704f4427edba",
+  "dataBindingConfiguration": {
+    "dataBindingType": "NonTimeSeries",
+    "propertyBindings": [
+      {
+        "sourceColumnName": "promotion_id",
+        "targetPropertyId": "4a1704a9-7c33-5c1f-90fb-c922705002d8"
+      },
+      {
+        "sourceColumnName": "promotion_name",
+        "targetPropertyId": "36222885-2a6a-50b3-96f5-46efb4d1d9d5"
+      },
+      {
+        "sourceColumnName": "promotion_type",
+        "targetPropertyId": "d1cae7da-7193-50e4-bb63-6079d3938e7b"
+      },
+      {
+        "sourceColumnName": "discount_amount",
+        "targetPropertyId": "afd84b76-22f6-5929-a899-c23031e49098"
+      },
+      {
+        "sourceColumnName": "start_date",
+        "targetPropertyId": "9870bb5c-1f27-5601-9805-91c374e9ec12"
+      },
+      {
+        "sourceColumnName": "end_date",
+        "targetPropertyId": "d866f6bd-87f8-5149-a4ee-b302b624c824"
+      }
+    ],
+    "sourceTableProperties": {
+      "sourceType": "LakehouseTable",
+      "workspaceId": "00000000-0000-0000-0000-000000000000",
+      "itemId": "00000000-0000-0000-0000-000000000000",
+      "sourceTableName": "promotions",
+      "sourceSchema": "dbo"
+    }
+  }
+}
