@@ -1,7 +1,7 @@
 # =============================================================================
 # deploy_ontology_notebook.py
 # -----------------------------------------------------------------------------
-# 부록 B "선언적 일괄 정의 방식"을 Fabric Notebook 에서 실행하는 배포 코드.
+# Appendix B "선언적 일괄 정의 방식"을 Fabric Notebook 에서 실행하는 배포 코드.
 #
 # 이 파일은 Fabric Notebook 셀 단위로 붙여넣어 실행하도록 구성되어 있습니다.
 # 각 "# ======== CELL n ========" 블록을 하나의 노트북 셀에 복사하세요.
@@ -147,7 +147,7 @@ else:
     url = f"{FABRIC_API_BASE}/workspaces/{WORKSPACE_ID}/ontologies"
     body = {
         "displayName": ONTOLOGY_NAME,
-        "description": "Track1 선언적 일괄 정의(부록 B)",
+        "description": "Track1 선언적 일괄 정의(Appendix B)",
         "definition": definition_full,
     }
     resp = requests.post(url, headers=headers, json=body, timeout=120)

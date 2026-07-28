@@ -9,14 +9,15 @@
 ## 참고 자료
 - Track3 실습 준비물 상세: [PREREQUISITES.md](PREREQUISITES.md)
 - FoundryIQ 기술 가이드: [Track3_FoundryIQ_Introduction_and_Technical_Guide.md](./docs/Track3_FoundryIQ_Introduction_and_Technical_Guide.md)
-- FabricIQ 운영형 검증 부록: [Track3_Appendix_FabricIQ_Operational_Agent_Validation_Guide.md](./docs/Track3_Appendix_FabricIQ_Operational_Agent_Validation_Guide.md)
+- FabricIQ 운영형 검증 Appendix: [Track3_Appendix_FabricIQ_Operational_Agent_Validation_Guide.md](./docs/Track3_Appendix_FabricIQ_Operational_Agent_Validation_Guide.md)
 - 발표용 1장 요약 슬라이드 원고: [Track3_OneSlide_Executive_Summary.md](./docs/Track3_OneSlide_Executive_Summary.md)
-- WorkIQ/Graph 검색 API 부록: [Track3_Appendix_WorkIQ_Integration_and_M365_Search_API_Guide.md](./docs/Track3_Appendix_WorkIQ_Integration_and_M365_Search_API_Guide.md)
+- WorkIQ/Graph 검색 API Appendix: [Track3_Appendix_WorkIQ_Integration_and_M365_Search_API_Guide.md](./docs/Track3_Appendix_WorkIQ_Integration_and_M365_Search_API_Guide.md)
 - Track2 인계 계약(입력 패키지 기준): [PREREQUISITES.md](../track2/PREREQUISITES.md)
 - Track3 자동 실행 샘플(데이터/스크립트/노트북): [track3/data/README.md](./data/README.md)
 - Track3 미션 워크벤치 노트북: [track3/data/Track3_Mission_Workbench.ipynb](./data/Track3_Mission_Workbench.ipynb)
 - Track3 학습자용 End-to-End 노트북(스크립트 로직을 셀로 이식): [track3/data/Track3_EndToEnd_Learner_Notebook.ipynb](./data/Track3_EndToEnd_Learner_Notebook.ipynb)
 - 통합 계획(전체 시간/트랙 목적): [Fabric_Ontology_AI_Workshop_Integrated_Plan_v2.0.md](../common/docs/Fabric_Ontology_AI_Workshop_Integrated_Plan_v2.0.md)
+
 
 ## 실습 목표
 1. Track2 인계 패키지를 15분 내 검수하고 Tool A/B 단독 헬스체크를 완료한다.

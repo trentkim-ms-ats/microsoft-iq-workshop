@@ -35,6 +35,13 @@ Track1의 Ontology와 샘플 CSV 컨텍스트를 바탕으로 Track2 WorkIQ 실�
 ```text
 track2/data/
   generate_samples.js
+  content_definitions/
+    people.json
+    facts.json
+    sharepoint_docs.json
+    onedrive_docs.json
+    outlook_messages.json
+    teams_threads.json
   bootstrap_m365_prereqs.py
   run_track2_oneclick.py
   deploy_m365_samples.py
@@ -67,6 +74,7 @@ npm run generate
 ```
 
 생성기는 `generated/`를 지우고 같은 내용으로 다시 만듭니다. `package-lock.json`을 사용하므로 같은 의존성 버전으로 재현됩니다.
+샘플 문서/메일/스레드 원문은 `content_definitions/` 폴더의 유형별 JSON 파일에 분리되어 있으며, `generate_samples.js`는 해당 폴더를 읽어 산출물을 생성합니다.
 
 ## 5. M365 배포 전 준비
 
@@ -279,6 +287,8 @@ python validate_acl_setup.py \
 ```bash
 jupyter notebook Track2_Mission1_2_Workbench.ipynb
 ```
+
+Fabric Notebook에서 실행 시 셀 실행 전에 우측 상단에서 Notebook 세션(**Start session**)을 먼저 시작하세요.
 
 노트북은 `generated/manifests/content_manifest.csv`를 읽어:
 - 키워드 5종 프로브 결과 계산

@@ -1,0 +1,504 @@
+[
+  {
+    "id": "TM01",
+    "channel": "cs-tier2",
+    "title": "AeroPhone X 배송 지연 클레임",
+    "keywords": [
+      "AeroPhone X",
+      "O09001",
+      "SH09001",
+      "T09001"
+    ],
+    "messages": [
+      [
+        "cs",
+        "2026-05-20T09:05:00+09:00",
+        "AeroPhone X 관련 NoTrackingUpdate 문의가 증가했습니다. T09001과 O09001 원본을 확인해 주세요."
+      ],
+      [
+        "logistics",
+        "2026-05-20T09:18:00+09:00",
+        "SH09001은 Delayed입니다. 현재 약속일을 재계산 중이며 14시까지 공지 문구를 공유하겠습니다."
+      ],
+      [
+        "inventory",
+        "2026-05-20T09:26:00+09:00",
+        "S09001 기준 on_hand 4, reserved 30입니다. 신규 노출 제한을 요청했습니다."
+      ]
+    ]
+  },
+  {
+    "id": "TM02",
+    "channel": "cs-tier2",
+    "title": "SmartWatch Pro 재고 문의 폭증",
+    "keywords": [
+      "SmartWatch Pro",
+      "O09002",
+      "SH09002",
+      "T09002"
+    ],
+    "messages": [
+      [
+        "cs",
+        "2026-05-16T11:10:00+09:00",
+        "SmartWatch Pro 재고 및 배송 문의가 급증했습니다. T09002 사유는 LateDelivery입니다."
+      ],
+      [
+        "inventory",
+        "2026-05-16T11:20:00+09:00",
+        "S09002는 on_hand 3, reserved 25입니다. 판매 가능 수량을 0으로 전환하는 중입니다."
+      ],
+      [
+        "logistics",
+        "2026-05-16T11:34:00+09:00",
+        "O09002의 SH09002는 Delayed입니다. 고객별 변경 약속일을 전달하겠습니다."
+      ]
+    ]
+  },
+  {
+    "id": "TM03",
+    "channel": "logistics",
+    "title": "UltraBook 15 배송 추적 갱신",
+    "keywords": [
+      "UltraBook 15",
+      "O09003",
+      "SH09003",
+      "T09003"
+    ],
+    "messages": [
+      [
+        "logistics",
+        "2026-05-17T08:35:00+09:00",
+        "UltraBook 15 O09003의 SH09003은 InTransit입니다. 배송 지연 확정이 아니라 추적 갱신 지연 상태입니다."
+      ],
+      [
+        "cs",
+        "2026-05-17T08:48:00+09:00",
+        "T09003은 NoTrackingUpdate입니다. 고객 안내에서 Delayed로 단정하지 않겠습니다."
+      ],
+      [
+        "inventory",
+        "2026-05-17T09:02:00+09:00",
+        "S09003 기준 on_hand 6, reserved 40입니다. 신규 주문 약속은 제한해야 합니다."
+      ]
+    ]
+  },
+  {
+    "id": "TM04",
+    "channel": "inventory",
+    "title": "핵심 상품 품절 임박 공동 대응",
+    "keywords": [
+      "AeroPhone X",
+      "SmartWatch Pro",
+      "UltraBook 15"
+    ],
+    "messages": [
+      [
+        "inventory",
+        "2026-05-16T09:00:00+09:00",
+        "2026-05-16 재고 스냅샷: AeroPhone X 4/예약 30(S09001), SmartWatch Pro 3/예약 25(S09002), UltraBook 15 6/예약 40(S09003)."
+      ],
+      [
+        "marketing",
+        "2026-05-16T09:12:00+09:00",
+        "세 상품의 캠페인 노출을 축소하고 BackToSchool 소재에서는 배송 약속 문구를 보수적으로 변경하겠습니다."
+      ],
+      [
+        "cs",
+        "2026-05-16T09:20:00+09:00",
+        "상품별 FAQ와 보상 기준을 분리해 준비하겠습니다."
+      ]
+    ]
+  },
+  {
+    "id": "TM05",
+    "channel": "payments",
+    "title": "결제 실패와 RetrySuccess 지표 분리",
+    "keywords": [
+      "RetrySuccess",
+      "Failed",
+      "PAY00019"
+    ],
+    "messages": [
+      [
+        "payments",
+        "2026-05-19T10:00:00+09:00",
+        "Track1 결제 2,004건: Success 670, Failed 667, RetrySuccess 666, 상태 결측 1건(PAY00019). RetrySuccess는 상태와 재시도 여부가 섞인 비표준 코드다."
+      ],
+      [
+        "data",
+        "2026-05-19T10:14:00+09:00",
+        "RetrySuccess는 AUTHORIZED + is_retry=true로 분리하고 PAY00019는 결측으로 유지하겠습니다."
+      ],
+      [
+        "growth",
+        "2026-05-19T10:25:00+09:00",
+        "최초 승인율과 재시도 회복률을 캠페인별로 별도 계산하겠습니다."
+      ]
+    ]
+  },
+  {
+    "id": "TM06",
+    "channel": "campaign-ops",
+    "title": "SummerPush 중간 성과 해석",
+    "keywords": [
+      "SummerPush",
+      "전환율",
+      "결제 실패"
+    ],
+    "messages": [
+      [
+        "growth",
+        "2026-05-20T15:00:00+09:00",
+        "SummerPush 직접 귀속행이 현재 추출에 보이지 않습니다. 성과 0으로 해석하지 않고 매핑 범위를 확인하겠습니다."
+      ],
+      [
+        "marketing",
+        "2026-05-20T15:12:00+09:00",
+        "결제 실패와 재시도 회복을 분리한 리포트가 나올 때까지 예산 증액 결정을 보류합니다."
+      ],
+      [
+        "data",
+        "2026-05-20T15:25:00+09:00",
+        "Campaign -> CampaignAttribution -> Order -> Payment 경로와 SQL 기준값을 비교하겠습니다."
+      ]
+    ]
+  },
+  {
+    "id": "TM07",
+    "channel": "campaign-ops",
+    "title": "BackToSchool Go/No-Go 준비",
+    "keywords": [
+      "BackToSchool",
+      "OnlineMall",
+      "Go/No-Go"
+    ],
+    "messages": [
+      [
+        "marketing",
+        "2026-07-10T13:00:00+09:00",
+        "BackToSchool은 7월 15일 시작 예정입니다. 결제/재고/물류/CS 근거를 오늘까지 모읍니다."
+      ],
+      [
+        "inventory",
+        "2026-07-10T13:14:00+09:00",
+        "핵심 상품 재고 기준과 노출 제한안을 공유했습니다."
+      ],
+      [
+        "payments",
+        "2026-07-10T13:21:00+09:00",
+        "Failed와 RetrySuccess 분리 지표를 Go/No-Go 자료에 포함하겠습니다."
+      ],
+      [
+        "cs",
+        "2026-07-10T13:30:00+09:00",
+        "배송 약속 변경 FAQ와 에스컬레이션 경로를 준비했습니다."
+      ]
+    ]
+  },
+  {
+    "id": "TM08",
+    "channel": "campaign-ops",
+    "title": "FlashWeek Percent 할인 마진 검토",
+    "keywords": [
+      "FlashWeek",
+      "Percent",
+      "Bundle",
+      "PR00050"
+    ],
+    "messages": [
+      [
+        "finance",
+        "2026-05-18T14:00:00+09:00",
+        "프로모션 1,000건은 Amount/Bundle/BOGO/Percent 각 250건이다. Percent 마진 프록시는 0.6521로 다른 유형(약 0.9815~0.9824)보다 낮다."
+      ],
+      [
+        "marketing",
+        "2026-05-18T14:16:00+09:00",
+        "다음 실험은 Percent 상한을 낮추고 Bundle 대안을 포함하겠습니다."
+      ],
+      [
+        "data",
+        "2026-05-18T14:30:00+09:00",
+        "PR00050 음수 할인과 O00007/O00600 금액 불일치를 별도 품질 경고로 표시합니다."
+      ]
+    ]
+  },
+  {
+    "id": "TM09",
+    "channel": "cs-tier2",
+    "title": "NotAsDescribed 반품 클러스터",
+    "keywords": [
+      "NotAsDescribed",
+      "DailyTee Cotton",
+      "Platinum"
+    ],
+    "messages": [
+      [
+        "cs",
+        "2026-05-24T10:20:00+09:00",
+        "NotAsDescribed 반품 표현이 여러 형태로 들어옵니다. DailyTee Cotton 사례와 Platinum 고객 메모를 확인해 주세요."
+      ],
+      [
+        "crm",
+        "2026-05-24T10:34:00+09:00",
+        "VIPRetention 접촉 전 주문·배송·반품 근거를 확인하고 중복 보상을 방지하겠습니다."
+      ],
+      [
+        "data",
+        "2026-05-24T10:45:00+09:00",
+        "별칭을 표준 사유에 매핑하되 R00011 결측은 임의 치환하지 않겠습니다."
+      ]
+    ]
+  },
+  {
+    "id": "TM10",
+    "channel": "data-quality",
+    "title": "Track1 FK/PK 차단 이슈",
+    "keywords": [
+      "PAY90001",
+      "T90001",
+      "SH00001"
+    ],
+    "messages": [
+      [
+        "data",
+        "2026-05-27T09:10:00+09:00",
+        "PAY90001->O99999와 T90001->C99999 고아 참조, SH00001 중복을 P0로 등록했습니다."
+      ],
+      [
+        "payments",
+        "2026-05-27T09:24:00+09:00",
+        "PAY90001은 캠페인 전환 집계에서 격리하고 원본 이벤트를 조사하겠습니다."
+      ],
+      [
+        "logistics",
+        "2026-05-27T09:31:00+09:00",
+        "SH00001 중복은 삭제 대신 정제 계층에서 중복 플래그를 남기겠습니다."
+      ]
+    ]
+  },
+  {
+    "id": "TM11",
+    "channel": "data-quality",
+    "title": "금액 정합성 불일치 조사",
+    "keywords": [
+      "O00007",
+      "O00600",
+      "gross_amount"
+    ],
+    "messages": [
+      [
+        "data",
+        "2026-05-27T11:00:00+09:00",
+        "O00007은 item 합계보다 +10, O00600은 -25 차이가 있습니다."
+      ],
+      [
+        "finance",
+        "2026-05-27T11:12:00+09:00",
+        "프로모션 마진 분석에서 두 주문을 제외한 값과 포함한 값을 함께 제시해 주세요."
+      ],
+      [
+        "growth",
+        "2026-05-27T11:20:00+09:00",
+        "Track3 브리핑에는 품질 경고와 영향 범위를 명시하겠습니다."
+      ]
+    ]
+  },
+  {
+    "id": "TM12",
+    "channel": "data-quality",
+    "title": "비표준 상태 코드 정렬",
+    "keywords": [
+      "Completed",
+      "Cancelled",
+      "RetrySuccess",
+      "InTransit"
+    ],
+    "messages": [
+      [
+        "data",
+        "2026-05-28T10:00:00+09:00",
+        "주문/결제/배송 상태를 표준 코드로 매핑하되 원천값을 보존합니다."
+      ],
+      [
+        "payments",
+        "2026-05-28T10:13:00+09:00",
+        "RetrySuccess는 AUTHORIZED와 is_retry=true로 분리하는 안에 동의합니다."
+      ],
+      [
+        "logistics",
+        "2026-05-28T10:25:00+09:00",
+        "InTransit은 IN_TRANSIT로 표준화하고 원본 CamelCase를 lineage에 남기겠습니다."
+      ]
+    ]
+  },
+  {
+    "id": "TM13",
+    "channel": "leadership-briefing",
+    "title": "리더십 브리핑 근거 점검",
+    "keywords": [
+      "FabricIQ",
+      "WorkIQ",
+      "원본 링크"
+    ],
+    "messages": [
+      [
+        "cdo",
+        "2026-07-11T15:00:00+09:00",
+        "최종 브리핑은 정형 지표, M365 업무 근거, 원본 링크, 품질 경고, 조치안을 포함해야 합니다."
+      ],
+      [
+        "data",
+        "2026-07-11T15:12:00+09:00",
+        "FabricIQ 기준값과 품질 이슈 Top3를 전달하겠습니다."
+      ],
+      [
+        "marketing",
+        "2026-07-11T15:18:00+09:00",
+        "WorkIQ 캠페인 문서와 Go/No-Go 결정 링크를 제공하겠습니다."
+      ]
+    ]
+  },
+  {
+    "id": "TM14",
+    "channel": "leadership-briefing",
+    "title": "BackToSchool 조건부 Go 후속",
+    "keywords": [
+      "BackToSchool",
+      "AeroPhone X",
+      "조건부 Go"
+    ],
+    "messages": [
+      [
+        "ceo",
+        "2026-07-11T09:40:00+09:00",
+        "BackToSchool은 조건부 Go입니다. 핵심 상품 노출 제한과 결제 지표 분리를 적용해 주세요."
+      ],
+      [
+        "marketing",
+        "2026-07-11T09:52:00+09:00",
+        "AeroPhone X, SmartWatch Pro, UltraBook 15 소재와 배송 문구를 조정하겠습니다."
+      ],
+      [
+        "cdo",
+        "2026-07-11T10:05:00+09:00",
+        "24시간 후 동일 재현 질의로 결과를 다시 검증하겠습니다."
+      ]
+    ]
+  },
+  {
+    "id": "TM15",
+    "channel": "cs-tier2",
+    "title": "의도된 표기 불일치 점검",
+    "keywords": [
+      "Aero Phone X",
+      "AeroPhone X",
+      "표기 정규화"
+    ],
+    "qualityFlags": [
+      "intentional-alias"
+    ],
+    "messages": [
+      [
+        "cs",
+        "2026-05-20T16:00:00+09:00",
+        "일부 상담 메모에서 Aero Phone X로 띄어 쓴 사례가 있습니다."
+      ],
+      [
+        "data",
+        "2026-05-20T16:12:00+09:00",
+        "정식 엔터티명은 AeroPhone X입니다. 별칭 사전에 Aero Phone X를 추가하고 원문은 보존하겠습니다."
+      ],
+      [
+        "growth",
+        "2026-05-20T16:20:00+09:00",
+        "정확 검색과 정규화 검색 결과 차이를 Track2 품질 증적으로 남기겠습니다."
+      ]
+    ]
+  },
+  {
+    "id": "TM16",
+    "channel": "cs-tier2",
+    "title": "고객등급별 반품 패턴 공유",
+    "keywords": [
+      "Silver",
+      "Gold",
+      "Bronze",
+      "SizeIssue",
+      "NotAsDescribed"
+    ],
+    "messages": [
+      [
+        "cs",
+        "2026-06-02T10:30:00+09:00",
+        "Silver·Gold 등급의 DailyTee Cotton 반품 문의가 늘었습니다. 사유는 SizeIssue와 NotAsDescribed가 다수입니다."
+      ],
+      [
+        "crm",
+        "2026-06-02T10:42:00+09:00",
+        "Silver 반품 고객은 이탈 위험이 높아 사후 케어 대상으로 태깅하겠습니다. Platinum은 VIPRetention과 중복 확인합니다."
+      ],
+      [
+        "growth",
+        "2026-06-02T10:55:00+09:00",
+        "채널·등급 교차표를 공유했습니다. Bronze는 배송 사유 반품이 많아 물류와 분리해 봐야 합니다."
+      ]
+    ]
+  },
+  {
+    "id": "TM17",
+    "channel": "inventory",
+    "title": "비전자 카테고리 재고 및 보조 소재",
+    "keywords": [
+      "ComfyChair Home",
+      "DailyTee Cotton",
+      "BackToSchool"
+    ],
+    "messages": [
+      [
+        "marketing",
+        "2026-06-05T09:30:00+09:00",
+        "전자 핵심 상품 노출 제한 기간에 ComfyChair Home과 DailyTee Cotton을 BackToSchool 보조 소재로 검토합니다."
+      ],
+      [
+        "inventory",
+        "2026-06-05T09:41:00+09:00",
+        "ComfyChair Home(P00003)과 DailyTee Cotton(P00002)은 재고 여유가 있습니다. P00050 이상값은 노출 목록에서 제외했습니다."
+      ],
+      [
+        "cs",
+        "2026-06-05T09:52:00+09:00",
+        "DailyTee Cotton은 상세 설명 개선 후 노출하면 NotAsDescribed 문의를 줄일 수 있습니다."
+      ]
+    ]
+  },
+  {
+    "id": "TM18",
+    "channel": "campaign-ops",
+    "title": "주문 취소율과 배송 지연 상관 점검",
+    "keywords": [
+      "O00013",
+      "LateDelivery",
+      "취소",
+      "배송 지연"
+    ],
+    "messages": [
+      [
+        "growth",
+        "2026-05-24T14:00:00+09:00",
+        "배송 지연 구간과 주문 취소·환불이 겹치는지 상관을 보고 있습니다. Q3 명명 주문 O09001~O09003 주변을 확인 중입니다."
+      ],
+      [
+        "logistics",
+        "2026-05-24T14:13:00+09:00",
+        "Delayed 배송이 몰린 날짜에 취소 문의가 함께 증가했습니다. SH 상태 변경 로그를 붙이겠습니다."
+      ],
+      [
+        "data",
+        "2026-05-24T14:25:00+09:00",
+        "O00013 order_date 결측과 O00007/O00600 금액 불일치는 상관 분석에서 제외 표시하고 원본 확인 상태를 남기겠습니다."
+      ]
+    ]
+  }
+]

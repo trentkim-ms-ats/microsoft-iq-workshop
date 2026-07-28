@@ -185,3 +185,4 @@ python evaluate_track3_outputs.py --strict
 노트북 경로: [Track3_Mission_Workbench.ipynb](./data/Track3_Mission_Workbench.ipynb)
 
 > 학습자용 end-to-end 노트북(스크립트 로직을 셀로 이식): [Track3_EndToEnd_Learner_Notebook.ipynb](./data/Track3_EndToEnd_Learner_Notebook.ipynb)
+> Fabric Notebook 실행 시에는 셀 실행 전에 우측 상단에서 Notebook 세션(**Start session**)을 먼저 시작하세요.

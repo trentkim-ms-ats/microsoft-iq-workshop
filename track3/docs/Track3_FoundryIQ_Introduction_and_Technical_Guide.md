@@ -3,7 +3,7 @@
 이 문서는 워크숍 Track 3에서 사용하는 **FoundryIQ**의 개념, 기술 구성, 그리고 본 프로젝트에서 FoundryIQ를 사용하는 이유를 정리합니다.
 
 실습 실행은 [WORKBOOK.md](../WORKBOOK.md)를 기준으로 진행하고, 로컬 자동 검증은 [track3/data/README.md](../data/README.md) 및 [track3/data/Track3_Mission_Workbench.ipynb](../data/Track3_Mission_Workbench.ipynb)를 사용합니다.
-FabricIQ 상세 구현과 운영형 검증 체크는 [Track3_Appendix_FabricIQ_Operational_Agent_Validation_Guide.md](./Track3_Appendix_FabricIQ_Operational_Agent_Validation_Guide.md) 부록을 참고합니다.
+FabricIQ 상세 구현과 운영형 검증 체크는 [Track3_Appendix_FabricIQ_Operational_Agent_Validation_Guide.md](./Track3_Appendix_FabricIQ_Operational_Agent_Validation_Guide.md) Appendix을 참고합니다.
 
 ## 0) Track3 시작 입력 계약 (Track2 인계 검수)
 

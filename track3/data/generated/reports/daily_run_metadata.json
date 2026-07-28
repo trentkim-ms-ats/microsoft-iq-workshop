@@ -1,5 +1,5 @@
 {
-  "generatedAtUtc": "2026-07-14T15:52:59.292757+00:00",
+  "generatedAtUtc": "2026-07-16T17:04:22.231165+00:00",
   "executionMode": "simulation-reference",
   "sourceContract": {
     "structured": "FabricIQ simulation generated from Track1 CSV",
@@ -10,7 +10,7 @@
   "promptVersion": "track3-prompt-v1",
   "modelVersion": "foundry-responses-v1",
   "toolsetVersion": "fabriciq-v1+workiq-v1",
-  "runFallbackCheck": true,
+  "runFallbackCheck": false,
   "briefingPath": "/Users/hyungilkim/Documents/Data Platform Workshop/track3/data/generated/reports/leadership_briefing.md",
   "llmBriefingPath": null
 }

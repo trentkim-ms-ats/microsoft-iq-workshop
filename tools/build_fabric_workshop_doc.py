@@ -23,7 +23,7 @@ r.font.name = 'Arial'
 r._element.rPr.rFonts.set(qn('w:eastAsia'), 'Malgun Gothic')
 
 doc.add_paragraph('문서 버전: v1.0')
-doc.add_paragraph('작성일: 2026-07-05')
+doc.add_paragraph('작성일: 2026년 7월')
 doc.add_paragraph('대상: 워크숍 준비 인원 2명 (기술 리드 1, 콘텐츠/운영 리드 1)')
 
 doc.add_paragraph('')

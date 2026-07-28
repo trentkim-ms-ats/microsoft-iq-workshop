@@ -1,6 +1,6 @@
 # Track3 Leadership Briefing
 
-- generatedAtUtc: 2026-07-14T15:52:59.292757+00:00
+- generatedAtUtc: 2026-07-16T17:04:22.231165+00:00
 - source: Q1~Q3 normal mode responses
 
 ## Executive Summary

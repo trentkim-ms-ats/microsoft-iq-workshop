@@ -1,7 +1,7 @@
-# Track1 Ontology Bundle — 선언적 일괄 정의 방식 (부록 B 실행 세트)
+# Track1 Ontology Bundle — 선언적 일괄 정의 방식 (Appendix B 실행 세트)
 
-이 폴더는 실습지 **부록 B "선언적 일괄 정의 방식"**을 실제로 실행하기 위한 파일 세트입니다.
-엔터티 하나씩 만드는 부록 A와 달리, **14개 엔터티 + 17개 물리관계 + 3개 논리관계**를
+이 폴더는 실습지 **Appendix B "선언적 일괄 정의 방식"**을 실제로 실행하기 위한 파일 세트입니다.
+엔터티 하나씩 만드는 Appendix A와 달리, **14개 엔터티 + 17개 물리관계 + 3개 논리관계**를
 하나의 정의(definition) 번들로 묶어 **한 번의 API 호출**로 배포합니다.
 
 ## 구성 파일
@@ -87,7 +87,7 @@ Import 후 확인/설정:
 #### 3-3) 배포 전/후 상세 체크 (권장)
 
 1. **WORKSPACE_ID 확인**
-   - 주소창 또는 부록 A의 방법으로 확인
+   - 주소창 또는 Appendix A의 방법으로 확인
 
 2. **LAKEHOUSE_ID 확인**
    - Lakehouse item의 GUID를 사용해야 합니다(이름 아님)
@@ -222,9 +222,9 @@ entityCount=14
 - 이 검증은 Track1 기본 제출 필수는 아니며, 시간 여유 팀의 심화 과제입니다.
 - 자세한 실습 절차는 [WORKBOOK.md](../WORKBOOK.md)의 "⑦ 온톨로지 추론/의미 질의 검증 미니 실습"을 따르세요.
 
-## 부록 A와의 관계
+## Appendix A와의 관계
 
-| 항목 | 부록 A (기본) | 부록 B (이 번들) |
+| 항목 | Appendix A (기본) | Appendix B (이 번들) |
 |---|---|---|
 | 엔드포인트 | `/items` (제네릭) | `/ontologies` (전용) |
 | 엔터티/속성 | 루프로 하나씩 + 반복 updateDefinition | 정의 번들에 인라인, **한 번에** |
@@ -232,4 +232,4 @@ entityCount=14
 | 관계 | `/relationships`(Preview) | `RelationshipTypes` + `Contextualizations` |
 | 재현성 | 순차 실행 | 계약→결정적 ID로 항상 동일 결과 |
 
-> ℹ️ 부록 B는 **심화/자동화 참고용**입니다. Track1 제출 기준은 부록 A(또는 미션 4 UI)로 충분합니다.
+> ℹ️ Appendix B는 **심화/자동화 참고용**입니다. Track1 제출 기준은 Appendix A(또는 미션 4 UI)로 충분합니다.

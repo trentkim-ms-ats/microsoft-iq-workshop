@@ -223,9 +223,9 @@ entities_config = [
 
 # 엔터티는 /items로 14개 Ontology item을 만드는 방식이 아니라,
 # 기존 ONTOLOGY_ID의 definition.parts 안에 EntityTypes로 추가해야 합니다.
-# 실행 코드는 참가자 실습지 부록 A의 최신 "단계 1" 셀을 그대로 사용합니다.
+# 실행 코드는 참가자 실습지 Appendix A의 최신 "단계 1" 셀을 그대로 사용합니다.
 assert token, "토큰 없이 실행할 수 없습니다. Notebook 환경을 확인하세요."
-print("실습지 부록 A 단계 1 셀 실행 → updateDefinition 상태 200/202 확인")
+print("실습지 Appendix A 단계 1 셀 실행 → updateDefinition 상태 200/202 확인")
 print("자동화 전체 경로는 track1/ontology_bundle/deploy_ontology_notebook.ipynb 사용")
 ```
 
@@ -242,7 +242,7 @@ print("자동화 전체 경로는 track1/ontology_bundle/deploy_ontology_noteboo
 
 2. **실습 중 (T+70 시작)**:
    - 참가자에게 스크립트 공유 (또는 복사/붙여넣기 링크)
-   - 실습지 부록 A 단계 1 셀 또는 번들 노트북 실행
+   - 실습지 Appendix A 단계 1 셀 또는 번들 노트북 실행
    - 콘솔 출력 확인: `updateDefinition: 200/202`, 엔터티 정의 14개
 
 3. **다음 단계 (T+80~90)**:
@@ -260,7 +260,7 @@ print("자동화 전체 경로는 track1/ontology_bundle/deploy_ontology_noteboo
 
 ### 📌 단계별 자동화 가이드
 
-실습지 [부록 A. Fabric Ontology 자동 구성 스크립트](../WORKBOOK.md#부록-a-fabric-ontology-자동-구성-스크립트-미션-4-보조)의 각 단계 스크립트를 순서대로 실행하세요:
+실습지 [Appendix A. Fabric Ontology 자동 구성 스크립트](./Appendix_A_Fabric_Ontology_Auto_Script.md)의 각 단계 스크립트를 순서대로 실행하세요:
 
 | Step | 작업 | 방식 | 시간 |
 |---|---|---|---|

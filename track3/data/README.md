@@ -253,5 +253,6 @@ CLI 인자:
 
 ## 6) 노트북 사용
 
+- Fabric Notebook에서 실행 시 셀 실행 전에 우측 상단에서 Notebook 세션(**Start session**)을 먼저 시작하세요.
 - [Track3_Mission_Workbench.ipynb](Track3_Mission_Workbench.ipynb): Dual Mode(`simulation`/`live`) 지원 노트북입니다. `live` 모드에서는 **정형값은 FabricIQ**, **비정형 근거는 WorkIQ**에서만 가져오도록 분리되어 있으며(`TRACK3_EXECUTION_MODE=live`), `simulation` 모드에서는 기존 로컬 재현 경로를 사용합니다.
 - [Track3_EndToEnd_Learner_Notebook.ipynb](Track3_EndToEnd_Learner_Notebook.ipynb): 학습자용 simulation 노트북. 3개 스크립트의 **로직 자체를 셀로 이식**해 샘플 생성 → 통합응답(정상+fallback) → 품질 게이트 평가를 순서대로 수정·학습하고, 마지막에 같은 Responses API 공용 모듈로 최종 문장을 생성합니다.

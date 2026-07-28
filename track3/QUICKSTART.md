@@ -6,6 +6,7 @@
 4. Confirm every normal response traces both `FabricIQ` and `WorkIQ`.
 5. Optionally configure Azure AI Foundry Responses API for the final briefing.
 
+
 ```bash
 cd track3/data
 python generate_track3_samples.py

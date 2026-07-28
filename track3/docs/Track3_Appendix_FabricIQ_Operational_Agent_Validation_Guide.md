@@ -2,7 +2,7 @@
 
 이 문서는 Track3에서 말하는 "운영형 에이전트"가 기술적으로 무엇을 구현한 상태인지, 특히 Tool A인 FabricIQ를 중심으로 설명합니다.
 
-본 문서는 다음 문서의 확장 부록입니다.
+본 문서는 다음 문서의 확장 Appendix 문서입니다.
 
 - 기본 안내: [Track3_FoundryIQ_Introduction_and_Technical_Guide.md](./Track3_FoundryIQ_Introduction_and_Technical_Guide.md)
 - 실습 운영 기준: [WORKBOOK.md](../WORKBOOK.md)

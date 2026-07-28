@@ -12,11 +12,13 @@
 
 세 계층 모두 동일한 엔터티/속성 이름을 재사용하므로, Track 1에서 정의한 이름·상태 코드는 **Track 2 매핑표와 Track 3 프롬프트에 그대로 인용**됩니다. 명명 규칙 일관성이 3-IQ 통합 품질의 전제 조건입니다.
 
+> ⚠️ **실행 전 확인**: 본 문서의 SQL 예시는 Notebook 셀 언어가 **Spark SQL**일 때 실행됩니다. 각 SQL 실행 전에 셀 언어를 Spark SQL로 전환하세요.
+
 ## 미션별 바로가기
 - 온톨로지 설명 문서: [Track1_Ontology_Concepts_and_Graph_Design_Guide.md](Track1_Ontology_Concepts_and_Graph_Design_Guide.md)
 - 공통 설계 의도: [데이터 구조 설계 의도](#design-intent)
 - 고급 기준 시나리오: [End-to-End 복합 관계 시나리오](#advanced-scenario)
-- 미션 1(비즈니스 질문 정리): [원천 테이블 구조와 역할](#source-table-structure)
+- 미션 1(비즈니스 질문 정리): [질문 세트(Q1~Q5)와 권장 쿼리](#mission1-question-set), [원천 테이블 구조와 역할](#source-table-structure)
 - 미션 2(데이터 프로파일링): [프로파일링 관점 체크포인트](#profiling-checkpoints)
 - 미션 3(표준 스키마 설계): [표준화 규칙의 구조적 의미](#standardization-rules)
 - 미션 4(Ontology 엔터티/관계 설계): [Ontology 구조(의미 모델)](#ontology-model)
@@ -87,6 +89,227 @@ Track 1 강사 대본의 "다중경로 분석"에 맞춰 실습자도 아래 논
 - 동일 이벤트(주문)를 결제/배송/재고/프로모션/CS와 연결해 **원인-결과 그래프**로 해석 가능
 - SQL 조인 중심 분석을 넘어 엔터티 관계 경로 기반의 **설명 가능한 AI 답변** 생성 가능
 - “무슨 일이 일어났나”를 넘어 “왜 일어났나”까지 추적 가능한 구조 확보
+
+<a id="mission1-question-set"></a>
+## 0-2) 미션 1 기준 질문(Q1~Q5)과 권장 쿼리
+
+아래 Q1~Q5는 Track1에서 질문-데이터 매핑을 확정할 때 사용하는 기준 질문 세트입니다.  
+각 쿼리는 결과 숫자 자체보다 **해석 경로(어떤 관계를 통해 결론을 냈는가)**를 남기는 데 목적이 있습니다.
+
+### 질문/테이블/핵심 컬럼 매핑
+
+| 질문 ID | 비즈니스 질문 | 필요 테이블 | 핵심 컬럼 |
+|---|---|---|---|
+| Q1 | 결제 실패가 캠페인 전환율에 미치는 영향은 무엇인가? | campaigns, campaign_attribution, customers, orders, payments | campaign_id, customer_id, order_id, payment_status, attributed_revenue, order_date |
+| Q2 | 배송 지연은 반품률과 고객 만족도에 어떤 영향을 미치는가? | shipments, returns, support_tickets, orders, customers, channels | shipment_status, delivered_at, return_reason, ticket_type, customer_tier, channel_id |
+| Q3 | 프로모션 유형별 할인 전략이 매출총이익과 재구매율에 미치는 영향은 무엇인가? | promotions, order_promotions, orders, order_items, products, customers | promotion_type, discount_amount, order_value, unit_price, quantity, customer_id |
+| Q4 | 재고 부족/품절 경험은 주문 취소율과 고객센터 문의량에 어떤 영향을 미치는가? | inventory_snapshots, products, orders, support_tickets, channels | on_hand_qty, reserved_qty, order_status, ticket_type, ticket_reason, channel_id |
+| Q5 | 채널·고객등급별 반품 사유 패턴은 재구매율에 어떤 차이를 만드는가? | returns, orders, customers, channels, order_items, products | return_reason, customer_tier, channel_id, order_date, customer_id, product_id |
+
+### 권장 KPI
+
+| 질문 | 권장 KPI |
+|---|---|
+| Q1 | 결제 실패율, 캠페인 전환율(승인 결제 기준) |
+| Q2 | 배송 지연군 반품률, 배송 지연군 불만 티켓율(`ticket_type='COMPLAINT'`) |
+| Q3 | 프로모션 유형별 매출총이익률(Proxy), 재구매율 |
+| Q4 | 품절 경험 상품군 주문 취소율, 주문당 문의 건수 |
+| Q5 | 채널·고객등급·반품사유별 재구매율 |
+
+#### Q1. 결제 실패가 캠페인 전환율에 미치는 영향
+
+**배경**  
+캠페인 유입 주문이 실제 매출로 이어지지 않는 대표 원인은 결제 실패입니다.  
+Q1은 `유입 성과(캠페인)`와 `거래 성사(결제 승인)`를 분리해, 마케팅 문제와 결제 운영 문제를 구분해 해석하기 위한 기준 쿼리입니다.
+
+**분석 경로**  
+`Campaign -> CampaignAttribution -> Order -> Payment`
+
+**결과 해석 포인트**  
+- `payment_failure_rate`가 높은 캠페인에서 `conversion_rate`가 낮으면 결제 구간 병목 가능성이 큽니다.
+- `conversion_rate`는 승인 결제(`SUCCESS`, `RETRYSUCCESS`, `AUTHORIZED`) 기준입니다.
+- 귀속 데이터 누락 가능성이 있으므로, 값이 낮다고 바로 캠페인 품질 문제로 단정하지 않습니다.
+
+```sql
+WITH campaign_orders AS (
+  SELECT ca.campaign_id, ca.order_id
+  FROM campaign_attribution ca
+),
+payment_flags AS (
+  SELECT
+    p.order_id,
+    MAX(CASE WHEN UPPER(TRIM(COALESCE(p.payment_status, ''))) IN ('FAILED') THEN 1 ELSE 0 END) AS has_failed,
+    MAX(CASE WHEN UPPER(TRIM(COALESCE(p.payment_status, ''))) IN ('SUCCESS', 'RETRYSUCCESS', 'AUTHORIZED') THEN 1 ELSE 0 END) AS has_authorized
+  FROM payments p
+  GROUP BY p.order_id
+)
+SELECT
+  co.campaign_id,
+  COUNT(*) AS attributed_orders,
+  AVG(COALESCE(pf.has_failed, 0)) AS payment_failure_rate,
+  AVG(COALESCE(pf.has_authorized, 0)) AS conversion_rate
+FROM campaign_orders co
+LEFT JOIN payment_flags pf ON co.order_id = pf.order_id
+GROUP BY co.campaign_id
+ORDER BY conversion_rate ASC;
+```
+
+#### Q2. 배송 지연이 반품률·불만 티켓에 미치는 영향
+
+**배경**  
+배송 지연은 반품 증가와 고객 불만을 동시에 유발할 수 있습니다.  
+Q2는 배송 상태 변화가 고객경험 지표(반품/불만)로 어떻게 전이되는지 확인하는 운영 리스크 진단 쿼리입니다.
+
+**분석 경로**  
+`Order -> Shipment -> Return`, `Order -> SupportTicket`
+
+**결과 해석 포인트**  
+- `is_delayed=1` 집단의 `return_rate`, `complaint_ticket_rate`가 동시 상승하면 배송 이슈가 고객경험 악화로 이어졌다고 해석할 수 있습니다.
+- 반품/티켓은 주문 단위 플래그(있음/없음)로 집계되므로, 건수 자체보다 비율 비교가 핵심입니다.
+- 티켓 유형은 `COMPLAINT` 기준이며, `INQUIRY`와 혼합 해석하지 않습니다.
+
+```sql
+WITH order_flags AS (
+  SELECT
+    o.order_id,
+    MAX(CASE WHEN UPPER(TRIM(COALESCE(s.shipment_status, ''))) IN ('DELAYED') THEN 1 ELSE 0 END) AS is_delayed,
+    MAX(CASE WHEN r.return_id IS NOT NULL THEN 1 ELSE 0 END) AS is_returned,
+    MAX(CASE WHEN UPPER(TRIM(COALESCE(st.ticket_type, ''))) IN ('COMPLAINT') THEN 1 ELSE 0 END) AS has_complaint
+  FROM orders o
+  LEFT JOIN shipments s ON o.order_id = s.order_id
+  LEFT JOIN returns r ON o.order_id = r.order_id
+  LEFT JOIN support_tickets st ON o.order_id = st.order_id
+  GROUP BY o.order_id
+)
+SELECT
+  is_delayed,
+  COUNT(*) AS orders_cnt,
+  AVG(is_returned) AS return_rate,
+  AVG(has_complaint) AS complaint_ticket_rate
+FROM order_flags
+GROUP BY is_delayed;
+```
+
+#### Q3. 프로모션 유형별 마진(Proxy)·재구매율 비교
+
+**배경**  
+프로모션은 단기 매출을 올릴 수 있지만, 할인 구조에 따라 마진 훼손과 재구매 효과가 다릅니다.  
+Q3는 프로모션 유형별로 수익성과 고객 유지 신호를 동시에 비교하기 위한 기준 쿼리입니다.
+
+**분석 경로**  
+`Promotion -> OrderPromotion -> Order -> Customer`
+
+**결과 해석 포인트**  
+- `gross_margin_proxy`는 `SUM(net_amount)/SUM(gross_amount)` 기반 근사치이며, 실제 원가 기반 마진과는 다를 수 있습니다.
+- `repurchase_rate`는 고객 전체 주문 이력에서 `2회 이상 주문` 고객 비율입니다.
+- 특정 프로모션이 마진을 낮추면서 재구매율도 낮다면 우선 조정 후보입니다.
+
+```sql
+WITH order_amounts AS (
+  SELECT
+    o.order_id,
+    CAST(o.gross_amount AS DOUBLE) AS gross_amount,
+    CAST(o.net_amount AS DOUBLE) AS net_amount
+  FROM orders o
+),
+customer_repeat AS (
+  SELECT customer_id, CASE WHEN COUNT(*) >= 2 THEN 1 ELSE 0 END AS is_repeat
+  FROM orders
+  GROUP BY customer_id
+)
+SELECT
+  p.promotion_type,
+  COUNT(DISTINCT o.order_id) AS orders_cnt,
+  SUM(oa.net_amount) / NULLIF(SUM(oa.gross_amount), 0) AS gross_margin_proxy,
+  AVG(cr.is_repeat) AS repurchase_rate
+FROM orders o
+JOIN order_promotions op ON o.order_id = op.order_id
+JOIN promotions p ON op.promotion_id = p.promotion_id
+JOIN order_amounts oa ON o.order_id = oa.order_id
+LEFT JOIN customer_repeat cr ON o.customer_id = cr.customer_id
+GROUP BY p.promotion_type
+ORDER BY gross_margin_proxy ASC;
+```
+
+#### Q4. 재고 부족(품절 노출) 경험이 취소율·문의량에 미치는 영향
+
+**배경**  
+재고 부족은 주문 취소와 CS 문의 증가로 이어져 운영 비용을 키웁니다.  
+Q4는 품절 노출 상품이 포함된 주문과 아닌 주문을 나눠 취소율/문의량 차이를 확인하는 기준 쿼리입니다.
+
+**분석 경로**  
+`InventorySnapshot -> Product -> OrderItem -> Order -> SupportTicket`
+
+**결과 해석 포인트**  
+- `has_stockout_product=1` 집단의 `cancel_rate`, `avg_tickets_per_order`가 높으면 재고-고객영향 연쇄를 의심할 수 있습니다.
+- 재고 스냅샷은 시점 데이터이므로, 주문 시점과의 완전한 인과를 보장하지 않습니다.
+- 이 쿼리는 원인 확정이 아니라 우선 점검 대상을 찾는 탐지용 분석입니다.
+
+```sql
+WITH stockout_products AS (
+  SELECT DISTINCT product_id
+  FROM inventory_snapshots
+  WHERE CAST(on_hand_qty AS DOUBLE) - CAST(reserved_qty AS DOUBLE) <= 0
+),
+order_stockout_flag AS (
+  SELECT
+    o.order_id,
+    MAX(CASE WHEN sp.product_id IS NOT NULL THEN 1 ELSE 0 END) AS has_stockout_product,
+    MAX(CASE WHEN UPPER(TRIM(COALESCE(o.order_status, ''))) IN ('CANCELLED', 'CANCELED') THEN 1 ELSE 0 END) AS is_cancelled
+  FROM orders o
+  JOIN order_items oi ON o.order_id = oi.order_id
+  LEFT JOIN stockout_products sp ON oi.product_id = sp.product_id
+  GROUP BY o.order_id
+),
+ticket_cnt AS (
+  SELECT order_id, COUNT(*) AS tickets_per_order
+  FROM support_tickets
+  GROUP BY order_id
+)
+SELECT
+  osf.has_stockout_product,
+  COUNT(*) AS orders_cnt,
+  AVG(osf.is_cancelled) AS cancel_rate,
+  AVG(COALESCE(tc.tickets_per_order, 0)) AS avg_tickets_per_order
+FROM order_stockout_flag osf
+LEFT JOIN ticket_cnt tc ON osf.order_id = tc.order_id
+GROUP BY osf.has_stockout_product;
+```
+
+#### Q5. 채널·고객등급·반품사유 패턴별 재구매율 차이
+
+**배경**  
+반품은 동일 현상처럼 보이지만 채널/고객등급/사유 조합에 따라 재구매 회복력 차이가 큽니다.  
+Q5는 어떤 세그먼트에서 반품 이후 재구매가 특히 낮은지 파악해 대응 우선순위를 정하기 위한 기준 쿼리입니다.
+
+**분석 경로**  
+`Return -> Order -> Channel/CustomerTier`, `Customer -> Order(반복구매)`
+
+**결과 해석 포인트**  
+- `repurchase_rate`가 낮은 조합(채널/등급/사유)은 보상 정책·상세 안내 개선의 우선 후보입니다.
+- `returned_customers`가 매우 작은 그룹은 표본 왜곡이 있으므로 함께 확인합니다.
+- 고객 등급 결측/이상값은 별도 그룹으로 분리해 해석합니다.
+
+```sql
+WITH customer_repeat AS (
+  SELECT customer_id, CASE WHEN COUNT(*) >= 2 THEN 1 ELSE 0 END AS is_repeat
+  FROM orders
+  GROUP BY customer_id
+)
+SELECT
+  ch.channel_name,
+  c.customer_tier,
+  r.return_reason,
+  COUNT(DISTINCT r.customer_id) AS returned_customers,
+  AVG(cr.is_repeat) AS repurchase_rate
+FROM returns r
+JOIN orders o ON r.order_id = o.order_id
+JOIN customers c ON o.customer_id = c.customer_id
+JOIN channels ch ON o.channel_id = ch.channel_id
+LEFT JOIN customer_repeat cr ON r.customer_id = cr.customer_id
+GROUP BY ch.channel_name, c.customer_tier, r.return_reason
+ORDER BY repurchase_rate ASC;
+```
 
 ## 1) 전체 구조(3계층)
 1. 원천(Source) 계층  
@@ -270,6 +493,18 @@ SQL 검증은 "데이터 품질/정합성"을 검증하고, 의미 질의 검증
 2. **Level B (GraphModel 가능 환경)**  
    - GraphModel `refreshGraph` 후 `executeQuery` 실행  
    - Graph 질의 결과와 SQL 기준값을 비교(행수/샘플 키)
+
+권장 시나리오 팩(기존 미제공 보강 포함):
+
+| 시나리오 | 질문 | 경로 | SQL 기준값 |
+|---|---|---|---|
+| A (기본) | 캠페인 유입 주문 중 결제 실패 주문은? | `Campaign -> CampaignAttribution -> Order -> Payment` | 실패 주문의 `campaign_id, order_id` 목록 |
+| B (보강) | 프로모션 유형별 재구매율은? | `Promotion -> OrderPromotion -> Order -> Customer` | `promotion_type`별 `orders_cnt`, `repurchase_rate` |
+
+시나리오 B 비교 기준(권장):
+- `orders_cnt` 차이 허용: 0
+- `repurchase_rate` 허용오차: ±0.001
+- 불일치 시 우선 점검: `Order_receives_OrderPromotion`, `OrderPromotion_points_to_Promotion`, `Customer_places_Order` 관계/방향
 
 검증 로그 최소 항목:
 - `question`, `path`, `baselineSqlRows`

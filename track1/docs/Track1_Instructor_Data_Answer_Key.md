@@ -1,10 +1,17 @@
-# Track1 강사용 데이터 정답노트 (Answer Key) — 데이터셋 v1.1
+# Track1 강사용 데이터 정답노트 (Answer Key) — 데이터셋 v1.2
 
 > 본 문서는 **강사/운영 전용**입니다. 참가자에게 배포하지 마세요.
 > [track1/data/](../data/) 데이터에 **의도적으로 삽입한 노이즈**의 정확한 위치와, 각 미션에서 예상되는 발견 결과를 정리합니다.
 
 ## 0. 데이터셋 개요
-- 버전: v1.1 (의도된 노이즈 포함)
+- 버전: v1.2 (의도된 노이즈 + Q1~Q5 분석 신호 주입)
+- 데이터는 [`track1/data/generate_track1_samples.py`](../data/generate_track1_samples.py)로 재현(seed `20260701` 고정)
+- **v1.2 변경점**: 미션1 기준 질문 Q1~Q5가 의미 있는 결론을 도출하도록 테이블 간 키 매핑·값 분포를 재구성. 아래 노이즈(고정 ID)와 명명 시나리오는 모두 보존.
+  - Q1: 캠페인 결제 실패율↑ ⇒ 전환율↓ (활성 캠페인 60개, 실패율↔전환율 상관 ≈ -1.0)
+  - Q2: 배송 지연군 반품률(≈0.44)·불만율(≈0.32)이 비지연군(≈0.19/≈0.09)보다 높음
+  - Q3: 프로모션 유형별 마진(Percent<BOGO<Amount<Bundle)·재구매율(Bundle>BOGO>Amount>Percent) 차등
+  - Q4: 품절 포함 주문의 취소율(≈0.17)·주문당 문의(≈1.4)가 비품절(≈0.02/≈0.5)보다 높음
+  - Q5: 고객등급(Platinum>Gold>Silver>Bronze)·채널·사유별 재구매율 편차(81개 조합)
 - 전 테이블 1,000행 이상 (단, `channels.csv`는 실제 의미 있는 채널 4개로만 구성 — CH0001~CH0004)
 - 노이즈는 모두 **고정 ID**로 삽입되어 재현 가능
 
@@ -92,10 +99,12 @@
 - R8 귀속 합계: MultiTouch 주문 위반 없음(모두 통과)
 
 ### 미션 5 선택 심화 — 의미 질의 검증(온톨로지 경로)
-- 질문 예시: "캠페인 유입 주문 중 결제 실패 주문은?"
+- 시나리오 A(기본): "캠페인 유입 주문 중 결제 실패 주문은?"
 - 기대 경로: `Campaign -> CampaignAttribution -> Order -> Payment`
+- 시나리오 B(기존 미제공 보강): "프로모션 유형별 재구매율은?"
+- 기대 경로: `Promotion -> OrderPromotion -> Order -> Customer`
 - 정답 판정 기준:
-  1. SQL 기준값(캠페인ID/주문ID) 결과를 먼저 산출했는가
+  1. SQL 기준값(질문별 핵심 키/지표) 결과를 먼저 산출했는가
   2. `getDefinition`에서 경로 엔터티/관계 존재를 확인했는가
   3. (GraphModel 가능 시) `executeQuery` 결과와 SQL 결과를 비교했는가
   4. 불일치 시 원인(`매핑 누락`, `관계 방향 오류`, `코드셋 표준화 미반영`)을 기록했는가
@@ -139,6 +148,49 @@ graphRows=4
 comparison=FAIL
 failReason=관계 방향 오류(Order_has_Payment)
 notes=관계 수정 후 refreshGraph 재실행 예정
+[/SEMANTIC_VALIDATION_SUBMISSION]
+```
+
+#### 시나리오 B (Q3) 채점 기준 추가
+- SQL 기준값: `promotion_type`별 `orders_cnt`, `repurchase_rate`
+- Graph row-level 결과를 같은 기준으로 재집계해 비교
+- 합격 기준:
+  - `orders_cnt` 차이 0
+  - `repurchase_rate` 허용오차 ±0.001 이내
+- 실패 주요 원인:
+  - `Order_receives_OrderPromotion` 관계 누락
+  - `OrderPromotion_points_to_Promotion` 관계 방향 반전
+  - `Customer_places_Order` 매핑 누락
+
+**PASS 예시 (Q3)**
+```text
+[SEMANTIC_VALIDATION_SUBMISSION]
+team=Team Gamma
+validatedAtKst=2026-07-12 11:20
+question=프로모션 유형별 재구매율은?
+path=Promotion->OrderPromotion->Order->Customer
+baselineSqlRows=4
+graphQueryStatus=200
+graphRows=1664
+comparison=PASS
+failReason=-
+notes=promotion_type별 orders_cnt/repurchase_rate가 SQL 기준과 허용오차(±0.001) 내 일치
+[/SEMANTIC_VALIDATION_SUBMISSION]
+```
+
+**FAIL 예시 (Q3)**
+```text
+[SEMANTIC_VALIDATION_SUBMISSION]
+team=Team Delta
+validatedAtKst=2026-07-12 11:35
+question=프로모션 유형별 재구매율은?
+path=Promotion->OrderPromotion->Order->Customer
+baselineSqlRows=4
+graphQueryStatus=200
+graphRows=1430
+comparison=FAIL
+failReason=Order_receives_OrderPromotion 관계 누락
+notes=누락 관계 보완 후 refreshGraph 재실행 예정
 [/SEMANTIC_VALIDATION_SUBMISSION]
 ```
 
@@ -186,7 +238,7 @@ HAVING ABS(SUM(a.attributed_revenue) - o.net_amount) > 0.02;  -- (없음)
 
 ---
 
-## 5. Q3 시나리오 (재고 부족 ↔ CS/배송) 정답 경로
+## 5. Q4 시나리오 (재고 부족 ↔ CS/배송) 정답 경로
 
 명명 상품 기준으로 스토리가 구성되어 있습니다.
 

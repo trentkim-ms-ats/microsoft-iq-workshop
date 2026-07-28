@@ -1,4 +1,4 @@
-# Integrated Workshop on Fabric, WorkIQ, and FoundryIQ
+# 3-IQ Hands-on Workshop
 
 > **Fabric·WorkIQ·FoundryIQ 통합 실습 워크숍**  
 > 데이터에서 근거 기반 AI 에이전트까지 end-to-end로 연결하는 1일 워크숍 저장소
@@ -26,7 +26,7 @@
 
 | 항목 | 내용 |
 |---|---|
-| 공식 제목 | **Integrated Workshop on Fabric, WorkIQ, and FoundryIQ** |
+| 공식 제목 | **3-IQ Hands-on Workshop** |
 | 운영 시간 | **09:00-17:00, 총 480분** |
 | 대상 | 데이터/SQL 기초 보유자 + AI 활용 실습 참가자 |
 | 운영 방식 | 1일 집중형, Track1 → Track2 → Track3 → 통합 미니 프로젝트 |
@@ -102,6 +102,7 @@ Data Platform Workshop/
 ### 저장소 유지보수 관점
 1. [AGENTS.md](./AGENTS.md)
 2. [common/docs/PLANS.md](common/docs/PLANS.md)
+3. [GitHub Copilot Multi-Agent/Fleet 가이드](.github/agents/README.md)
 
 ---
 
@@ -213,7 +214,7 @@ Track1(FabricIQ)
 
 ---
 
-## 7) 자동화/검증 빠른 시작
+## 7) 실행 빠른 시작
 
 ### Track1
 
@@ -296,36 +297,7 @@ python evaluate_track3_outputs.py --strict
 
 ---
 
-## 9) 검증(Validation)
-
-이 저장소는 문서뿐 아니라 **재실행 가능한 상태**를 유지하는 것을 목표로 합니다.
-
-### 최소 검증 항목
-
-1. Markdown 링크 깨짐 0건
-2. Python 문법 검사 통과
-3. Track2 생성/배포 경로 확인 (기본 dry-run, 실제 반영은 `--execute`)
-4. Track3 생성/시뮬레이션/평가 경로 확인
-5. 두 Track3 노트북 실행 경로 및 Responses API 계약 최신 상태 유지
-6. simulation/live source trace와 fallback 정책 검증
-
-유지보수 기준 문서:
-- [AGENTS.md](./AGENTS.md)
-- [common/docs/PLANS.md](common/docs/PLANS.md)
-
----
-
-## 10) 보안 및 운영 원칙
-
-- 반드시 **샘플/격리 환경**에서만 실행합니다.
-- 실제 임직원 데이터/메일함/채널/사이트를 전제로 하지 않습니다.
-- 토큰, 시크릿, 관리자 권한 정보는 문서에 하드코딩하지 않습니다.
-- API key와 Entra Bearer token을 구분하고, 노출된 토큰은 즉시 폐기·재발급합니다.
-- 장애가 나면 우회 경로와 검증 방법을 함께 기록합니다.
-
----
-
-## 11) 추천 시작 순서
+## 9) 추천 시작 순서
 
 처음 보는 사람은 아래 순서로 읽는 것을 권장합니다.
 
@@ -336,4 +308,27 @@ python evaluate_track3_outputs.py --strict
 5. [track2/WORKBOOK.md](track2/WORKBOOK.md)
 6. [track3/WORKBOOK.md](track3/WORKBOOK.md)
 
-이 README는 전체 워크숍의 **설명서이자 출발점**입니다.
+---
+
+## 10) Contributing
+
+기여 시 아래 원칙을 따릅니다.
+
+- 변경 범위가 속한 트랙 문서와 실행 경로를 함께 업데이트합니다.
+- 고정 계약(시간/DoD/fallback/adapter)은 [AGENTS.md](./AGENTS.md)를 기준으로 확인합니다.
+- 변경 후 최소 검증(생성/시뮬레이션/평가 또는 dry-run)을 수행합니다.
+- 커밋에는 시크릿/토큰/실데이터를 포함하지 않습니다.
+
+관련 기준:
+- [AGENTS.md](./AGENTS.md)
+- [common/docs/PLANS.md](common/docs/PLANS.md)
+
+---
+
+## 11) Security Notes
+
+- 반드시 **샘플/격리 환경**에서만 실행합니다.
+- 실제 임직원 데이터/메일함/채널/사이트를 전제로 하지 않습니다.
+- 토큰, 시크릿, 관리자 권한 정보는 문서/코드/산출물에 하드코딩하지 않습니다.
+- API key와 Entra 토큰을 구분해 사용하고, 노출된 토큰은 즉시 폐기·재발급합니다.
+- 보안 이슈 상세는 공개 이슈에 남기지 말고 내부 보안 담당 채널로 비공개 전달합니다.

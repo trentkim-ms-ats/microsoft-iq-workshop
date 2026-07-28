@@ -19,6 +19,7 @@
 - 미션 4 참고: [Ontology 구조(의미 모델)](./docs/Track1_Data_Structure_Detailed_Guide.md#ontology-model)
 - 미션 5 참고: [3단 매핑 구조](./docs/Track1_Data_Structure_Detailed_Guide.md#mapping-3step), [검증 구조](./docs/Track1_Data_Structure_Detailed_Guide.md#validation-structure), [의미 질의 검증 구조(선택)](./docs/Track1_Data_Structure_Detailed_Guide.md#semantic-validation-structure)
 
+
 ## 실습 목표
 1. 원천 데이터를 FabricIQ가 이해 가능한 표준 시맨틱 구조로 정리한다.
 2. Ontology 엔터티/관계/속성을 정의해 3-IQ 스택 공통 어휘로 만든다.
@@ -69,7 +70,7 @@
 | Q4 | 재고 부족/품절 경험은 주문 취소율과 고객센터 문의량에 어떤 영향을 미치는가? | inventory_snapshots, products, orders, support_tickets, channels | on_hand_qty, reserved_qty, order_status, ticket_type, ticket_reason, channel_id |
 | Q5 | 채널·고객등급별 반품 사유 패턴은 재구매율에 어떤 차이를 만드는가? | returns, orders, customers, channels, order_items, products | return_reason, customer_tier, channel_id, order_date, customer_id, product_id |
 
-#### Q1~Q5 권장 KPI 및 검증 쿼리
+#### Q1~Q5 권장 KPI 및 분리 실행 쿼리
 
 | 질문 | 권장 KPI |
 |---|---|
@@ -79,8 +80,21 @@
 | Q4 | 품절 경험 상품군 주문 취소율, 주문당 문의 건수 |
 | Q5 | 채널·고객등급·반품사유별 재구매율 |
 
+##### Q1. 결제 실패가 캠페인 전환율에 미치는 영향
+
+**배경**  
+캠페인 유입 주문이 실제 매출로 이어지지 않는 대표 원인은 결제 실패입니다.  
+Q1은 `유입 성과(캠페인)`와 `거래 성사(결제 승인)`를 분리해, 마케팅 문제와 결제 운영 문제를 구분해 해석하기 위한 기준 쿼리입니다.
+
+**분석 경로**  
+`Campaign -> CampaignAttribution -> Order -> Payment`
+
+**결과 해석 포인트**  
+- `payment_failure_rate`가 높은 캠페인에서 `conversion_rate`가 낮으면 결제 구간 병목 가능성이 큽니다.
+- `conversion_rate`는 승인 결제(`SUCCESS`, `RETRYSUCCESS`, `AUTHORIZED`) 기준입니다.
+- 귀속 데이터 누락 가능성이 있으므로, 값이 낮다고 바로 캠페인 품질 문제로 단정하지 않습니다.
+
 ```sql
--- Q1: 결제 실패율이 캠페인 전환율(승인 결제 기준)에 미치는 영향
 WITH campaign_orders AS (
   SELECT ca.campaign_id, ca.order_id
   FROM campaign_attribution ca
@@ -102,8 +116,37 @@ FROM campaign_orders co
 LEFT JOIN payment_flags pf ON co.order_id = pf.order_id
 GROUP BY co.campaign_id
 ORDER BY conversion_rate ASC;
+```
 
--- Q2: 배송 지연이 반품률/고객 불만 티켓율에 미치는 영향
+**기대 신호 (v1.2 데이터 · seed `20260701`)**  
+결제 실패율이 높은 캠페인일수록 전환율이 낮은 **강한 음의 상관**이 나타나도록 데이터가 구성되어 있습니다. 귀속은 소수의 활성 캠페인(약 60개)에 집중되어 캠페인당 표본(약 30~40건)이 충분합니다.
+
+| 지표 | 값(근사) |
+|---|---|
+| 귀속 캠페인 수 | 약 60개 |
+| 캠페인당 귀속 주문 | 약 30~40건 |
+| 결제 실패율 분포 | 약 0.13 ~ 0.71 |
+| `payment_failure_rate` ↔ `conversion_rate` 상관 | 약 **-1.0** |
+
+- 하위(전환율 낮음): 실패율 0.65~0.71 캠페인 → 전환율 0.29~0.35
+- 상위(전환율 높음): 실패율 0.13~0.17 캠페인 → 전환율 0.83~0.87
+- **해석**: 전환율 하위 캠페인은 마케팅 품질이 아니라 **결제 실패**가 병목임을 명확히 보여줍니다. 결제 재시도/대체 수단 개선이 우선 조치입니다.
+
+##### Q2. 배송 지연이 반품률·불만 티켓에 미치는 영향
+
+**배경**  
+배송 지연은 반품 증가와 고객 불만을 동시에 유발할 수 있습니다.  
+Q2는 배송 상태 변화가 고객경험 지표(반품/불만)로 어떻게 전이되는지 확인하는 운영 리스크 진단 쿼리입니다.
+
+**분석 경로**  
+`Order -> Shipment -> Return`, `Order -> SupportTicket`
+
+**결과 해석 포인트**  
+- `is_delayed=1` 집단의 `return_rate`, `complaint_ticket_rate`가 동시 상승하면 배송 이슈가 고객경험 악화로 이어졌다고 해석할 수 있습니다.
+- 반품/티켓은 주문 단위 플래그(있음/없음)로 집계되므로, 건수 자체보다 비율 비교가 핵심입니다.
+- 티켓 유형은 `COMPLAINT` 기준이며, `INQUIRY`와 혼합 해석하지 않습니다.
+
+```sql
 WITH order_flags AS (
   SELECT
     o.order_id,
@@ -123,8 +166,34 @@ SELECT
   AVG(has_complaint) AS complaint_ticket_rate
 FROM order_flags
 GROUP BY is_delayed;
+```
 
--- Q3: 프로모션 유형별 매출총이익률(Proxy)·재구매율
+**기대 신호 (v1.2 데이터 · seed `20260701`)**  
+배송 지연군(`is_delayed=1`)이 비지연군보다 반품률·불만율이 **뚜렷하게 높게** 구성되어 있습니다.
+
+| `is_delayed` | 주문 수(근사) | 반품률 | 불만 티켓율 |
+|---|---|---|---|
+| 0 (정상) | 약 1,337 | 약 **0.19** | 약 **0.09** |
+| 1 (지연) | 약 666 | 약 **0.44** | 약 **0.32** |
+
+- 반품률 격차 약 **2.3배**, 불만율 격차 약 **3.4배**로 지연 → 고객경험 악화의 전이가 관찰됩니다.
+- **해석**: 배송 지연이 반품과 불만을 동시에 끌어올리는 공통 원인임을 시사합니다. 지연 알림/보상·물류 SLA 개선이 반품·불만을 함께 낮출 수 있는 지렛대입니다.
+
+##### Q3. 프로모션 유형별 마진(Proxy)·재구매율 비교
+
+**배경**  
+프로모션은 단기 매출을 올릴 수 있지만, 할인 구조에 따라 마진 훼손과 재구매 효과가 다릅니다.  
+Q3는 프로모션 유형별로 수익성과 고객 유지 신호를 동시에 비교하기 위한 기준 쿼리입니다.
+
+**분석 경로**  
+`Promotion -> OrderPromotion -> Order -> Customer`
+
+**결과 해석 포인트**  
+- `gross_margin_proxy`는 `SUM(net_amount)/SUM(gross_amount)` 기반 근사치이며, 실제 원가 기반 마진과는 다를 수 있습니다.
+- `repurchase_rate`는 고객 전체 주문 이력에서 `2회 이상 주문` 고객 비율입니다.
+- 특정 프로모션이 마진을 낮추면서 재구매율도 낮다면 우선 조정 후보입니다.
+
+```sql
 WITH order_amounts AS (
   SELECT
     o.order_id,
@@ -149,8 +218,37 @@ JOIN order_amounts oa ON o.order_id = oa.order_id
 LEFT JOIN customer_repeat cr ON o.customer_id = cr.customer_id
 GROUP BY p.promotion_type
 ORDER BY gross_margin_proxy ASC;
+```
 
--- Q4: 품절 경험 상품군의 취소율/문의량 영향
+**기대 신호 (v1.2 데이터 · seed `20260701`)**  
+프로모션 유형별로 **마진(Proxy)과 재구매율이 모두 차등**되도록 구성되어 있습니다. 마진이 낮은 유형이 반드시 재구매를 잘 끌어오는 것은 아니라는 점이 핵심입니다.
+
+| `promotion_type` | 주문 수(근사) | `gross_margin_proxy` | `repurchase_rate` |
+|---|---|---|---|
+| Percent | 약 379 | 약 **0.75** | 약 **0.30** |
+| BOGO | 약 441 | 약 **0.85** | 약 **0.83** |
+| Amount | 약 376 | 약 **0.90** | 약 **0.72** |
+| Bundle | 약 468 | 약 **0.95** | 약 **0.90** |
+
+- `Percent`는 **마진도 최저이고 재구매율도 최저** → 우선 조정 후보입니다.
+- `Bundle`/`BOGO`는 마진과 재구매율이 모두 양호 → 유지·확대 후보입니다.
+- **해석**: 단순 할인율(Percent)보다 묶음형(Bundle/BOGO) 프로모션이 수익성과 고객 유지 측면에서 유리합니다.
+
+##### Q4. 재고 부족(품절 노출) 경험이 취소율·문의량에 미치는 영향
+
+**배경**  
+재고 부족은 주문 취소와 CS 문의 증가로 이어져 운영 비용을 키웁니다.  
+Q4는 품절 노출 상품이 포함된 주문과 아닌 주문을 나눠 취소율/문의량 차이를 확인하는 기준 쿼리입니다.
+
+**분석 경로**  
+`InventorySnapshot -> Product -> OrderItem -> Order -> SupportTicket`
+
+**결과 해석 포인트**  
+- `has_stockout_product=1` 집단의 `cancel_rate`, `avg_tickets_per_order`가 높으면 재고-고객영향 연쇄를 의심할 수 있습니다.
+- 재고 스냅샷은 시점 데이터이므로, 주문 시점과의 완전한 인과를 보장하지 않습니다.
+- 이 쿼리는 원인 확정이 아니라 우선 점검 대상을 찾는 탐지용 분석입니다.
+
+```sql
 WITH stockout_products AS (
   SELECT DISTINCT product_id
   FROM inventory_snapshots
@@ -179,8 +277,35 @@ SELECT
 FROM order_stockout_flag osf
 LEFT JOIN ticket_cnt tc ON osf.order_id = tc.order_id
 GROUP BY osf.has_stockout_product;
+```
 
--- Q5: 채널·고객등급·반품사유 패턴별 재구매율
+**기대 신호 (v1.2 데이터 · seed `20260701`)**  
+품절 상품이 포함된 주문(`has_stockout_product=1`)의 취소율·주문당 문의량이 비품절 주문보다 **더 높게** 구성되어 있습니다.
+
+| `has_stockout_product` | 주문 수(근사) | 취소율 | 주문당 문의 건수 |
+|---|---|---|---|
+| 0 (비품절) | 약 1,647 | 약 **0.02** | 약 **0.50** |
+| 1 (품절 포함) | 약 356 | 약 **0.17** | 약 **1.40** |
+
+- 취소율 격차 약 **7배**, 주문당 문의 격차 약 **2.8배**입니다.
+- 명명 상품(**AeroPhone X**, **SmartWatch Pro**, **UltraBook 15**)의 2026-05-16 재고부족 시나리오가 이 신호의 대표 사례입니다.
+- **해석**: 재고 부족 노출이 취소와 CS 부하를 동시에 키우므로, 재고 가시성·품절 임박 알림·대체 상품 추천이 운영 비용 절감의 우선 과제입니다.
+
+##### Q5. 채널·고객등급·반품사유 패턴별 재구매율 차이
+
+**배경**  
+반품은 동일 현상처럼 보이지만 채널/고객등급/사유 조합에 따라 재구매 회복력 차이가 큽니다.  
+Q5는 어떤 세그먼트에서 반품 이후 재구매가 특히 낮은지 파악해 대응 우선순위를 정하기 위한 기준 쿼리입니다.
+
+**분석 경로**  
+`Return -> Order -> Channel/CustomerTier`, `Customer -> Order(반복구매)`
+
+**결과 해석 포인트**  
+- `repurchase_rate`가 낮은 조합(채널/등급/사유)은 보상 정책·상세 안내 개선의 우선 후보입니다.
+- `returned_customers`가 매우 작은 그룹은 표본 왜곡이 있으므로 함께 확인합니다.
+- 고객 등급 결측/이상값은 별도 그룹으로 분리해 해석합니다.
+
+```sql
 WITH customer_repeat AS (
   SELECT customer_id, CASE WHEN COUNT(*) >= 2 THEN 1 ELSE 0 END AS is_repeat
   FROM orders
@@ -201,6 +326,44 @@ GROUP BY ch.channel_name, c.customer_tier, r.return_reason
 ORDER BY repurchase_rate ASC;
 ```
 
+**기대 신호 (v1.2 데이터 · seed `20260701`)**  
+반품 이후 재구매율이 **고객등급에 따라 단조 증가**하도록 구성되어 있으며, 채널·반품사유까지 조합하면 **약 81개 세그먼트**로 편차를 관찰할 수 있습니다.
+
+> 보강 설명: 데이터가 \"너무 많아서\"라기보다, **조합 수(채널×등급×사유)가 81개**여서 본문에서는 방향성만 요약했습니다. 아래에 실제 세그먼트 예시를 추가합니다.
+
+| `customer_tier` | 재구매율(근사) |
+|---|---|
+| Bronze | 약 **0.49** |
+| Silver | 약 **0.66** |
+| Gold | 약 **0.77** |
+| Platinum | 약 **0.85** |
+
+- 세그먼트 상세 예시(실제 집계):
+
+| channel_name | customer_tier | return_reason | returned_customers | repurchase_rate |
+|---|---|---|---:|---:|
+| OnlineMall | Bronze | ChangedMind | 8 | 0.2727 |
+| Social | Bronze | Damaged | 12 | 0.3846 |
+| MobileApp | Gold | NotAsDescribed | 18 | 0.9000 |
+| Social | Platinum | SizeIssue | 11 | 1.0000 |
+
+- 고객 단위 상세 예시(동일 세그먼트 내부에서도 주문 이력에 따라 차이 발생):
+
+| 세그먼트 | customer_id 예시 | sample_return_order | order_cnt | is_repeat |
+|---|---|---|---:|---:|
+| 저재구매 (OnlineMall/Bronze/ChangedMind) | C00049 | O00078 | 1 | 0 |
+| 저재구매 (OnlineMall/Bronze/ChangedMind) | C00129 | O00218 | 1 | 0 |
+| 저재구매 (OnlineMall/Bronze/ChangedMind) | C00229 | O00380 | 2 | 1 |
+| 고재구매 (Social/Platinum/SizeIssue) | C00008 | O00012 | 3 | 1 |
+| 고재구매 (Social/Platinum/SizeIssue) | C00260 | O00429 | 2 | 1 |
+| 고재구매 (Social/Platinum/SizeIssue) | C00356 | O00596 | 2 | 1 |
+
+- 최저 재구매 조합은 대체로 **Bronze 등급 + 불량/사이즈/변심 사유**에서 나타나고, Platinum은 대부분 조합에서 높은 재구매율을 보입니다.
+- `returned_customers`가 매우 작은 조합(표본 왜곡)과 고객등급 결측 그룹은 별도로 분리해 해석합니다.
+- **해석**: 동일한 "반품"이라도 저등급·품질불만 세그먼트의 이탈 위험이 가장 크므로, 보상 정책과 상세 안내 개선의 **우선순위**를 이 조합에 두어야 합니다.
+
+> **신호 재현·확인**: 위 Q1~Q5 수치는 v1.2 데이터셋(seed `20260701`) 기준 근사치이며 방향성이 핵심입니다. `python track1/data/generate_track1_samples.py`로 데이터를 재생성하면 동일한 신호와 모든 의도적 노이즈가 그대로 재현됩니다. 상세 기대치는 [강사용 정답노트](./docs/Track1_Instructor_Data_Answer_Key.md)와 [데이터 README](./data/README.md#7-q1q5-기대-신호-강사-확인용)를 참고하세요.
+
 #### 체크
 - 질문 5개 확정
 - 질문-테이블 매핑 완료
@@ -209,26 +372,66 @@ ORDER BY repurchase_rate ASC;
 1. 결측률, 중복률, 이상값, 코드값 분포를 점검한다.
 2. 품질 이슈를 심각도(High/Medium/Low)로 분류한다.
 
+#### 미션 2 핵심 프로파일링 쿼리 3종 (분리 실행)
+
+##### 2-1) 결측률 점검 (payments)
+
+**왜 이 쿼리를 먼저 보는가**  
+결측은 조인 누락/집계 왜곡의 가장 기본 원인입니다. 특히 `payment_status` 결측은 Q1(결제 실패↔전환율) 해석에 직접 영향을 줍니다.
+
+**무엇을 확인하는가**  
+- `payment_id` 결측률: 식별자 결측 여부  
+- `order_id` 결측률: 주문 연결 가능 여부(FK 관점)  
+- `payment_status` 결측률: 결제 성공/실패 분류 가능 여부
+
 ```sql
--- (예시) payments 결측률
 SELECT
   SUM(CASE WHEN payment_id IS NULL THEN 1 ELSE 0 END) * 100.0 / COUNT(*) AS null_rate_payment_id,
   SUM(CASE WHEN order_id IS NULL THEN 1 ELSE 0 END) * 100.0 / COUNT(*) AS null_rate_order_id,
   SUM(CASE WHEN payment_status IS NULL OR payment_status = '' THEN 1 ELSE 0 END) * 100.0 / COUNT(*) AS null_rate_payment_status
 FROM payments;
+```
 
--- (예시) 중복 키 점검
+**결과 해석 포인트**  
+- `payment_status` 결측이 0이 아니면, 미션 3에서 코드 표준화 전에 결측 처리 정책(삭제/보정/Unknown 코드)을 먼저 합의해야 합니다.
+
+##### 2-2) 중복 키 점검 (shipments)
+
+**왜 이 쿼리를 보는가**  
+중복 키는 1:N 관계를 의도치 않게 N:N으로 바꿔버려, 주문/배송 관련 집계를 과대 계산하게 만듭니다.
+
+**무엇을 확인하는가**  
+- `shipment_id`가 유일해야 하는 식별자인지  
+- 중복 발생 시 어떤 키에서 몇 건 중복인지
+
+```sql
 SELECT shipment_id, COUNT(*) cnt
 FROM shipments
 GROUP BY shipment_id
 HAVING COUNT(*) > 1;
+```
 
--- (예시) 이상값 점검
+**결과 해석 포인트**  
+- 결과가 1건 이상이면 미션 3에서 PK 규칙 위반으로 분류하고, 중복 제거 기준(최신건 우선/완전중복 제거)을 명시해야 합니다.
+
+##### 2-3) 이상값 점검 (가격/할인/재고/수량)
+
+**왜 이 쿼리를 보는가**  
+이상값은 지표를 즉시 왜곡합니다. 예를 들어 음수 수량/음수 재고/음수 할인은 매출·재고·마진 해석을 깨뜨립니다.
+
+**무엇을 확인하는가**  
+- 0 이하 가격, 음수 할인, 음수 재고, 0 이하 수량의 위반 건수
+- 위반 유형을 한 번에 비교할 수 있도록 `issue` 라벨과 건수로 집계
+
+```sql
 SELECT 'products.unit_price<=0' AS issue, COUNT(*) c FROM products WHERE unit_price <= 0
 UNION ALL SELECT 'promotions.discount<0', COUNT(*) FROM promotions WHERE discount_amount < 0
 UNION ALL SELECT 'inventory.on_hand<0', COUNT(*) FROM inventory_snapshots WHERE on_hand_qty < 0
 UNION ALL SELECT 'order_items.qty<=0', COUNT(*) FROM order_items WHERE quantity <= 0;
 ```
+
+**결과 해석 포인트**  
+- 건수가 0이 아닌 항목은 미션 3에서 유효범위 규칙(`unit_price>=0`, `discount>=0`, `on_hand>=0`, `qty>0`)으로 강제해야 합니다.
 
 > 💡 이 데이터셋에는 품질 이슈가 **의도적으로** 포함되어 있습니다. 아래 유형을 모두 찾으면 이슈 10개 이상 도출이 가능합니다.
 > - 결측(NULL) 5건 (customer_segment / order_date / payment_status / return_reason / ticket_reason)
@@ -310,7 +513,7 @@ UNION ALL SELECT 'order_items.qty<=0', COUNT(*) FROM order_items WHERE quantity 
 | Customer purchases Product (logical) | 고객의 상품 구매 관계(다중 홉) | Customer N : M Product | orders + order_items |
 
 #### 권장 확장 논리 관계 (다중경로 분석)
-아래 3개는 강사 진행 시 추가로 도출하는 다중경로 논리 관계입니다. 기본 20개 관계를 완성한 뒤, 팀 난이도/시간 여유에 맞춰 확장하세요.
+아래 3개는 브릿지/이벤트 테이블을 거쳐 엔터티를 N:M으로 연결하는 **다중 홉 논리 경로**입니다. 물리 FK를 넘는 의미 질의(경로 탐색, 원인-결과 추적) 검증에 사용합니다.
 
 | 관계(동사형) | 설명 | 카디널리티 | 구현 근거(다중 홉) |
 |---|---|---|---|
@@ -318,14 +521,21 @@ UNION ALL SELECT 'order_items.qty<=0', COUNT(*) FROM order_items WHERE quantity 
 | Shipment relates_to Return (logical) | 배송 이후 반품 발생 관계 추적 | Shipment N : M Return | shipments -> orders -> returns |
 | Order applies Promotion (logical path) | 주문별 적용 프로모션 경로 추적 | Order N : M Promotion | orders -> order_promotions -> promotions |
 
-> 💡 다중 홉 복합 경로 예시: `Campaign -> Order -> Payment -> Shipment -> Return`, `Promotion -> Order -> Margin(파생지표)`.
+> 💡 다중 홉 복합 경로 예시:
+> - `Campaign -> Order -> Payment -> Shipment -> Return`  
+>   (캠페인 유입이 결제/배송을 거쳐 반품까지 어떻게 이어졌는지)
+> - `Promotion -> Order -> Margin`  
+>   (프로모션이 주문 금액/마진에 어떤 영향을 주는지)
 
 #### Fabric Ontology로 구성하는 방법 (상세)
 아래 순서대로 진행하면 미션 4 산출물(엔터티/관계/카디널리티)을 Fabric Ontology 화면에서 바로 구현할 수 있습니다.
 
 **📌 빠른 방법: Python/REST API 자동화 (권장 - 5분)**
 
-별도 Notebook 셀에서 [부록 A. Fabric Ontology 자동 구성 스크립트](#부록-a-fabric-ontology-자동-구성-스크립트-미션-4-보조)를 실행하면 엔터티 생성(단계 1)·속성 추가(단계 3)·물리 관계(단계 5)가 자동화됩니다. 원천 테이블 매핑(단계 4)과 논리 관계(단계 6)는 UI로 수동 진행합니다.
+자동화 실행은 별도 Notebook/스크립트([`ontology_bundle/deploy_ontology_notebook.ipynb`](./ontology_bundle/deploy_ontology_notebook.ipynb), [`ontology_bundle/deploy_ontology_notebook.py`](./ontology_bundle/deploy_ontology_notebook.py))에서 수행합니다. 상세 단계는 [Appendix A. Fabric Ontology 자동 구성 스크립트](./docs/Appendix_A_Fabric_Ontology_Auto_Script.md)를 참고하세요. 자동화 범위는 엔터티 생성(단계 1)·속성 추가(단계 3)·물리 관계(단계 5)이며, 원천 테이블 매핑(단계 4)과 논리 관계(단계 6)는 UI에서 수동으로 진행합니다.  
+⚠️ **Fabric Notebook 실행 주의사항**  
+- 셀 실행 전에 우측 상단에서 Notebook 세션(**Start session**)을 먼저 시작하세요.  
+- SQL 셀은 실행 전에 셀 언어를 반드시 **Spark SQL**로 전환하세요.
 
 **📌 표준 방법: UI 수동 생성 (학습용)**
 
@@ -548,1138 +758,11 @@ evidenceLinks=<노트북/캡처 경로>
 
 ---
 
-## 부록 A. Fabric Ontology 자동 구성 스크립트 (미션 4 보조)
 
-> 이 부록은 미션 4의 엔터티/속성/관계를 Notebook(PySpark) 셀에서 **REST API로 자동 구성**하는 보조 자료입니다.
-> UI 수동 생성과 결과는 동일하며, 시간을 단축하려는 팀만 선택적으로 사용하세요.
-> 아래 단계 번호는 미션 4 [Fabric Ontology로 구성하는 방법](#fabric-ontology로-구성하는-방법-상세)의 UI 단계와 대응됩니다.
+## Appendix (분리 문서)
 
-| 부록 단계 | 작업 | 자동화 방식 | 대응 미션4 UI 단계 |
-|---|---|---|---|
-| 단계 1 | 엔터티 14개 생성 | ✅ REST API | 2. 엔터티 14개 생성 |
-| 단계 3 | 엔터티 속성 추가 | ✅ Definition API | 3. 각 엔터티 속성 추가 |
-| 단계 4 | 원천 테이블 매핑 | 🖱️ UI 수동 | 4. 원천 테이블 매핑 연결 |
-| 단계 5 | 물리 관계(FK) | ✅ REST API | 5. 물리 관계(1차) 생성 |
-| 단계 6 | 논리 관계(다중홉) | 🖱️ UI 수동 | 7. 논리 관계(3차) 정의 |
+> Appendix A와 Appendix B는 동일 목표(테스트 데이터가 Ontology에서 해석/조회되도록 구조·매핑 구성)를 다른 방식으로 수행합니다. 팀 상황에 맞춰 **A 또는 B 중 하나를 선택**해 진행하세요.
 
-> ⚠️ 단계 2(생성 확인)와 단계 4·6(매핑/논리 관계)은 현재 Preview API 미공개로 UI에서 수행합니다.
-> API는 Preview 단계로 엔드포인트가 변경될 수 있으므로, 실패 시 미션 4의 UI 수동 절차로 진행하세요.
-
-### 단계 1: 엔터티 14개 생성 (Python REST API)
-
-**위치**: Notebook(PySpark)의 별도 셀에서 실행 (미션 4 > 엔터티 14개 생성 단계)
-
-**전제 조건**:
-- Fabric Workspace 생성 완료
-- Ontology 항목 생성 완료 (또는 사전에 생성됨)
-- Workspace ID, Ontology ID를 먼저 조회
-
-**Workspace ID / Ontology ID 조회 방법** (URL 기반 - 모든 환경 지원):
-
-**① Workspace ID 찾기**:
-1. Workspace 진입
-2. 브라우저 주소창 확인
-3. 아래 패턴 중 하나에서 ID 추출:
-   - `https://app.fabric.microsoft.com/workspaces/{WORKSPACE_ID}` → ID 복사
-   - `https://msit.powerbi.com/groups/{WORKSPACE_ID}` → ID 복사 (또는 여기서 "WORKSPACE_ID"는 group ID)
-   - `https://powerbi.microsoft.com/groups/{WORKSPACE_ID}` → ID 복사
-
-   예:
-   ```
-   https://msit.powerbi.com/groups/12345678-1234-5678-1234-567812345678/...
-   → Workspace ID = 12345678-1234-5678-1234-567812345678
-   ```
-
-**② Ontology ID 찾기**:
-1. Ontology 항목 열기
-2. 브라우저 주소창 확인: `?itemId=` 또는 `?viewModel=` 뒤의 ID
-   
-   예:
-   ```
-   https://msit.powerbi.com/groups/.../reports/abcd1234-...?itemId=xyz789...
-   → Ontology ID = xyz789...
-   ```
-
-**③ 가장 간단한 방법 (권장): Notebook 내 자동 추출**:
-```python
-# Notebook 실행 환경에서 자동으로 ID 획득 (토큰 방식과 같음)
-# 아래 스크립트 최상단에 추가
-
-import requests
-from notebookutils.authentication import AzureStorageCredentialsManager
-
-# 현재 Workspace/Item ID 자동 감지 (일부 환경)
-# 또는 수동 기입 후 테스트
-
-WORKSPACE_ID = "12345678-1234-5678-1234-567812345678"  # 위에서 복사
-ONTOLOGY_ID = "abcd1234-efgh-5678-ijkl-mnopqrstuvwx"    # 위에서 복사
-
-print(f"✓ Workspace ID: {WORKSPACE_ID}")
-print(f"✓ Ontology ID: {ONTOLOGY_ID}")
-```
-
-**Script 실행**:
-
-```python
-# Fabric Ontology REST API를 통한 14개 엔터티 일괄 생성
-# 실행 시간: 일반적으로 수초~2분(비동기 처리/환경에 따라 달라짐)
-
-import requests
-import json
-from notebookutils.authentication import AzureStorageCredentialsManager
-
-# ============ 설정 ============
-FABRIC_API_BASE = "https://api.fabric.microsoft.com/v1"
-WORKSPACE_ID = "your-workspace-id"  # 위 조회 방법으로 기입
-ONTOLOGY_ID = "your-ontology-id"      # 위 조회 방법으로 기입
-
-# ============ 인증 토큰 (Fabric 자동 제공) ============
-try:
-    token = AzureStorageCredentialsManager().get_notebookutils_aad_token()
-    headers = {
-        "Authorization": f"Bearer {token}",
-        "Content-Type": "application/json"
-    }
-    print("✅ 인증 토큰 획득 완료")
-except Exception as e:
-    print(f"❌ 토큰 획득 실패: {str(e)}")
-    print("   → Fabric 권한 재확인 또는 UI 수동 생성으로 진행하세요.")
-    token = None
-
-# ============ 14개 엔터티 정의 ============
-entities_config = [
-    {"name": "Customer", "description": "고객 마스터"},
-    {"name": "Product", "description": "상품 카탈로그"},
-    {"name": "Channel", "description": "판매 채널"},
-    {"name": "Campaign", "description": "마케팅 캠페인"},
-    {"name": "Promotion", "description": "프로모션/할인"},
-    {"name": "Order", "description": "고객 주문"},
-    {"name": "OrderItem", "description": "주문 상세 항목"},
-    {"name": "Payment", "description": "결제 기록"},
-    {"name": "Shipment", "description": "배송 정보"},
-    {"name": "Return", "description": "반품 기록"},
-    {"name": "SupportTicket", "description": "고객 지원 문의"},
-    {"name": "InventorySnapshot", "description": "재고 스냅샷"},
-    {"name": "OrderPromotion", "description": "주문-프로모션 브릿지 (N:M)"},
-    {"name": "CampaignAttribution", "description": "캠페인-어트리뷰션 브릿지 (N:M)"},
-]
-
-# ============ 단일 Ontology 안에 EntityTypes 추가 ============
-# /items에 Ontology를 14번 생성하면 "엔터티 14개"가 아니라 빈 Ontology item 14개가 생깁니다.
-# 반드시 현재 ONTOLOGY_ID의 definition.parts에 EntityTypes를 추가합니다.
-import base64
-import uuid
-
-id_property_by_entity = {
-    "Customer": "customer_id",
-    "Product": "product_id",
-    "Channel": "channel_id",
-    "Campaign": "campaign_id",
-    "Promotion": "promotion_id",
-    "Order": "order_id",
-    "OrderItem": "order_id",
-    "Payment": "payment_id",
-    "Shipment": "shipment_id",
-    "Return": "return_id",
-    "SupportTicket": "ticket_id",
-    "InventorySnapshot": "snapshot_id",
-    "OrderPromotion": "order_id",
-    "CampaignAttribution": "campaign_id",
-}
-
-assert token, "토큰이 없습니다. 인증 셀을 먼저 성공시키세요."
-get_url = f"{FABRIC_API_BASE}/workspaces/{WORKSPACE_ID}/ontologies/{ONTOLOGY_ID}/getDefinition"
-get_response = requests.post(get_url, headers=headers, data="", timeout=60)
-get_response.raise_for_status()
-parts = get_response.json()["definition"]["parts"]
-
-existing_names = set()
-for part in parts:
-    if part["path"].startswith("EntityTypes/") and part["path"].endswith("/definition.json"):
-        entity = json.loads(base64.b64decode(part["payload"]).decode("utf-8"))
-        existing_names.add(entity["name"])
-
-created_names = []
-for entity in entities_config:
-    name = entity["name"]
-    if name in existing_names:
-        continue
-    entity_id = str(uuid.uuid5(uuid.NAMESPACE_URL, f"track1-ontology:{name}"))
-    property_name = id_property_by_entity[name]
-    property_id = str(uuid.uuid5(uuid.NAMESPACE_URL, f"track1-ontology:{name}:{property_name}"))
-    entity_definition = {
-        "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/ontology/entityType/1.0.0/schema.json",
-        "id": entity_id,
-        "namespace": "usertypes",
-        "baseEntityTypeId": None,
-        "name": name,
-        "description": entity["description"],
-        "entityIdParts": [property_id],
-        "displayNamePropertyId": property_id,
-        "namespaceType": "Custom",
-        "visibility": "Visible",
-        "properties": [
-            {
-                "id": property_id,
-                "name": property_name,
-                "valueType": "String",
-                "sourceColumnName": property_name,
-            }
-        ],
-        "timeseriesProperties": [],
-        "untypedProperties": [],
-    }
-    encoded = base64.b64encode(
-        json.dumps(entity_definition, ensure_ascii=False).encode("utf-8")
-    ).decode("utf-8")
-    parts.append(
-        {
-            "path": f"EntityTypes/{entity_id}/definition.json",
-            "payload": encoded,
-            "payloadType": "InlineBase64",
-        }
-    )
-    created_names.append(name)
-
-update_url = f"{FABRIC_API_BASE}/workspaces/{WORKSPACE_ID}/ontologies/{ONTOLOGY_ID}/updateDefinition?updateMetadata=True"
-update_response = requests.post(
-    update_url,
-    headers=headers,
-    json={"definition": {"parts": parts}},
-    timeout=120,
-)
-print("updateDefinition:", update_response.status_code)
-print("기존 엔터티:", len(existing_names), "/ 새로 추가:", len(created_names))
-print("추가 목록:", created_names or "(없음: 모두 이미 존재)")
-if update_response.status_code not in (200, 201, 202):
-    raise RuntimeError(update_response.text[:800])
-```
-
-**예상 출력**:
-```
-✅ 인증 토큰 획득 완료
-updateDefinition: 200 또는 202
-기존 엔터티: 0 / 새로 추가: 14
-추가 목록: ['Customer', ..., 'CampaignAttribution']
-```
-
-**트러블슈팅**:
-
-| 오류 | 원인 | 해결 방법 |
-|---|---|---|
-| `401 Unauthorized` | Fabric 권한 없음 | Ontology 편집 권한 확인 |
-| `404 Not Found` | Workspace/Ontology ID 오류 | ID 재확인 및 복사 |
-| `429 Too Many Requests` | API 호출 제한 | 5초 대기 후 재시도 |
-| `Timeout` | 네트워크 지연 | 재실행 또는 UI 수동 생성 |
-| `ALMOperationImportFailed` | 환경별 Definition import 제한 | UI 방식 또는 부록 B의 core fallback 사용 |
-
-> 존재가 확인되지 않은 별도 `fabric-sdk` 예시는 사용하지 않습니다. 자동화는 검증된 Definition API 방식과 [부록 B](#부록-b-선언적-일괄-정의-방식-심화)를 사용합니다.
-
----
-
-### 단계 2: 엔터티 생성 확인 (UI)
-
-엔터티 생성 후 Ontology UI에서 14개 엔터티가 모두 생성되었는지 확인한 뒤 다음 단계로 진행합니다. 이후 속성(단계 3)·물리 관계(단계 5)는 스크립트로, 매핑(단계 4)·논리 관계(단계 6)는 UI로 진행합니다.
-
----
-
-### 단계 3: 엔터티 속성 추가
-
-**목적**: 각 엔터티에 필수 속성(식별자, 날짜, 금액 등)을 추가합니다.
-
-**설명**:
-- 각 엔터티별로 핵심 속성 2~8개를 정의
-- 타입 설정 (Text, Integer, Decimal, Date, DateTime)
-- 첫 번째 식별자(`*_id`)를 `entityIdParts`와 `displayNamePropertyId`로 지정
-
-**Step 3 Script** (속성 추가):
-
-```python
-# 단계 3: getDefinition/updateDefinition 방식으로 속성 반영
-import base64
-import json
-import requests
-import uuid
-from notebookutils.authentication import AzureStorageCredentialsManager
-
-FABRIC_API_BASE = "https://api.fabric.microsoft.com/v1"
-WORKSPACE_ID = "your-workspace-id"
-ONTOLOGY_ID = "your-ontology-id"
-
-token = AzureStorageCredentialsManager().get_notebookutils_aad_token()
-headers = {"Authorization": f"Bearer {token}", "Content-Type": "application/json"}
-
-print("📌 단계 3: 엔터티 속성 추가 (Definition 업데이트 방식)")
-
-entity_properties = {
-    "Customer": [{"name": "customer_id", "type": "Text", "required": True},
-                {"name": "customer_segment", "type": "Text", "required": False},
-                {"name": "customer_tier", "type": "Text", "required": False},
-                {"name": "join_date", "type": "DateTime", "required": False}],
-    "Product": [{"name": "product_id", "type": "Text", "required": True},
-                {"name": "product_name", "type": "Text", "required": True},
-                {"name": "category", "type": "Text", "required": False},
-                {"name": "unit_price", "type": "Decimal", "required": False},
-                {"name": "currency", "type": "Text", "required": False}],
-    "Channel": [{"name": "channel_id", "type": "Text", "required": True},
-                {"name": "channel_name", "type": "Text", "required": True}],
-    "Campaign": [{"name": "campaign_id", "type": "Text", "required": True},
-                 {"name": "campaign_name", "type": "Text", "required": True},
-                {"name": "campaign_type", "type": "Text", "required": False},
-                {"name": "channel_id", "type": "Text", "required": False},
-                {"name": "start_date", "type": "Date", "required": False},
-                {"name": "end_date", "type": "Date", "required": False}],
-    "Promotion": [{"name": "promotion_id", "type": "Text", "required": True},
-                 {"name": "promotion_name", "type": "Text", "required": True},
-                 {"name": "promotion_type", "type": "Text", "required": False},
-                 {"name": "discount_amount", "type": "Decimal", "required": False},
-                 {"name": "start_date", "type": "Date", "required": False},
-                 {"name": "end_date", "type": "Date", "required": False}],
-    "Order": [{"name": "order_id", "type": "Text", "required": True},
-              {"name": "customer_id", "type": "Text", "required": True},
-              {"name": "channel_id", "type": "Text", "required": True},
-              {"name": "order_date", "type": "DateTime", "required": True},
-              {"name": "order_status", "type": "Text", "required": False},
-              {"name": "gross_amount", "type": "Decimal", "required": False},
-              {"name": "discount_applied", "type": "Decimal", "required": False},
-              {"name": "net_amount", "type": "Decimal", "required": False},
-              {"name": "currency", "type": "Text", "required": False}],
-    "OrderItem": [{"name": "order_id", "type": "Text", "required": True},
-                 {"name": "product_id", "type": "Text", "required": True},
-                 {"name": "quantity", "type": "Integer", "required": False},
-                 {"name": "sales_amount", "type": "Decimal", "required": False}],
-    "Payment": [{"name": "payment_id", "type": "Text", "required": True},
-                {"name": "order_id", "type": "Text", "required": True},
-                {"name": "payment_status", "type": "Text", "required": False},
-                {"name": "approved_amount", "type": "Decimal", "required": False},
-                {"name": "approved_at", "type": "DateTime", "required": False}],
-    "Shipment": [{"name": "shipment_id", "type": "Text", "required": True},
-                {"name": "order_id", "type": "Text", "required": True},
-                {"name": "shipment_status", "type": "Text", "required": False},
-                {"name": "delivered_at", "type": "DateTime", "required": False}],
-    "Return": [{"name": "return_id", "type": "Text", "required": True},
-               {"name": "order_id", "type": "Text", "required": True},
-               {"name": "product_id", "type": "Text", "required": True},
-               {"name": "customer_id", "type": "Text", "required": True},
-               {"name": "return_date", "type": "Date", "required": False},
-               {"name": "return_reason", "type": "Text", "required": False}],
-    "SupportTicket": [{"name": "ticket_id", "type": "Text", "required": True},
-                     {"name": "customer_id", "type": "Text", "required": True},
-                     {"name": "order_id", "type": "Text", "required": False},
-                     {"name": "ticket_type", "type": "Text", "required": False},
-                     {"name": "ticket_reason", "type": "Text", "required": False},
-                     {"name": "created_at", "type": "DateTime", "required": False}],
-    "InventorySnapshot": [{"name": "snapshot_id", "type": "Text", "required": True},
-                         {"name": "product_id", "type": "Text", "required": True},
-                         {"name": "snapshot_date", "type": "Date", "required": False},
-                         {"name": "on_hand_qty", "type": "Integer", "required": False},
-                         {"name": "reserved_qty", "type": "Integer", "required": False}],
-    "OrderPromotion": [{"name": "order_id", "type": "Text", "required": True},
-                      {"name": "promotion_id", "type": "Text", "required": True}],
-    "CampaignAttribution": [{"name": "campaign_id", "type": "Text", "required": True},
-                           {"name": "order_id", "type": "Text", "required": True},
-                           {"name": "customer_id", "type": "Text", "required": True},
-                           {"name": "attribution_model", "type": "Text", "required": False},
-                           {"name": "attributed_revenue", "type": "Decimal", "required": False}]
-}
-
-# 1) 현재 definition 조회
-get_url = f"{FABRIC_API_BASE}/workspaces/{WORKSPACE_ID}/ontologies/{ONTOLOGY_ID}/getDefinition"
-get_response = requests.post(get_url, headers=headers, data="", timeout=60)
-print("getDefinition:", get_response.status_code)
-get_response.raise_for_status()
-current_definition = get_response.json()["definition"]
-
-# 2) 각 EntityTypes 정의에 속성 추가
-type_map = {
-    "Text": "String",
-    "Integer": "BigInt",
-    "Decimal": "Double",
-    "Date": "DateTime",
-    "DateTime": "DateTime",
-}
-updated_entities = []
-for part in current_definition["parts"]:
-    if not (part["path"].startswith("EntityTypes/") and part["path"].endswith("/definition.json")):
-        continue
-    entity = json.loads(base64.b64decode(part["payload"]).decode("utf-8"))
-    specs = entity_properties.get(entity["name"])
-    if not specs:
-        continue
-    properties = []
-    for spec in specs:
-        property_id = str(
-            uuid.uuid5(
-                uuid.NAMESPACE_URL,
-                f"track1-ontology:{entity['name']}:{spec['name']}",
-            )
-        )
-        properties.append(
-            {
-                "id": property_id,
-                "name": spec["name"],
-                "valueType": type_map[spec["type"]],
-                "sourceColumnName": spec["name"],
-            }
-        )
-    entity["properties"] = properties
-    entity["entityIdParts"] = [properties[0]["id"]]
-    entity["displayNamePropertyId"] = properties[0]["id"]
-    part["payload"] = base64.b64encode(
-        json.dumps(entity, ensure_ascii=False).encode("utf-8")
-    ).decode("utf-8")
-    updated_entities.append(entity["name"])
-
-# 3) definition 전체를 보존한 채 업데이트
-update_url = f"{FABRIC_API_BASE}/workspaces/{WORKSPACE_ID}/ontologies/{ONTOLOGY_ID}/updateDefinition?updateMetadata=True"
-update_response = requests.post(
-    update_url,
-    headers=headers,
-    json={"definition": current_definition},
-    timeout=120
-)
-
-print("updateDefinition:", update_response.status_code)
-print("속성 갱신 엔터티:", len(updated_entities), updated_entities)
-
-if update_response.status_code in (200, 201, 202):
-    print("✅ Ontology 속성 스키마 업데이트 요청 성공")
-else:
-    raise RuntimeError(update_response.text[:800])
-```
-
-**설명**:
-- 속성 추가는 개별 엔드포인트 호출보다 `getDefinition → updateDefinition` 흐름이 안정적으로 동작
-- 각 `EntityTypes/{id}/definition.json`을 Base64 decode/수정/re-encode하며, 다른 파트는 그대로 유지
-- `updateDefinition?updateMetadata=True` 반영 후 Ontology UI에서 최종 확인
-
----
-
-### 단계 4: 원천 테이블 매핑 (선택)
-
-**목적**: 각 Ontology 엔터티를 Lakehouse 원천 테이블에 매핑합니다.
-
-**설명**:
-- Ontology 속성 ↔ Lakehouse 테이블 컬럼 연결
-- 매핑 우선순위: 식별자 > 날짜/금액 > 분석 속성
-
-**Step 4 Script** (UI 수동 권장 - API 미공개):
-
-```
-Ontology 항목 → [엔터티 선택] → [매핑] 탭 → [+ 테이블 추가] → 원천 테이블 선택 → 컬럼 매핑
-
-예:
-- Customer 엔터티 → customers 테이블
-- Order 엔터티 → orders 테이블
-- Payment 엔터티 → payments 테이블
-```
-
----
-
-### 단계 5: 물리 관계(1차) - FK 기반 생성
-
-**목적**: 원천 데이터의 Foreign Key(FK) 기반 1:N 관계를 정의합니다.
-
-**설명**:
-- Customer 1 : N Order (customers.customer_id ← orders.customer_id)
-- Order 1 : N Payment (orders.order_id ← payments.order_id)
-- Product 1 : N OrderItem (products.product_id ← order_items.product_id)
-- 총 9개 FK 기반 관계
-
-**Step 5 Script** (물리 관계 추가):
-
-```python
-# 단계 5: 물리 관계(FK 기반) 생성
-import requests
-from notebookutils.authentication import AzureStorageCredentialsManager
-
-FABRIC_API_BASE = "https://api.fabric.microsoft.com/v1"
-WORKSPACE_ID = "your-workspace-id"
-ONTOLOGY_ID = "your-ontology-id"
-
-try:
-    token = AzureStorageCredentialsManager().get_notebookutils_aad_token()
-    headers = {"Authorization": f"Bearer {token}", "Content-Type": "application/json"}
-except:
-    token = None
-
-print("📌 단계 5: 물리 관계 (FK 기반) 추가\n")
-
-physical_relationships = [
-    {"from": "Customer", "to": "Order", "name": "places", "card": "1:N"},
-    {"from": "Channel", "to": "Order", "name": "belongs_to", "card": "N:1"},
-    {"from": "Order", "to": "Payment", "name": "has", "card": "1:N"},
-    {"from": "Order", "to": "Shipment", "name": "fulfilled_by", "card": "1:N"},
-    {"from": "Order", "to": "OrderItem", "name": "includes", "card": "1:N"},
-    {"from": "Product", "to": "OrderItem", "name": "referenced_by", "card": "1:N"},
-    {"from": "Order", "to": "Return", "name": "has_return", "card": "1:N"},
-    {"from": "Customer", "to": "SupportTicket", "name": "raises", "card": "1:N"},
-    {"from": "Product", "to": "InventorySnapshot", "name": "has_snapshot", "card": "1:N"},
-]
-
-print("관계 후보 9개를 확인했습니다.")
-for rel in physical_relationships:
-    print(f"  - {rel['from']} → {rel['to']} ({rel['card']})")
-print("이 단계는 UI에서 추가하거나, 부록 B의 RelationshipTypes 일괄 배포를 사용하세요.")
-```
-
-> `/items/{ONTOLOGY_ID}/relationships` 형태의 개별 관계 API는 워크숍 기본 경로로 사용하지 않습니다. 검증된 UI 또는 부록 B Definition API 경로만 사용합니다.
-
----
-
-### 단계 6: 논리 관계(2차) - 다중홉 관계
-
-**목적**: 브릿지 테이블과 다중홉 분석을 위한 논리 관계를 추가합니다.
-
-**설명**:
-- **브릿지 기반 N:M**:
-  - Order ↔ Promotion (OrderPromotion 브릿지)
-  - Campaign ↔ Order (CampaignAttribution 브릿지)
-  
-- **다중홉 분석**:
-  - Campaign → Order → Payment (캠페인별 결제 추적)
-  - Promotion → Order → Return (프로모션별 반품 추적)
-  - Customer → Order → Product (고객 구매 상품)
-
-**Step 6 Script** (논리 관계 - UI 수동 권장):
-
-```
-Ontology 항목 → [관계 탭] → [+ Logical Relation 추가]
-
-다중홉 관계 정의:
-1. Campaign → CampaignAttribution → Order
-   - Campaign influences Order (다중터치 어트리뷰션)
-   
-2. Promotion → OrderPromotion → Order
-   - Promotion influences Order (프로모션 영향도)
-   
-3. Customer → Order → OrderItem → Product
-   - Customer purchases Product (간접 구매 관계)
-
-각 논리 관계별 설명:
-- 카디널리티: N:M
-- 경로: [브릿지 엔터티] 거쳐 연결
-- 분석 목적: 마케팅ROI, 프로모션효과, 교차판매 등
-```
-
-**⚠️ 주의**: 논리 관계는 현재 Fabric UI에서만 생성 가능합니다 (API 미공개). UI에서 직접 추가하세요.
-
----
-
-### 단계별 완료 체크리스트
-
-| 단계 | 작업 | 상태 |
-|---|---|---|
-| 3 | 속성 14개 엔터티 × 4~6개 속성 | Script/UI |
-| 4 | 원천 테이블 매핑 | UI (선택) |
-| 5 | 물리 관계 9개 (FK 기반) | Script/UI |
-| 6 | 논리 관계 5~6개 (다중홉) | UI (필수) |
-
----
-
-> 부록 A 종료. 미션 4 본문의 [Fabric Ontology로 구성하는 방법](#fabric-ontology로-구성하는-방법-상세)과 함께 사용하세요.
-
----
-
-## 부록 B. 선언적 일괄 정의 방식 (심화)
-
-> ℹ️ 이 부록은 **개념 이해용 참고 자료**입니다. Track1 실습의 제출 기준은 부록 A(또는 미션 4 UI)로 충분하며, 부록 B는 심화/자동화에 관심 있는 참가자를 위한 것입니다.
-
-### B-1. 핵심 아이디어: "사람이 읽는 계약(contract) → 정의 parts 번들"
-
-이 방식은 먼저 엔터티/속성/관계를 **선언적 YAML 계약**으로 적어둡니다.
-
-```yaml
-entities:
-  Customer:
-    primary_key: customer_id
-    source: customers.csv
-    fields: [customer_id, customer_name, customer_segment, registration_date]
-relationships:
-  - name: Customer_places_Order
-    from_entity: Customer
-    from_field: customer_id
-    to_entity: Order
-    to_field: customer_id
-```
-
-이 계약을 코드가 읽어 **여러 개의 JSON 파일(parts)**로 변환하고, 이를 base64(InlineBase64)로 인코딩해 하나의 `definition.parts[]`로 묶습니다.
-
-### B-2. Entity Type + Property는 "엔터티 정의 파일" 안에 인라인
-
-엔터티마다 `EntityTypes/{entity_id}/definition.json` 파트를 만들고, **Property를 그 안 `properties[]` 배열에 함께** 넣습니다(우리 부록 A처럼 속성만 따로 `updateDefinition` 하지 않음).
-
-```python
-entity_definition = {
-    "$schema": ".../ontology/entityType/1.0.0/schema.json",
-    "id": entity_id,
-    "name": "Customer",
-    "entityIdParts": [<customer_id property id>],        # PK
-    "displayNamePropertyId": <customer_name property id>,
-    "properties": [                                        # ← Property 인라인
-        {"id": pid, "name": "CustomerId",       "valueType": "String"},
-        {"id": pid, "name": "CustomerName",     "valueType": "String"},
-        {"id": pid, "name": "CustomerSegment",  "valueType": "String"},
-        {"id": pid, "name": "RegistrationDate", "valueType": "String"},
-    ],
-}
-parts.append({"path": f"EntityTypes/{entity_id}/definition.json",
-              "payload": b64_json(entity_definition), "payloadType": "InlineBase64"})
-```
-
-추가로 엔터티마다 **DataBinding 파트**(`EntityTypes/{id}/DataBindings/{bindingId}.json`)를 넣어 각 Property를 Lakehouse 테이블 컬럼에 직접 매핑합니다(`sourceColumnName` → `targetPropertyId`). 부록 A에서 UI로 하던 "원천 테이블 매핑"이 정의에 포함되는 셈입니다.
-
-### B-3. Relationship은 "관계 정의 파일 + Contextualization"
-
-관계는 `RelationshipTypes/{rel_id}/definition.json` 파트로 만들고 source/target을 **엔터티 타입 ID**로 연결합니다.
-
-```python
-relationship_definition = {
-    "$schema": ".../ontology/relationshipType/1.0.0/schema.json",
-    "id": rel_id, "name": "Customer_places_Order",
-    "source": {"entityTypeId": entity_ids["Customer"]},
-    "target": {"entityTypeId": entity_ids["Order"]},
-}
-```
-
-여기에 **Contextualization 파트**(`RelationshipTypes/{id}/Contextualizations/{ctxId}.json`)를 추가해, 관계를 실제 FK 컬럼에 바인딩합니다(`sourceKeyRefBindings` / `targetKeyRefBindings`). 즉 물리 관계의 근거(FK)가 정의 안에 명시됩니다.
-
-### B-4. API 호출: Ontology 전용 엔드포인트에 한 번에
-
-`.platform`(아이템 타입=Ontology)과 `definition.json`을 포함한 전체 parts를 **한 번의 정의로** 전송합니다. 부록 A의 제네릭 `/items` 방식과 달리 **`/ontologies` 전용 엔드포인트**를 사용합니다.
-
-```python
-definition = {"parts": [
-    {"path": "definition.json", "payload": b64_json({}), "payloadType": "InlineBase64"},
-    {"path": ".platform", "payload": b64_json({
-        "metadata": {"type": "Ontology", "displayName": ONTOLOGY_NAME}, ...
-    }), "payloadType": "InlineBase64"},
-    # EntityTypes/*/definition.json, EntityTypes/*/DataBindings/*.json,
-    # RelationshipTypes/*/definition.json, RelationshipTypes/*/Contextualizations/*.json ...
-]}
-
-# 신규 생성
-requests.post(f"{FABRIC_API_BASE}/workspaces/{WORKSPACE_ID}/ontologies",
-              headers=headers,
-              json={"displayName": ONTOLOGY_NAME, "description": "...", "definition": definition})
-
-# 기존 아이템 정의 교체
-requests.post(f"{FABRIC_API_BASE}/workspaces/{WORKSPACE_ID}/ontologies/{ONTOLOGY_ID}/updateDefinition",
-              headers=headers, json={"definition": definition})
-
-# 검증
-requests.post(f"{FABRIC_API_BASE}/workspaces/{WORKSPACE_ID}/ontologies/{ONTOLOGY_ID}/getDefinition",
-              headers=headers)
-```
-
-### B-5. 부록 A(점진적) vs 부록 B(선언적) 비교
-
-| 항목 | 부록 A (본 실습 기본) | 부록 B (선언적 일괄) |
-|---|---|---|
-| 엔드포인트 | `/workspaces/{ws}/items` (제네릭) | `/workspaces/{ws}/ontologies` (전용) |
-| 엔터티 생성 | 14개를 루프로 하나씩 | 정의 parts에 포함해 **한 번에** |
-| Property | 엔터티별 `updateDefinition` 반복 | 엔터티 정의에 **인라인** |
-| 원천 매핑 | UI 수동 | **DataBinding 파트로 정의에 포함** |
-| Relationship | UI 수동 | `RelationshipTypes` + Contextualization |
-| 적합한 상황 | 학습/단계별 이해 | 자동화/재현 가능한 프로비저닝 |
-
-### B-6. 실행 파일 세트 & Notebook 배포 (실제 실행)
-
-부록 B를 **실제로 실행**할 수 있도록, 모든 샘플 데이터에 대한 정의 파일과 배포 코드를 [`track1/ontology_bundle/`](./ontology_bundle) 폴더에 준비해 두었습니다.
-
-| 파일 | 역할 |
-|---|---|
-| [`ontology_contract.yaml`](./ontology_bundle/ontology_contract.yaml) | 선언적 계약(단일 진실 원천): 14 엔터티 + 17 물리관계 + 3 논리관계 |
-| [`generate_definition.py`](./ontology_bundle/generate_definition.py) · [`.ipynb`](./ontology_bundle/generate_definition.ipynb) | 계약 → Fabric Ontology `definition parts`(JSON) 생성기 (스크립트/노트북) |
-| [`definition_parts/`](./ontology_bundle/definition_parts) | 생성된 정의 파트(업로드 대상). 총 67 parts + `_manifest.json` |
-| [`deploy_ontology_notebook.py`](./ontology_bundle/deploy_ontology_notebook.py) · [`.ipynb`](./ontology_bundle/deploy_ontology_notebook.ipynb) | Notebook 셀 단위 배포 코드 (스크립트/노트북) |
-| [`README.md`](./ontology_bundle/README.md) | 실행 순서 안내 |
-
-정의 파트는 [`track1/data/`](./data/)의 실제 CSV 스키마(컬럼/PK/FK)와 1:1로 정합합니다.
-
-#### 전제 조건 (실행 전 반드시 확인)
-
-| 전제 | 설명 |
-|---|---|
-| Fabric capacity 연결 | 워크스페이스가 F2 이상(또는 Trial) capacity 에 연결되어 있어야 합니다 |
-| 권한 | 해당 워크스페이스에 **Contributor 이상** |
-| **Lakehouse 연결** | 배포 노트북이 파일을 읽을 수 있도록 **default Lakehouse 를 노트북에 연결** (아래 상세) |
-| 커널 | Notebook 언어 **PySpark (Python)** |
-
-**Lakehouse 연결이 왜 필요한가**
-CELL 3 은 업로드한 정의 파트를 `PARTS_ROOT = "/lakehouse/default/Files/ontology_bundle/definition_parts"` 경로에서 읽습니다.
-이 `/lakehouse/default/...` 경로는 노트북에 **default 로 지정된 Lakehouse** 가 있을 때만 자동 마운트됩니다.
-Lakehouse 를 연결하지 않으면 이 경로가 존재하지 않아 `FileNotFoundError` 가 발생합니다.
-
-**default Lakehouse 연결 방법 (노트북 편집 화면)**
-```text
-1. 노트북 왼쪽의 Explorer 패널에서 'Lakehouses'(또는 'Add lakehouse') 클릭
-2. Add → Existing lakehouse → ②에서 업로드한 Lakehouse(lh_track1_...) 선택 → Add
-3. 연결된 Lakehouse 목록에서 해당 Lakehouse 의 ⋯(More) → 'Set as default'
-   (여러 Lakehouse 를 붙였다면 반드시 하나를 default 로 지정)
-4. 왼쪽 Explorer 에서 Files > ontology_bundle > definition_parts 폴더가 보이면 정상
-```
-
-> 💡 **default 의 의미**: 노트북에는 여러 Lakehouse 를 연결할 수 있지만, `/lakehouse/default/` 는 그중 **default 로 표시된 한 개**를 가리킵니다. default 가 없거나 다른 Lakehouse 가 default 이면 경로가 어긋납니다.
-
-**연결 확인 (노트북에서 실행)**
-```python
-import os
-print(os.path.exists("/lakehouse/default"))                                   # True 여야 함
-print(os.listdir("/lakehouse/default/Files"))                                 # ontology_bundle 이 보여야 함
-print(os.listdir("/lakehouse/default/Files/ontology_bundle/definition_parts")) # .platform, EntityTypes, ... 확인
-```
-
-**자주 발생하는 문제**
-- `FileNotFoundError: /lakehouse/default/...` → Lakehouse 미연결 또는 default 미지정. 위 2~3단계를 다시 수행하세요.
-- 경로는 존재하나 `definition_parts` 가 비어 있음 → ②의 업로드가 다른 Lakehouse/폴더에 되었거나 폴더 구조가 깨진 경우. **노트북에 연결한 Lakehouse == 파일을 업로드한 Lakehouse** 인지 확인하세요.
-- default Lakehouse 를 바꾼 뒤에는 노트북 세션을 **재시작(Restart)** 해야 마운트가 갱신됩니다.
-- 파일을 Lakehouse 로 옮기고 싶지 않다면, ②를 생략하고 `PARTS_ROOT` 를 노트북에 내장 리소스(`builtin/`)나 다른 접근 가능한 경로로 바꿔도 됩니다(고급).
-
-**① (로컬) 정의 파일 생성** — 계약을 수정했을 때만. 기본 제공본을 쓰면 생략 가능:
-
-```bash
-cd track1/ontology_bundle
-python3 generate_definition.py     # → definition_parts/ 재생성 (67 parts)
-```
-
-각 엔터티는 `EntityTypes/<id>/definition.json`(속성 인라인) + `DataBindings/<id>.json`(컬럼→속성 매핑)로,
-각 물리관계는 `RelationshipTypes/<id>/definition.json` + `Contextualizations/<id>.json`(FK 바인딩)로 생성됩니다.
-
-**② Fabric Lakehouse 에 업로드** — 폴더 구조를 그대로 유지:
-
-```text
-Lakehouse > Files > (새 폴더) ontology_bundle > definition_parts 업로드
-최종 경로:  Files/ontology_bundle/definition_parts/...
-```
-
-**③ Notebook 을 워크스페이스로 Import 후 배포**
-
-먼저 노트북을 워크스페이스에 가져옵니다:
-
-```text
-app.fabric.microsoft.com → 대상 Workspace → Import(또는 + New item) → Notebook
-→ Import from this device → deploy_ontology_notebook.ipynb 선택 → Upload
-```
-
-Import 후: 노트북을 열고 상단에서 **Add lakehouse** 로 ②의 Lakehouse 를 연결(**default 설정**)해야 `/lakehouse/default/Files/...` 경로가 동작합니다. 커널은 **PySpark (Python)** 을 사용합니다.
-
-이어서 아래 셀을 순서대로 실행합니다(전체 코드는 [`deploy_ontology_notebook.ipynb`](./ontology_bundle/deploy_ontology_notebook.ipynb) / [`.py`](./ontology_bundle/deploy_ontology_notebook.py)):
-
-```python
-# CELL 1 : 설정
-import base64, json, os, requests
-FABRIC_API_BASE = "https://api.fabric.microsoft.com/v1"
-WORKSPACE_ID  = "your-workspace-id"                 # 부록 A의 ID 조회 방법 참고
-LAKEHOUSE_ID  = "your-lakehouse-item-id"            # /workspaces/{ws}/lakehouses 응답의 id
-ONTOLOGY_NAME = "retail_track1_ontology_v1"
-PARTS_ROOT    = "/lakehouse/default/Files/ontology_bundle/definition_parts"
-
-# CELL 2 : 인증 토큰 (Fabric 자동 제공)
-from notebookutils.authentication import AzureStorageCredentialsManager
-token = AzureStorageCredentialsManager().get_notebookutils_aad_token()
-headers = {"Authorization": f"Bearer {token}", "Content-Type": "application/json"}
-
-# CELL 3 : 업로드한 파트를 읽어 definition.parts[] 조립 (InlineBase64)
-def build_definition_from_folder(parts_root):
-    parts = []
-    for dirpath, _dirs, files in os.walk(parts_root):
-        for fn in sorted(files):
-            if fn == "_manifest.json":
-                continue
-            ap = os.path.join(dirpath, fn)
-            rel = os.path.relpath(ap, parts_root).replace(os.sep, "/")
-            with open(ap, "rb") as fh:
-                parts.append({"path": rel,
-                              "payload": base64.b64encode(fh.read()).decode(),
-                              "payloadType": "InlineBase64"})
-    priority = {".platform": 0, "definition.json": 1}
-    parts.sort(key=lambda p: (priority.get(p["path"], 2), p["path"]))
-    return {"parts": parts}
-
-definition = build_definition_from_folder(PARTS_ROOT)
-print("parts:", len(definition["parts"]))
-
-# CELL 4 : 신규 생성(create) 또는 정의 교체(updateDefinition) - 한 번에 배포
-def find_existing(ws, name):
-    r = requests.get(f"{FABRIC_API_BASE}/workspaces/{ws}/ontologies", headers=headers, timeout=30)
-    return next((i["id"] for i in r.json().get("value", []) if i.get("displayName") == name), None) if r.status_code == 200 else None
-
-existing = find_existing(WORKSPACE_ID, ONTOLOGY_NAME)
-if existing:
-    url = f"{FABRIC_API_BASE}/workspaces/{WORKSPACE_ID}/ontologies/{existing}/updateDefinition?updateMetadata=True"
-    resp = requests.post(url, headers=headers, json={"definition": definition}, timeout=120)
-    ONTOLOGY_ID = existing
-else:
-    url = f"{FABRIC_API_BASE}/workspaces/{WORKSPACE_ID}/ontologies"
-    body = {"displayName": ONTOLOGY_NAME, "description": "Track1 선언적 일괄 정의(부록 B)", "definition": definition}
-    resp = requests.post(url, headers=headers, json=body, timeout=120)
-    ONTOLOGY_ID = resp.json().get("id") if resp.status_code in (200, 201) else None
-print(resp.status_code, resp.text[:300])
-
-# CELL 5 : 검증 (getDefinition → base64 decode)
-url = f"{FABRIC_API_BASE}/workspaces/{WORKSPACE_ID}/ontologies/{ONTOLOGY_ID}/getDefinition"
-resp = requests.post(url, headers=headers, timeout=60)
-parts = resp.json()["definition"]["parts"]
-ents = [p for p in parts if p["path"].startswith("EntityTypes/") and p["path"].endswith("definition.json")]
-rels = [p for p in parts if p["path"].startswith("RelationshipTypes/") and p["path"].endswith("definition.json")]
-print(f"엔터티 {len(ents)} / 관계 {len(rels)} / 총 {len(parts)} parts")
-```
-
-**④ 배포 실행 상세 가이드 (권장 순서)**
-
-1. **토큰 갱신**
-   - 401 `TokenExpired`가 자주 발생하므로 배포 직전에 토큰을 다시 받습니다.
-   - 예시:
-     ```bash
-     TOKEN=$(az account get-access-token \
-       --resource https://analysis.windows.net/powerbi/api \
-       --query accessToken -o tsv)
-     ```
-
-2. **LAKEHOUSE_ID 확인 (필수)**
-   - `WORKSPACE_ID`의 Lakehouse 목록에서 배포 대상 Lakehouse의 `id`를 복사해 `LAKEHOUSE_ID`에 넣습니다.
-   - 예시:
-     ```bash
-     curl -s -H "Authorization: Bearer $TOKEN" \
-       "https://api.fabric.microsoft.com/v1/workspaces/<WORKSPACE_ID>/lakehouses"
-     ```
-
-3. **노트북에서 full/core 동작 이해**
-   - full: `definition_parts` 전체(67 parts) 배포 시도
-   - core: 엔터티/관계 중심(36 parts)만 배포
-   - 일부 환경에서는 full이 `ALMOperationImportFailed`로 실패할 수 있어, **core로 자동 재시도**하도록 스크립트가 구성되어 있습니다.
-
-4. **성공 판정 기준**
-   - CELL 5 출력에서 최소 다음을 확인:
-     - 엔터티 정의: 14
-     - 관계 정의: 20
-   - DataBindings/Contextualizations는 환경에 따라 0일 수 있습니다(core fallback 시 정상).
-
-5. **실패 시 점검 순서**
-   - `TokenExpired` → 토큰 재발급 후 재실행
-   - `FileNotFoundError: /lakehouse/default/...` → default Lakehouse 재지정 + 경로 재확인
-   - `ALMOperationImportFailed` → full 실패 케이스이므로 core 재시도 결과(엔터티/관계 개수)를 기준으로 검증
-
-**⑤ API 직접 검증(선택)**
-
-```bash
-# getDefinition
-curl -X POST \
-  -H "Authorization: Bearer $TOKEN" \
-  -H "Content-Type: application/json" \
-  -d '' \
-  "https://api.fabric.microsoft.com/v1/workspaces/<WORKSPACE_ID>/ontologies/<ONTOLOGY_ID>/getDefinition"
-
-# updateDefinition
-curl -X POST \
-  -H "Authorization: Bearer $TOKEN" \
-  -H "Content-Type: application/json" \
-  --data-binary @payload.json \
-  "https://api.fabric.microsoft.com/v1/workspaces/<WORKSPACE_ID>/ontologies/<ONTOLOGY_ID>/updateDefinition?updateMetadata=True"
-```
-
-**⑥ 온톨로지에 연결된 실제 샘플 데이터 값 검증(권장 추가)**
-
-핵심: Ontology item은 스키마/매핑 정의를 저장하고, 실제 레코드 값은 Lakehouse 테이블에 있습니다.  
-따라서 아래 2단계를 함께 확인합니다.
-
-1) `getDefinition`으로 온톨로지 정의를 조회  
-2) 매핑된 테이블에 SQL을 실행해 샘플 값 조회
-
-Notebook 예시:
-
-```python
-# 1) Ontology definition 조회
-url = f"{FABRIC_API_BASE}/workspaces/{WORKSPACE_ID}/ontologies/{ONTOLOGY_ID}/getDefinition"
-resp = requests.post(url, headers=headers, timeout=60)
-parts = resp.json()["definition"]["parts"]
-
-# 2) 엔터티별 실제 값 샘플 조회 (예: Customer)
-spark.sql("""
-SELECT customer_id, customer_segment, customer_tier, join_date
-FROM customers
-LIMIT 5
-""").show(truncate=False)
-
-# 3) 다른 엔터티도 동일하게 확인 (예: Order)
-spark.sql("""
-SELECT order_id, customer_id, channel_id, order_date, gross_amount, net_amount
-FROM orders
-LIMIT 5
-""").show(truncate=False)
-```
-
-출력 포맷(통일):
-```text
-=== ONTOLOGY_VALUE_VALIDATION_START ===
-workspaceId=...
-ontologyId=...
-ontologyName=...
-mappingSource=DataBinding 또는 WorkshopFallback
-sampleRows=5
-entityCount=14
-======================================
-[ENTITY] name=Customer table=customers
-[COLUMNS] selected=customer_id,customer_segment,customer_tier,join_date total=4
-[QUERY] SELECT `customer_id`, `customer_segment`, `customer_tier`, `join_date` FROM `customers` LIMIT 5
-...
-[ENTITY_DONE] name=Customer
-=== ONTOLOGY_VALUE_VALIDATION_SUMMARY ===
-=== ONTOLOGY_VALUE_VALIDATION_DONE ===
-```
-
-검증 체크:
-- 샘플 값이 기대 엔터티의 테이블/컬럼에서 조회되는가
-- 날짜/금액/수량 컬럼 값 형식이 Ontology의 `valueType` 의도와 일치하는가
-- 의도된 노이즈(결측/중복/이상값)가 실제로 조회되는가
-
-**⑦ 온톨로지 추론/의미 질의 검증 미니 실습 (선택, 10~15분)**
-
-목적: SQL 조인 결과와 별개로, **질문을 온톨로지 경로(엔터티-관계)**로 표현하고 그 경로가 실제 질의로 재현되는지 확인합니다.
-
-중요:
-- 이 섹션은 Track1 기본 DoD 필수는 아니며, 시간 여유 팀의 심화 과제입니다.
-- 테넌트에서 GraphModel Preview가 불가하면 **Level A까지만 수행**해도 됩니다.
-
-검증 시나리오(권장 1개):
-- 질문: "캠페인 유입 주문 중 결제 실패가 있는 주문은 무엇인가?"
-- 온톨로지 경로: `Campaign -> CampaignAttribution -> Order -> Payment`
-
-### Level A. 의미 경로 검증(환경 무관, 필수 권장)
-1) 질문을 경로로 고정
-- 엔터티/관계를 문장 대신 경로 문자열로 명시:  
-  `Campaign influences Order` + `Order has Payment`
-
-2) `getDefinition`으로 경로 구성요소 존재 확인
-- 엔터티(`Campaign`, `Order`, `Payment`)와 관계가 정의에 있는지 확인
-- DataBinding/Contextualization이 있다면 FK 바인딩까지 확인
-
-3) SQL 기준값 계산(베이스라인)
-```sql
-SELECT DISTINCT ca.campaign_id, o.order_id
-FROM campaign_attribution ca
-JOIN orders o ON ca.order_id = o.order_id
-JOIN payments p ON p.order_id = o.order_id
-WHERE UPPER(TRIM(COALESCE(p.payment_status, ''))) = 'FAILED'
-ORDER BY ca.campaign_id, o.order_id
-LIMIT 20;
-```
-
-4) 로그 템플릿으로 기록
-```text
-[SEMANTIC_VALIDATION_START]
-question=캠페인 유입 주문 중 결제 실패가 있는 주문은?
-path=Campaign->CampaignAttribution->Order->Payment
-baselineSqlRows=<행수>
-```
-
-### Level B. 의미 질의 실행 검증(GraphModel Preview 가능 환경)
-1) GraphModel 준비
-- Ontology와 별도 GraphModel 아이템 생성/갱신
-- `refreshGraph` 완료(202 LRO polling 후 succeeded)
-
-2) 의미 질의 실행
-```python
-GRAPH_MODEL_ID = "your-graph-model-item-id"  # Fabric UI에서 생성한 GraphModel item ID
-
-query = """
-MATCH (c:`Campaign`)-[:`Campaign_influences_Order`]->(o:`Order`)
-MATCH (o)-[:`Order_has_Payment`]->(p:`Payment`)
-WHERE toUpper(coalesce(p.payment_status, '')) = 'FAILED'
-RETURN c.campaign_id AS campaign_id, o.order_id AS order_id
-LIMIT 20;
-"""
-resp = requests.post(
-    f"{FABRIC_API_BASE}/workspaces/{WORKSPACE_ID}/graphModels/{GRAPH_MODEL_ID}/executeQuery?beta=True",
-    headers=headers,
-    json={"query": query},
-    timeout=60,
-)
-print(resp.status_code, resp.text[:500])
-```
-
-3) SQL 기준값과 비교
-- 비교 기준:
-  - Row count 차이 허용범위: 0 (동일 데이터 시점 기준)
-  - `campaign_id`, `order_id` 샘플 10건이 동일
-  - 불일치 시 원인 분류: 매핑 누락 / 관계 방향 오류 / 상태코드 표준화 미반영
-
-4) 결과 로그(권장)
-```text
-[SEMANTIC_VALIDATION_RESULT]
-level=GraphModel
-graphQueryStatus=200
-graphRows=<행수>
-sqlRows=<행수>
-comparison=PASS|FAIL
-failReason=<사유>
-[SEMANTIC_VALIDATION_DONE]
-```
-
-합격 기준(선택 심화):
-- Level A 수행 완료 + SQL 기준값 산출
-- (GraphModel 가능 시) 비교 결과 `PASS` 또는 `FAIL 사유` 명확 기록
-
-제출 템플릿(복붙용):
-
-| 항목 | 기록 값 |
-|---|---|
-| 팀명 |  |
-| 검증 일시(KST) |  |
-| 질문(question) |  |
-| 경로(path) |  |
-| baselineSqlRows |  |
-| graphQueryStatus (없으면 N/A) |  |
-| graphRows (없으면 N/A) |  |
-| comparison (PASS/FAIL/N/A) |  |
-| failReason (없으면 `-`) |  |
-| 비고(매핑 누락/관계 방향/코드셋 이슈 등) |  |
-
-복붙 로그 템플릿:
-```text
-[SEMANTIC_VALIDATION_SUBMISSION]
-team=<팀명>
-validatedAtKst=<YYYY-MM-DD HH:MM>
-question=<질문>
-path=<Entity->...->Entity>
-baselineSqlRows=<행수>
-graphQueryStatus=<코드 또는 N/A>
-graphRows=<행수 또는 N/A>
-comparison=<PASS|FAIL|N/A>
-failReason=<사유 또는 ->
-notes=<추가 메모>
-[/SEMANTIC_VALIDATION_SUBMISSION]
-```
-
-샘플 작성본:
-
-**샘플 A (PASS 케이스)**
-
-| 항목 | 기록 값 |
-|---|---|
-| 팀명 | Team Alpha |
-| 검증 일시(KST) | 2026-07-12 10:42 |
-| 질문(question) | 캠페인 유입 주문 중 결제 실패 주문은? |
-| 경로(path) | Campaign->CampaignAttribution->Order->Payment |
-| baselineSqlRows | 12 |
-| graphQueryStatus (없으면 N/A) | 200 |
-| graphRows (없으면 N/A) | 12 |
-| comparison (PASS/FAIL/N/A) | PASS |
-| failReason (없으면 `-`) | - |
-| 비고(매핑 누락/관계 방향/코드셋 이슈 등) | SQL 샘플 10건과 그래프 결과 키(campaign_id, order_id) 일치 |
-
-```text
-[SEMANTIC_VALIDATION_SUBMISSION]
-team=Team Alpha
-validatedAtKst=2026-07-12 10:42
-question=캠페인 유입 주문 중 결제 실패 주문은?
-path=Campaign->CampaignAttribution->Order->Payment
-baselineSqlRows=12
-graphQueryStatus=200
-graphRows=12
-comparison=PASS
-failReason=-
-notes=샘플 10건 키 일치 확인
-[/SEMANTIC_VALIDATION_SUBMISSION]
-```
-
-**샘플 B (FAIL 케이스)**
-
-| 항목 | 기록 값 |
-|---|---|
-| 팀명 | Team Beta |
-| 검증 일시(KST) | 2026-07-12 10:55 |
-| 질문(question) | 캠페인 유입 주문 중 결제 실패 주문은? |
-| 경로(path) | Campaign->CampaignAttribution->Order->Payment |
-| baselineSqlRows | 12 |
-| graphQueryStatus (없으면 N/A) | 200 |
-| graphRows (없으면 N/A) | 4 |
-| comparison (PASS/FAIL/N/A) | FAIL |
-| failReason (없으면 `-`) | 관계 방향 오류(`Order_has_Payment` 반대로 모델링) |
-| 비고(매핑 누락/관계 방향/코드셋 이슈 등) | 관계 방향 수정 후 `refreshGraph` 재실행 필요 |
-
-```text
-[SEMANTIC_VALIDATION_SUBMISSION]
-team=Team Beta
-validatedAtKst=2026-07-12 10:55
-question=캠페인 유입 주문 중 결제 실패 주문은?
-path=Campaign->CampaignAttribution->Order->Payment
-baselineSqlRows=12
-graphQueryStatus=200
-graphRows=4
-comparison=FAIL
-failReason=관계 방향 오류(Order_has_Payment)
-notes=관계 수정 후 refreshGraph 재실행 예정
-[/SEMANTIC_VALIDATION_SUBMISSION]
-```
-
-> `definition.json` 이 `{}` 가 아니라 위처럼 엔터티/관계 개수가 나오면 정상 저장된 것입니다.
-> ⚠️ 이 Notebook 은 **default Lakehouse 연결**이 필요합니다(`/lakehouse/default/Files/...` 접근). 202(비동기) 응답 시 `Location` 헤더로 완료를 폴링하는 코드는 전체 파일에 포함되어 있습니다.
-
----
-
-## 부록 C. (심화) GraphModel — 그래프 쿼리를 원하는 경우
-
-**본 Track1 기본 실습은 GraphModel을 필수로 다루지 않습니다.** 미션 4의 목표는 Ontology(엔터티/관계/속성 의미 모델)를 정의해 3-IQ의 공통 어휘를 만드는 것입니다. 다만 위 ⑦ 선택 심화처럼 GraphModel 가능 환경에서는 의미 질의 검증을 수행할 수 있으며, 더 확장된 그래프 질의가 필요하면 아래 경로를 따릅니다.
-
-### C-1. Ontology와 GraphModel의 차이
-
-- **Ontology 아이템**: 엔터티/관계/속성의 **의미 스키마**(무엇이 무엇과 어떻게 연결되는가). Track1의 산출물.
-- **GraphModel 아이템**: 그 스키마를 실제 Lakehouse Delta 테이블에서 **노드/엣지로 물질화(materialize)**한 뒤 그래프 쿼리(MATCH … RETURN)를 실행할 수 있는 **별도 아이템**.
-
-즉 GraphModel은 Ontology와 **별개의 Fabric 아이템**(`.platform` metadata `type: "GraphModel"`)으로 추가 생성해야 합니다.
-
-### C-2. GraphModel을 원할 때의 구성
-
-GraphModel 정의는 4개 파트 + `.platform`으로 구성됩니다.
-
-| 파트 | 역할 |
-|---|---|
-| `graphType.json` | `nodeTypes` / `edgeTypes` — 노드·엣지 타입과 속성 타입 정의 |
-| `dataSources.json` | 각 Delta 테이블을 `DeltaTable` 데이터 소스로 등록 (OneLake abfss 경로) |
-| `graphDefinition.json` | `nodeTables` / `edgeTables` — 테이블 컬럼을 노드/엣지 속성에 매핑하고, 엣지의 `sourceNodeKeyColumns` / `destinationNodeKeyColumns`로 연결 |
-| `stylingConfiguration.json` | 그래프 시각화 레이아웃(노드 위치/크기) |
-
-```python
-# 노드 타입: 엔터티 = 노드
-node_types = [{
-    "alias": entity_id, "labels": ["Customer"],
-    "primaryKeyProperties": ["CustomerId"],
-    "properties": [{"name": "CustomerId", "type": "STRING"}, ...],
-}]
-# 엣지 타입: 관계 = 엣지 (source/destination 노드 타입 연결)
-edge_types = [{
-    "alias": rel_id, "labels": ["Customer_places_Order"],
-    "sourceNodeType": {"alias": entity_ids["Customer"]},
-    "destinationNodeType": {"alias": entity_ids["Order"]},
-}]
-```
-
-### C-3. 생성 → 새로고침 → 질의 흐름
-
-먼저 Fabric UI에서 GraphModel item을 생성한 뒤, 항목 URL의 item ID를 복사합니다.
-
-```python
-GRAPH_MODEL_ID = "your-graph-model-item-id"
-
-# 1) GraphModel 정의 배포
-requests.post(f"{FABRIC_API_BASE}/workspaces/{WORKSPACE_ID}/graphModels/{GRAPH_MODEL_ID}/updateDefinition",
-              headers=headers, json={"definition": {"parts": [...]}})
-
-# 2) Delta 테이블에서 그래프 인덱스 빌드(새로고침) - 비동기 LRO
-requests.post(f"{FABRIC_API_BASE}/workspaces/{WORKSPACE_ID}/graphModels/{GRAPH_MODEL_ID}/jobs/refreshGraph/instances",
-              headers=headers)   # 202 → Location 헤더로 완료까지 폴링
-
-# 3) 그래프 쿼리 실행 (Cypher 유사 문법, beta)
-requests.post(f"{FABRIC_API_BASE}/workspaces/{WORKSPACE_ID}/graphModels/{GRAPH_MODEL_ID}/executeQuery?beta=True",
-              headers=headers,
-              json={"query": "MATCH (c:`Customer`)-[:`Customer_places_Order`]->(o:`Order`) RETURN c, o LIMIT 5;"})
-```
-
-### C-4. 언제 GraphModel을 고려하나
-
-- **필요 없음(Track1 기본)**: 엔터티/관계 의미 모델 정의, 3-IQ 공통 어휘, WorkIQ/FoundryIQ 그라운딩 → **Ontology만으로 충분**.
-- **고려할 만함**: 다중 홉 경로 탐색(예: 캠페인→주문→결제→반품 경로를 그래프 순회), 커뮤니티/중심성 등 그래프 분석, MATCH 패턴 질의를 직접 실행하고 싶을 때.
-
-> ⚠️ GraphModel의 `executeQuery`는 현재 `beta` 파라미터가 필요한 Preview 기능입니다. 테넌트/리전에 따라 미지원일 수 있으므로, 사용 전 Fabric 공개 미리보기 제한 사항과 워크숍 환경을 먼저 확인하세요.
+- [Appendix A. Fabric Ontology 자동 구성 스크립트](./docs/Appendix_A_Fabric_Ontology_Auto_Script.md): 미션 4에서 엔터티/속성/물리 관계를 Notebook 기반으로 자동 구성하는 실행 가이드입니다.
+- [Appendix B. 선언적 일괄 정의 방식 (심화)](./docs/Appendix_B_Declarative_Bundle_Deployment.md): 별도 Notebook([`generate_definition.ipynb`](./ontology_bundle/generate_definition.ipynb), [`deploy_ontology_notebook.ipynb`](./ontology_bundle/deploy_ontology_notebook.ipynb))으로 제공되며, Ontology 번들을 사용해 정의를 일괄 배포하는 심화 가이드입니다.
+- [Appendix C. GraphModel 심화 가이드](./docs/Appendix_C_GraphModel_Deep_Dive.md): GraphModel 중심의 다중 홉 질의/검증 패턴을 정리한 심화 가이드입니다.

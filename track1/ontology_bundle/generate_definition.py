@@ -2,7 +2,7 @@
 # =============================================================================
 # generate_definition.py
 # -----------------------------------------------------------------------------
-# 부록 B "선언적 일괄 정의 방식"의 정의 파일 생성기.
+# Appendix B "선언적 일괄 정의 방식"의 정의 파일 생성기.
 #
 # 입력 : ontology_contract.yaml (엔터티/속성/관계 선언)
 # 출력 : definition_parts/  아래에 Fabric Ontology definition parts(JSON)
@@ -20,7 +20,7 @@
 #
 # 생성된 definition_parts/ 폴더를 Fabric Lakehouse의
 #   Files/ontology_bundle/definition_parts/  로 업로드한 뒤,
-# Notebook(부록 B-6)에서 읽어 한 번의 API 호출로 온톨로지를 배포합니다.
+# Notebook(Appendix B-6)에서 읽어 한 번의 API 호출로 온톨로지를 배포합니다.
 # =============================================================================
 from __future__ import annotations
 

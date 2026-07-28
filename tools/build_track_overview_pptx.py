@@ -1,8 +1,9 @@
 from pptx import Presentation
 from pptx.util import Inches, Pt
 from pptx.dml.color import RGBColor
+from pathlib import Path
 
-BASE = '/Users/hyungilkim/Documents/Data Platform Workshop/common/docs'
+BASE = Path(__file__).resolve().parent.parent / "common" / "docs"
 
 
 def add_slide(prs, title, one_liner, flow_items, policy_rows, tech_points, conclusion, palette):
@@ -128,7 +129,7 @@ def make_track1():
             'text': (23, 37, 58),
         },
     )
-    prs.save(f"{BASE}/Track1_Overview.pptx")
+    prs.save(str(BASE / "Track1_Overview.pptx"))
 
 
 def make_track2():
@@ -162,7 +163,7 @@ def make_track2():
             'text': (22, 52, 36),
         },
     )
-    prs.save(f"{BASE}/Track2_Overview.pptx")
+    prs.save(str(BASE / "Track2_Overview.pptx"))
 
 
 def make_track3():
@@ -197,7 +198,7 @@ def make_track3():
             'text': (62, 35, 12),
         },
     )
-    prs.save(f"{BASE}/Track3_Overview.pptx")
+    prs.save(str(BASE / "Track3_Overview.pptx"))
 
 
 if __name__ == '__main__':

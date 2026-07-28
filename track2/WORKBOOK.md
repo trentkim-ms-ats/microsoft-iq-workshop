@@ -18,6 +18,7 @@
 - 강사용 당일 운영 체크리스트: [Instructor_Day_of_Operations_Checklist.md](../common/docs/Instructor_Day_of_Operations_Checklist.md)
 - 통합 계획(트랙별 시간/DoD 근거): [Fabric_Ontology_AI_Workshop_Integrated_Plan_v2.0.md](../common/docs/Fabric_Ontology_AI_Workshop_Integrated_Plan_v2.0.md)
 
+
 ## 실습 목표
 1. Track1 인계 패키지를 5분 내 검수하고, 고정 키워드 5종 프로브로 WorkIQ 검색 가용성을 확인한다.
 2. Outlook/Teams/SharePoint/OneDrive 4대 M365 소스를 WorkIQ로 색인·검색해 소스 인벤토리(인덱스 카탈로그)를 작성한다.
@@ -40,7 +41,7 @@
 | 대상 Outlook 메일함 | 리더십 이슈 논의 메일이 담긴 공유 메일함 또는 샘플 사용자 계정 |
 | 대상 Teams 채널 | CS 티어2 대응 채널(샘플) |
 | 대상 OneDrive 폴더 | 미팅 노트가 담긴 공유 폴더 |
-| 검색/검증 도구 | 제공 WorkIQ 커넥터 화면(기본) 또는 Microsoft Graph Explorer/API 클라이언트(선택, 부록 A 참조) |
+| 검색/검증 도구 | 제공 WorkIQ 커넥터 화면(기본) 또는 Microsoft Graph Explorer/API 클라이언트(선택, Appendix A 참조) |
 | 샘플 콘텐츠 시드셋 | 기준 시드 19건: SharePoint 6/Outlook 5/Teams 5/OneDrive 3 ([준비 계약 및 배치 완료 검수](../track1/docs/Track1_WorkIQ_Seed_Content_Specification.md#3-소스별-샘플-데이터-준비-계약)) |
 | 확장 샘플 데이터 | 총 60개 업무 항목: SharePoint 15/Outlook 15/Teams 18 스레드/OneDrive 12 ([생성·배포 방법](./data/README.md)) |
 | Track1 인계 패키지 | `TRACK2_HANDOFF_PACKAGE` (Ontology 식별정보/모델요약/매핑근거/이슈Top3/WorkIQ 키워드/검증 로그) |
@@ -51,7 +52,7 @@
 - **샘플/격리 테넌트 콘텐츠만 사용**한다. 실제 임직원 메일함/채널/사이트/문서를 색인 대상으로 삼지 않는다.
 - 제목만 있는 빈 콘텐츠는 사용하지 않는다. 본문에 상황, 영향, 결정 또는 후속 조치 중 최소 2개와 지정 엔터티명을 포함한다.
 - 문서 본문의 상품명/캠페인명 표기는 정형 데이터(Track1 Ontology)와 **정확히 일치**해야 매칭이 성립한다. 오탈자·별칭은 표기 정규화 실습 소재로 활용한다.
-- 권한 최소화 원칙을 적용하고, 검색 결과가 **권한 기반 노출(ACL/Security trimming)**을 따르는지 확인한다(부록 C).
+- 권한 최소화 원칙을 적용하고, 검색 결과가 **권한 기반 노출(ACL/Security trimming)**을 따르는지 확인한다(Appendix C).
 - Track1에서 넘어온 미해결 이슈 Top3는 무시하지 않고, 품질 점수 산정 시 감점/보정 근거로 반영한다.
 
 ## 중간 점검 타임마커
@@ -196,7 +197,7 @@ python track2/data/verify_entity_document_mapping.py \
 - `--json-output` 옵션으로 검증 리포트를 파일로 저장할 수 있다.
 
 ### 미션 3. 품질 8대 항목 규칙 실행 (35분)
-정형(Fabric) + 비정형(WorkIQ) 확장판 품질 8대 항목을 실행하고 항목별 증적을 확보한다. 상세 점검 절차와 예시는 [부록 A](#appendix-a-quality-checks)를 참조한다.
+정형(Fabric) + 비정형(WorkIQ) 확장판 품질 8대 항목을 실행하고 항목별 증적을 확보한다. 상세 점검 절차와 예시는 [Appendix A](#appendix-a-quality-checks)를 참조한다.
 
 | # | 항목 | Fabric 측면 | WorkIQ 측면 |
 |---|---|---|---|
@@ -303,7 +304,7 @@ reproQueries=<질의1;질의2;질의3>
 ---
 
 <a id="appendix-a-quality-checks"></a>
-## 부록 A. 품질 8대 항목 상세 점검 절차
+## Appendix A. 품질 8대 항목 상세 점검 절차
 
 각 항목은 **기본 경로(제공 WorkIQ 커넥터/UI 검색)** 로 먼저 수행하고, 정밀 검증이 필요할 때만 **선택 경로(Microsoft Graph Search API)** 를 사용합니다. 두 경로는 명확히 분리해서 기록하며, 문서에 정의되지 않은 CLI 명령이나 API 엔드포인트를 임의로 가정하지 않습니다. Graph Search API 요청/응답 구조는 [Track3 Appendix](../track3/docs/Track3_Appendix_WorkIQ_Integration_and_M365_Search_API_Guide.md#3-기본-요청-구조개념)에 정의된 형태만 사용합니다.
 
@@ -341,7 +342,7 @@ reproQueries=<질의1;질의2;질의3>
 - 선택 경로: Graph Search API 응답의 원본 리소스 URL 필드가 유효한지 확인한다.
 - 증적: 원본 링크 URL 캡처.
 
-## 부록 B. 트러블슈팅
+## Appendix B. 트러블슈팅
 
 | 증상 | 원인 후보 | 우선 조치 | 전환 기준 |
 |---|---|---|---|
@@ -352,7 +353,7 @@ reproQueries=<질의1;질의2;질의3>
 | 품질 항목 점수 판단 곤란 | 증적 부족 | 동일 항목에 대해 문서 2건 이상 재검색 | 시간 초과 시 50점(부분 사용 가능)으로 잠정 처리 후 조치안에 재검증 예정 명시 |
 | Graph Search API 401/429 | 토큰 만료/스로틀링 | 토큰 재발급, `Retry-After` 준수 후 재시도 | 3회 실패 시 기본 경로(UI 커넥터)로 전환 |
 
-## 부록 C. 프라이버시 및 ACL 가이드
+## Appendix C. 프라이버시 및 ACL 가이드
 1. **샘플/격리 테넌트만 사용**한다. 실제 임직원 메일·채팅·문서를 색인하거나 검색 대상으로 삼지 않는다.
 2. **권한 최소화**: WorkIQ/Graph 접근 권한은 실습에 필요한 범위(Mail.Read, Files.Read.All, ChannelMessage.Read.All, Sites.Read.All 등)로 제한한다.
 3. **ACL 기반 노출(Security trimming) 확인(간이)**: 가능하다면 동일 키워드를 서로 다른 팀 계정으로 검색해 결과 차이가 권한에 따라 발생하는지 관찰하고, 참조무결성/유효성 항목의 근거로 활용한다. 정식 ACL 회귀 점검은 Track3의 `WORKIQ_API_HANDOFF_CHECK`(aclProbe)에서 수행한다.
