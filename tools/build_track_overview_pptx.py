@@ -105,7 +105,7 @@ def make_track1():
     add_slide(
         prs,
         'Track1 Overview | FabricIQ Foundation with Ontology',
-        'Track1 establishes trusted structured data and ontology paths required for Track2 quality gates and Track3 grounded responses.',
+        'Track1 establishes trusted structured data and ontology paths required for Track2 quality gates, Track3 WebIQ scope, and Track4 FoundryIQ grounded responses.',
         ['Source Data', 'Profiling', 'Standardization', 'Ontology Modeling', 'Mapping', 'Validation', 'Handover'],
         [
             'Normal: standardized schema + ontology mapping completed (READY)',
@@ -139,8 +139,8 @@ def make_track2():
     add_slide(
         prs,
         'Track2 Overview | WorkIQ Quality Gate and Deployment Readiness',
-        'Track2 validates business-evidence data quality and reproducible M365 deployment for WorkIQ retrieval in Track3.',
-        ['Track1 Handover', 'Sample Generation', 'M365 Deployment', '8-Item Quality Gate', 'Scoring', 'Manifest', 'Track3 Input'],
+        'Track2 validates business-evidence data quality and reproducible M365 deployment for WorkIQ retrieval in Track4 FoundryIQ.',
+        ['Track1 Handover', 'Sample Generation', 'M365 Deployment', '8-Item Quality Gate', 'Scoring', 'Manifest', 'Track4 Input'],
         [
             'Normal: generation/deployment/manifest complete (PASS)',
             'Partial channel failure: retry with channel status tracking (PARTIAL)',
@@ -151,7 +151,7 @@ def make_track2():
             'Seed+Extended distribution consistency controls',
             'One-click generate/execute deployment path',
             '8-item gate with 6-pass minimum rule',
-            'Manifest-based evidence traceability for Track3',
+            'Manifest-based evidence traceability for Track4 FoundryIQ',
         ],
         'Track2 outcome is not sample volume; it is policy-compliant WorkIQ evidence readiness with reproducibility.',
         {
@@ -166,14 +166,14 @@ def make_track2():
     prs.save(str(BASE / "Track2_Overview.pptx"))
 
 
-def make_track3():
+def make_track4_foundry():
     prs = Presentation()
     prs.slide_width = Inches(13.333)
     prs.slide_height = Inches(7.5)
     add_slide(
         prs,
-        'Track3 Overview | FoundryIQ Operational Agent Validation',
-        'Track3 verifies routed, evidence-grounded responses under normal and failure conditions with explicit fallback policies.',
+        'Track4 Overview | FoundryIQ Operational Agent Validation',
+        'Track4 verifies routed, evidence-grounded responses under normal and failure conditions with explicit fallback policies.',
         ['Question', 'FoundryIQ Orchestrator', 'FabricIQ Tool', 'WorkIQ Tool', 'Merge Response', 'Quality Gate', 'Ops Report'],
         [
             'Normal: Tool A/B merged response (PASS)',
@@ -188,7 +188,7 @@ def make_track3():
             'Pass/partial/blocked response grading',
             'Run context and retry audit trace storage',
         ],
-        'Track3 outcome is not a flashy demo; it is a testable and resilient operational agent system.',
+        'Track4 outcome is not a flashy demo; it is a testable and resilient operational agent system.',
         {
             'bg': (255, 250, 245),
             'panel': (255, 240, 225),
@@ -198,11 +198,11 @@ def make_track3():
             'text': (62, 35, 12),
         },
     )
-    prs.save(str(BASE / "Track3_Overview.pptx"))
+    prs.save(str(BASE / "Track4_Overview.pptx"))
 
 
 if __name__ == '__main__':
     make_track1()
     make_track2()
-    make_track3()
+    make_track4_foundry()
     print('created')

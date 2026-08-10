@@ -3,7 +3,7 @@
 Track1의 Ontology와 샘플 CSV 컨텍스트를 바탕으로 Track2 WorkIQ 실습을 직접 실행할 수 있도록 만든 **완전한 가상 데이터**입니다. 실제 고객, 임직원, 회사 운영정보는 포함하지 않습니다.
 
 > **📘 전체 배포 가이드:** [TRACK2_M365_Complete_Deployment_Guide.md](TRACK2_M365_Complete_Deployment_Guide.md)  
-> 샘플 생성 → 사전 검증 → 배포 준비 → 실제 배포 → 배포 후 검증의 **5단계 엔드-투-엔드 프로세스**를 제공합니다. 이메일 배송 검증의 3가지 방법도 포함되어 있습니다.
+> 샘플 생성 → 사전 검증 → 배포 준비 → 조건부 승인 라이브 배포 → 배포 후 검증의 **5단계 엔드-투-엔드 프로세스**를 제공합니다. 이메일 배송의 조건부 라이브 검증 절차도 포함되어 있습니다.
 
 ## 1. 제공 규모
 
@@ -15,7 +15,8 @@ Track1의 Ontology와 샘플 CSV 컨텍스트를 바탕으로 Track2 WorkIQ 실�
 | OneDrive | 12개 | 업로드 가능한 DOCX 12개 |
 | **합계** | **60개 업무 항목** | **DOCX 27 + EML 15 + Teams 메시지 55** |
 
-기존 [Track1_WorkIQ_Seed_Content_Specification.md](../../track1/docs/Track1_WorkIQ_Seed_Content_Specification.md)의 19건은 최소 기준입니다. 이 패키지는 검색·교차 매핑·품질 검증·Track3 인계를 더 풍부하게 실행할 수 있도록 60개 업무 항목으로 확장했습니다.
+[Track1_WorkIQ_Seed_Content_Specification.md](../../track1/docs/Track1_WorkIQ_Seed_Content_Specification.md)의
+시드 19건과 함께, 본 패키지 60개 업무 항목을 사용해 검색·교차 매핑·품질 검증·인계를 실행합니다.
 
 ## 2. Track1 연결 범위
 
@@ -80,7 +81,7 @@ npm run generate
 
 **⚠️ 중요:** 반드시 **샘플/격리 테넌트**를 사용합니다.
 
-배포 전 필수 준비사항은 [TRACK2_M365_Complete_Deployment_Guide.md - 3단계](TRACK2_M365_Complete_Deployment_Guide.md#3단계-배포-준비)를 참고하세요. 아래는 간략한 체크리스트입니다:
+배포 전 필수 준비사항과 dry-run 경계는 [전체 배포 가이드의 local dry-run 절차](TRACK2_M365_Complete_Deployment_Guide.md#3-required-local-dry-run)를 참고하세요. 아래는 간략한 체크리스트입니다:
 
 1. SharePoint 샘플 사이트와 문서 라이브러리 준비
 2. OneDrive 샘플 사용자 준비
@@ -100,43 +101,21 @@ npm run generate
 
 권한 유형과 관리자 동의 여부는 조직 정책 및 실행 방식(위임/앱)에 따라 달라집니다. 최소 권한을 적용하고 실습 종료 후 회수합니다.
 
-## 6. 배포 설정 및 실행
+## 6. 배포 설정과 실행 경계
 
-**📘 전체 가이드:** [TRACK2_M365_Complete_Deployment_Guide.md - 3단계, 4단계, 5단계](TRACK2_M365_Complete_Deployment_Guide.md) 참고
+**📘 전체 가이드:** [local dry-run, 승인 라이브 작업 및 증적 경계](TRACK2_M365_Complete_Deployment_Guide.md#3-required-local-dry-run)를 참고.
 
-### 원클릭 실행 (권장)
+### 조건부 승인 라이브 작업
 
-사전 준비(앱/권한/Teams/config) + 실제 배포를 한 번에 실행합니다.
+로컬 실습의 기본 경로는 아래 dry-run뿐입니다. `run_track2_oneclick.py`와
+`bootstrap_m365_prereqs.py`의 `--execute`는 테넌트 쓰기, 권한 동의 또는 앱/채널
+프로비저닝을 수행할 수 있으므로 참가자 명령이나 로컬 검증이 아닙니다. 승인된 운영자가
+격리 샘플 테넌트에서 별도 절차로만 실행하고, [전체 배포 가이드](TRACK2_M365_Complete_Deployment_Guide.md)의
+사후 참가자·ACL·메일 증적을 수집합니다.
 
-```bash
-python run_track2_oneclick.py \
-  --tenant-domain M365DS060811.onmicrosoft.com \
-  --sharepoint-hostname m365ds060811.sharepoint.com \
-  --sharepoint-site-path /sites/Track2WorkshopSample \
-  --generate \
-  --execute
-```
-
-동작 방식:
-- `--generate`를 주면 `npm run generate`를 먼저 실행해 샘플 데이터를 재생성
-- `GRAPH_ADMIN_TOKEN`이 없으면 관리자 디바이스 로그인(코드 입력)으로 자동 획득
-- `GRAPH_ACCESS_TOKEN`이 이미 있으면 그대로 사용
-- 없으면 bootstrap 단계에서 새 클라이언트 시크릿을 만들고 앱 토큰을 자동 발급해 배포까지 진행
-
-### 사전 준비 자동화 (권장)
-
-앱 등록, 권한(관리자 동의), Teams 팀/채널 프로비저닝, `deployment_config.json` 생성까지 자동화할 수 있습니다.
-
-```bash
-python bootstrap_m365_prereqs.py \
-  --tenant-domain M365DS060811.onmicrosoft.com \
-  --sharepoint-hostname m365ds060811.sharepoint.com \
-  --sharepoint-site-path /sites/Track2WorkshopSample \
-  --execute \
-  --create-client-secret
-```
-
-`GRAPH_ADMIN_TOKEN`은 선택사항입니다. 미설정 시 관리자 디바이스 로그인으로 토큰을 자동 획득합니다.
+토큰, 클라이언트 시크릿, 테넌트/계정 식별자는 문서·구성 파일·명령 기록·증적에 넣지
+않습니다. 토큰 환경 변수는 승인된 라이브 `--execute` 작업에서만 운영자가 외부 비밀
+저장소를 통해 제공하며, dry-run에는 필요하지 않습니다.
 
 ### 빠른 시작
 
@@ -144,13 +123,8 @@ python bootstrap_m365_prereqs.py \
 cp deployment_config.example.json deployment_config.json
 ```
 
-`deployment_config.json`의 placeholder를 샘플 테넌트의 실제 ID/UPN으로 바꿉니다. 이 파일에는 비밀값을 넣지 않습니다.
-
-토큰은 파일에 저장하지 않고 환경 변수로 전달합니다.
-
-```bash
-export GRAPH_ACCESS_TOKEN="<ACCESS_TOKEN>"
-```
+`deployment_config.json`의 placeholder는 승인된 샘플 테넌트의 식별자로만 바꾸며,
+비밀값이나 토큰 placeholder를 넣지 않습니다.
 
 먼저 dry-run으로 설정과 작업 목록을 확인합니다.
 
@@ -166,21 +140,16 @@ python deploy_m365_samples.py \
   --sources sharepoint onedrive
 ```
 
-실제 배포는 명시적으로 `--execute`를 추가해야 합니다.
-
-```bash
-python deploy_m365_samples.py \
-  --config deployment_config.json \
-  --sources sharepoint onedrive outlook teams \
-  --execute
-```
+실제 배포는 `--execute`가 있어야만 발생합니다. 이는 승인된 운영자가 격리 테넌트에서
+별도 수행하는 라이브 작업이며, dry-run이나 이 README의 정적 manifest가 이를 증명하지
+않습니다.
 
 ## 7. 배포 동작
 
-- SharePoint: `/Track2-Sample/<분류>/` 폴더를 만들고 DOCX 업로드
-- OneDrive: `/Track2-Sample/MeetingNotes/`, `/Track2-Sample/Briefings/`에 DOCX 업로드
-- Outlook: 역할별 샘플 발신 계정에서 지정된 샘플 수신 계정으로 메일 전송
-- Teams: 지정 채널에 루트 메시지와 답글 게시
+- 승인된 라이브 작업에서만 SharePoint: `/Track2-Sample/<분류>/` 폴더를 만들고 DOCX 업로드
+- 승인된 라이브 작업에서만 OneDrive: `/Track2-Sample/MeetingNotes/`, `/Track2-Sample/Briefings/`에 DOCX 업로드
+- 승인된 라이브 작업에서만 Outlook: 역할별 샘플 발신 계정에서 지정된 샘플 수신 계정으로 메일 전송
+- 승인된 라이브 작업에서만 Teams: 지정 채널에 루트 메시지와 답글 게시
 - 429/5xx: 5초, 10초, 20초 간격으로 최대 3회 재시도
 
 ### M365 시스템 메타데이터 제한
@@ -197,14 +166,14 @@ Track2에서는 다음을 구분해 기록합니다.
 - Draft와 Final 상태 문서
 - Data-Stewards/Leaders 전용 Restricted 문서
 - `AeroPhone X`와 `Aero Phone X` 표기 불일치
-- Track1 품질 이슈가 경고와 함께 인용된 콘텐츠
+- Track1의 Ontology/매핑 제한이 경고와 함께 인용된 콘텐츠
 - SummerPush/VIPRetention 귀속 범위 부재를 0으로 오해하지 않는 해석 사례
 
 이 사례는 삭제하지 않고 정확성, 완전성, 일관성, 유효성, 중복성, 참조무결성, 적시성, 추적성 점검에 사용합니다.
 
 ## 9. 배포 후 검수
 
-**📘 상세 검증 가이드:** [TRACK2_M365_Complete_Deployment_Guide.md - 5단계](TRACK2_M365_Complete_Deployment_Guide.md#5단계-배포-후-검증) 참고
+**📘 상세 검증 가이드:** [승인 라이브 작업과 증적 경계](TRACK2_M365_Complete_Deployment_Guide.md#4-approved-live-operation-and-evidence-boundary)를 참고.
 
 ### 검증 체크리스트
 
@@ -214,15 +183,18 @@ Track2에서는 다음을 구분해 기록합니다.
 4. Restricted 콘텐츠가 일반 참가자에게 노출되지 않는지 확인합니다.
 5. [Track1_WorkIQ_Seed_Content_Specification.md](../../track1/docs/Track1_WorkIQ_Seed_Content_Specification.md)의 `TRACK2_SEED_READINESS`를 작성합니다.
 
-### 이메일 배송 검증
+### 이메일 배송 증적
 
-배포된 15개 Outlook 이메일 검증의 3가지 방법:
+생성된 15개 EML/`messages.json`/manifest는 **정적 샘플과 의도한 발송 payload**를,
+dry-run 출력은 **계획된 발송 작업**을 보여 줄 뿐입니다. 둘 다 Graph 호출, 사서함 배치,
+수신자 배송을 증명하지 않습니다. 배포 로그 분석, HTTP 수락 응답, 또는 Sent Items도
+단독으로 배송 증명이 아닙니다.
 
-- **방법 1 (권장):** 배포 로그 분석 — 가장 빠르고 추가 권한 불필요
-- **방법 2:** Outlook 웹 인터페이스 직접 확인 — 종단간 검증
-- **방법 3:** M365 관리 센터 메시지 추적 — 공식 배포 로그
-
-자세한 방법은 [EMAIL_DELIVERY_VERIFICATION.md](EMAIL_DELIVERY_VERIFICATION.md) 참고.
+배송을 `VERIFIED`로 표시할 수 있는 것은 승인된 격리 테넌트의 라이브 작업 뒤에 수집한
+참가자 사서함 관찰 또는 테넌트 메시지 추적뿐입니다. 증적이 아직 없으면 `PENDING` 또는
+`NOT VERIFIED`로 기록하고, 재전송 전에 메일 관리자와 trace window/정책을 확인합니다.
+식별자·주소·메시지 내용·토큰은 저장소에 기록하지 않습니다. 자세한 조건, 상태 및
+복구 절차는 [EMAIL_DELIVERY_VERIFICATION.md](EMAIL_DELIVERY_VERIFICATION.md)를 따릅니다.
 
 ### 크로스 소스 Entity-to-Document 매핑 자동 검증
 
@@ -245,7 +217,7 @@ python verify_entity_document_mapping.py \
 
 ### Track1 인계 패키지 자동 검증
 
-Track1에서 전달받은 `TRACK2_HANDOFF_PACKAGE` 블록이 필수 필드/형식을 충족하는지 자동 검증할 수 있습니다.
+Track1에서 전달받은 `TRACK2_WORKIQ_HANDOFF_PACKAGE` 블록이 필수 필드/형식을 충족하는지 자동 검증할 수 있습니다.
 
 ```bash
 python validate_track1_handoff.py \
@@ -257,7 +229,7 @@ python validate_track1_handoff.py \
 - 필수 필드 12개 존재 여부
 - placeholder(`<...>`) 미치환 항목 여부
 - GUID/숫자 형식 검증(`workspaceId`, `ontologyId`, `entityCount`, `relationshipCount`)
-- 최소 개수 권고(`corePaths>=3`, `mappingHighlights>=5`, `openIssues>=3`)
+- 최소 개수 권고(`corePaths>=3`, `mappingHighlights>=5`, `openIssues>=1` 또는 `none-known`)
 
 ### ACL 검증 결과 자동 판정
 

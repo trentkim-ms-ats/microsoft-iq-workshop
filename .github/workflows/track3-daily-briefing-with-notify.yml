@@ -1,4 +1,4 @@
-name: Track3 Daily Briefing With Notify
+name: Track4 FoundryIQ Daily Briefing With Notify
 
 on:
   workflow_dispatch:
@@ -24,14 +24,15 @@ on:
         required: false
         type: boolean
         default: false
-  schedule:
-    # KST 08:30 (Mon-Fri) == UTC 23:30 (Sun-Thu)
-    - cron: "30 23 * * 0-4"
+  # Intentionally manual-only after folder migration. A human operator must approve
+  # any scheduled Foundry execution outside this repository change.
 
 jobs:
-  run-track3-daily-briefing-with-notify:
+  run-track4-foundry-daily-briefing-with-notify:
     runs-on: ubuntu-latest
     timeout-minutes: 40
+    permissions:
+      contents: read
     env:
       AZURE_AI_FOUNDRY_RESPONSES_ENDPOINT: ${{ secrets.AZURE_AI_FOUNDRY_RESPONSES_ENDPOINT }}
       AZURE_AI_FOUNDRY_MODEL: ${{ secrets.AZURE_AI_FOUNDRY_MODEL }}
@@ -58,7 +59,7 @@ jobs:
         with:
           python-version: "3.11"
 
-      - name: Run Track3 daily briefing pipeline
+      - name: Run Track4 FoundryIQ daily briefing pipeline
         shell: bash
         run: |
           set -euo pipefail
@@ -88,20 +89,19 @@ jobs:
           fi
 
           python tools/send_track3_notifications.py \
-            --reports-dir track3/data/generated/reports \
+            --reports-dir track4/data/generated/reports \
             --teams-webhook-url "${TEAMS_WEBHOOK_URL:-}" \
             ${EMAIL_FLAG} \
             --smtp-host "${SMTP_HOST:-}" \
             --smtp-port "${SMTP_PORT:-587}" \
             --smtp-user "${SMTP_USER:-}" \
-            --smtp-password "${SMTP_PASSWORD:-}" \
             --email-from "${SMTP_FROM:-}" \
             --email-to "${SMTP_TO:-}"
 
-      - name: Upload Track3 reports artifact
+      - name: Upload Track4 FoundryIQ reports artifact
         uses: actions/upload-artifact@v4
         with:
-          name: track3-daily-reports-with-notify
+          name: track4-foundry-daily-reports-with-notify
           path: |
-            track3/data/generated/reports/*
-            track3/data/generated/responses/*.json
+            track4/data/generated/reports/*
+            track4/data/generated/responses/*.json

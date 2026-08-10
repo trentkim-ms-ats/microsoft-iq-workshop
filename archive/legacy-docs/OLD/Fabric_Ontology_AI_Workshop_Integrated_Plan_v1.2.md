@@ -1,5 +1,15 @@
 # Microsoft Fabric Ontology(Preview) 기반 AI 데이터 준비 워크숍 통합 계획 (v1.2)
 
+> **Historical archive — do not use as an active runbook.** This 2026-07-08,
+> pre-WebIQ baseline plan preserves its original three-track sequence, names, timings, and
+> assumptions. The canonical current path is **Track1 FabricIQ → Track2 WorkIQ →
+> Track3 WebIQ → Track4 FoundryIQ**; use the
+> [Microsoft IQ workshop integrated plan](../../../common/docs/Microsoft_IQ_Workshop_Integrated_Plan.md)
+> for
+> active instructions. Any link here into `track1/` is a current reference for
+> comparison only, not an endorsement of this document's path, order, schedule, or
+> Definition of Done.
+
 - 문서 버전: v1.2 (Markdown 통합본)
 - 작성일: 2026-07-08
 - 준비 인원: 2명 (기술 리드 1, 콘텐츠/운영 리드 1)
@@ -67,7 +77,9 @@
 
 ## 트랙 1-1. 데이터 준비 실습 배치 안내
 - 트랙1은 총 실습 140분 + 휴식 10분 = 벽시간 150분(10:00-12:30)으로 구성됩니다.
-- 어젠다상 90/50 분할은 브레이크를 기준으로 한 블록이며, 실제 미션 시간표는 [Track1_Instructor_Script_v1.0.md](../../../track1/docs/Track1_Instructor_Script_v1.0.md) 분단위 표를 따릅니다.
+- 어젠다상 90/50 분할은 브레이크를 기준으로 한 블록이며, 아래 링크는 비교용
+  **current Track1 reference only**입니다. 활성 미션 시간표·순서 지침으로 이
+  historical plan을 따르지 마세요: [Track1_Instructor_Script_v1.0.md](../../../track1/docs/Track1_Instructor_Script_v1.0.md).
 - 트랙1의 "1차 검증"은 구조 무결성 확인(참조/코드/중복)에 초점을 두고, 품질 게이트/점수화는 트랙2에서 수행합니다.
 
 ### 4.1 트랙 1. Fabric에서 Ontology(Preview) 기반 데이터 준비 (140분)

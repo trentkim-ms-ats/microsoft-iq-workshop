@@ -1,10 +1,14 @@
 #!/usr/bin/env python3
-"""Send Track3 daily briefing notifications to Teams and/or email."""
+"""Send Track4 FoundryIQ daily briefing notifications to Teams and/or email.
+
+The helper filename is retained as a legacy Track3 FoundryIQ identifier.
+"""
 
 from __future__ import annotations
 
 import argparse
 import json
+import os
 import smtplib
 import ssl
 import urllib.error
@@ -15,11 +19,11 @@ from typing import Any
 
 
 def parse_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description="Send Track3 daily briefing notifications.")
+    parser = argparse.ArgumentParser(description="Send Track4 FoundryIQ daily briefing notifications.")
     parser.add_argument(
         "--reports-dir",
         type=Path,
-        default=Path("track3/data/generated/reports"),
+        default=Path("track4/data/generated/reports"),
         help="Directory containing daily_run_metadata.json and briefing markdown.",
     )
     parser.add_argument(
@@ -35,10 +39,11 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--smtp-host", default="", help="SMTP host.")
     parser.add_argument("--smtp-port", type=int, default=587, help="SMTP port.")
     parser.add_argument("--smtp-user", default="", help="SMTP username.")
-    parser.add_argument("--smtp-password", default="", help="SMTP password.")
+    # SMTP password is read from the SMTP_PASSWORD environment variable, not a CLI
+    # argument, to prevent exposure in the OS process table (/proc/<pid>/cmdline).
     parser.add_argument("--email-from", default="", help="Sender email address.")
     parser.add_argument("--email-to", default="", help="Comma-separated recipient list.")
-    parser.add_argument("--email-subject-prefix", default="[Track3 Daily Briefing]", help="Email subject prefix.")
+    parser.add_argument("--email-subject-prefix", default="[Track4 FoundryIQ Daily Briefing]", help="Email subject prefix.")
     return parser.parse_args()
 
 
@@ -47,7 +52,7 @@ def load_json(path: Path) -> dict[str, Any]:
 
 
 def build_summary(meta: dict[str, Any], report: dict[str, Any], briefing_path: Path) -> tuple[str, str]:
-    title = "Track3 daily briefing run completed"
+    title = "Track4 FoundryIQ daily briefing run completed"
     failed = report.get("failed", 0)
     passed = report.get("passed", 0)
     total = report.get("total", 0)
@@ -116,8 +121,8 @@ def main() -> None:
     reports_dir = args.reports_dir.resolve()
 
     meta_path = reports_dir / "daily_run_metadata.json"
-    report_path = reports_dir / "evaluation_report.json"
-    briefing_path = reports_dir / "leadership_briefing.md"
+    report_path = reports_dir / "microsoft_iq_evaluation_report.json"
+    briefing_path = reports_dir / "microsoft_iq_leadership_briefing.md"
 
     if not meta_path.is_file():
         raise RuntimeError(f"Missing metadata file: {meta_path}")
@@ -140,11 +145,12 @@ def main() -> None:
         required = [args.smtp_host, args.email_from, args.email_to]
         if not all(required):
             raise RuntimeError("email-enabled requires smtp-host, email-from, email-to")
+        smtp_password = os.environ.get("SMTP_PASSWORD", "")
         send_email(
             smtp_host=args.smtp_host,
             smtp_port=args.smtp_port,
             smtp_user=args.smtp_user,
-            smtp_password=args.smtp_password,
+            smtp_password=smtp_password,
             email_from=args.email_from,
             email_to=args.email_to,
             subject=f"{args.email_subject_prefix} {meta.get('pipelineVersion', '')}".strip(),

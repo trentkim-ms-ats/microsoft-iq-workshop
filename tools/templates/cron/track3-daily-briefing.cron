@@ -1,4 +1,6 @@
-# Track3 daily leadership briefing (KST 08:30 on weekdays)
+# Track4 FoundryIQ daily leadership briefing (KST 08:30 on weekdays)
+# Legacy filename: track3-daily-briefing.cron. Do not install or enable without
+# human approval; the helper writes Track4 FoundryIQ output.
 # If your server timezone is UTC, use: 30 23 * * 0-4
 # If your server timezone is KST, use: 30 8 * * 1-5
 #
@@ -11,4 +13,4 @@
   --prompt-version p3.2 \
   --model-version foundry-responses-v1 \
   --toolset-version fabriciq-1.4+workiq-2.1 \
-  >> /var/log/track3-daily-briefing.log 2>&1
+  >> /var/log/track4-foundry-daily-briefing.log 2>&1

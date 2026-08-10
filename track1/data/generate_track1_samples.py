@@ -4,8 +4,8 @@ Track1 샘플 데이터 결정론적 생성기 (v1.2)
 
 목적
 - WORKBOOK 미션1의 기준 질문 Q1~Q5가 "의미 있는 분석 신호"를 갖도록 데이터를 재구성.
-- 동시에 미션2(프로파일링)/미션3(표준화)/미션5(검증)를 위한 의도적 노이즈와
-  명명 상품 시나리오(재고부족→배송지연→CS)를 그대로 보존.
+- 강사 설명/회귀용 P1 품질 사례와 미션3(표준화), 명명 상품 시나리오
+  (재고부족→배송지연→CS)를 그대로 보존. P1 탐지는 참가자 실습에서 제외.
 
 설계 원칙
 - seed 고정으로 완전 재현 가능.
@@ -432,6 +432,11 @@ def set_named_snapshot(sid, pid, on_hand, reserved):
         if row[0] == sid:
             row[1], row[2], row[3], row[4] = pid, "2026-05-16", on_hand, reserved
             return
+    # sid was not found in the randomly-generated rows; append a new fixed row.
+    # Guard against duplicate IDs that could indicate a collision with the random loop.
+    existing_ids = {row[0] for row in inventory_snapshots}
+    if sid in existing_ids:
+        raise RuntimeError(f"set_named_snapshot: duplicate snapshot id {sid!r}")
     inventory_snapshots.append([sid, pid, "2026-05-16", on_hand, reserved])
 
 # 명명 주문 3건 추가 (O09001-3) — 소액, 명명 상품 1종씩

@@ -1,0 +1,49 @@
+{
+  "tableCount": 14,
+  "rowCounts": {
+    "customers": 1200,
+    "products": 1200,
+    "orders": 2003,
+    "order_items": 4024,
+    "returns": 1000,
+    "channels": 4,
+    "payments": 2004,
+    "shipments": 2004,
+    "inventory_snapshots": 2096,
+    "promotions": 1000,
+    "order_promotions": 1910,
+    "campaigns": 1000,
+    "campaign_attribution": 2250,
+    "support_tickets": 1314
+  },
+  "questionKeyMap": {
+    "Q1": ["campaign_id", "order_id", "payment_status"],
+    "Q2": ["order_id", "shipment_status", "return_id", "ticket_type"],
+    "Q3": ["promotion_id", "order_id", "customer_id"],
+    "Q4": ["product_id", "order_id", "on_hand_qty"],
+    "Q5": ["customer_id", "channel_id", "return_reason"]
+  },
+  "qualityConcepts": [
+    {
+      "concept": "referential-integrity",
+      "impact": "ontology path can break",
+      "exercise": "explanation-only"
+    },
+    {
+      "concept": "duplicate-key",
+      "impact": "aggregates can be overstated",
+      "exercise": "explanation-only"
+    },
+    {
+      "concept": "missing-value",
+      "impact": "classification can be incomplete",
+      "exercise": "explanation-only"
+    },
+    {
+      "concept": "outlier",
+      "impact": "metrics can be distorted",
+      "exercise": "explanation-only"
+    }
+  ],
+  "p1ValidationExecuted": false
+}

@@ -1,27 +1,41 @@
-# 워크숍 샘플 데이터 리뷰
+# Historical workshop sample-data review (archived; P1 curriculum status noted below)
 
-전체적으로 **데이터 모델 관계와 카디널리티는 매우 잘 설계**되어 있고 (14개 테이블 모두 존재, 다중 홉 분석 가능한 참조 구조), 로드 순서까지 정리되어 있어 좋습니다. 다만 **워크숍의 실습 미션이 성립하려면 데이터가 지금보다 "지저분해야" 합니다.** 지금 데이터는 너무 깨끗해서 미션에서 발견할 이슈가 부족합니다.
+> **Historical context only (2026-07-08):** This is a pre-v1.2 review backlog,
+> not the active curriculum, sample contract, or implementation instruction. For
+> current data facts use [Track1 data README](../../track1/data/README.md), for
+> the WorkIQ seed contract use
+> [Track1 WorkIQ seed specification](../../track1/docs/Track1_WorkIQ_Seed_Content_Specification.md),
+> and for the canonical learning order use
+> [the Microsoft IQ workshop plan](Microsoft_IQ_Workshop_Integrated_Plan.md).
+>
+> **Curriculum decision (2026-07-29):** P1의 참조 무결성·PK 중복·결측·이상값
+> 사례는 데이터셋/강사용 정답/회귀 참고에는 남아 있지만, 참가자 실습에서는 찾거나
+> 수정하지 않습니다. 참가자에게는 왜 이런 검증이 필요한지만 설명하고, Track1
+> 실습 시간은 Ontology 매핑과 의미 경로 확인에 사용합니다. 따라서 이 문서의 P1
+> 항목은 “모두 해결됨”을 뜻하지 않으며 현재 참가자 과제도 아닙니다.
+
+전체적으로 **데이터 모델 관계와 카디널리티는 매우 잘 설계**되어 있고 (14개 테이블 모두 존재, 다중 홉 분석 가능한 참조 구조), 로드 순서까지 정리되어 있어 좋습니다. 아래 평가는 데이터 품질 탐지 실습을 포함하려던 당시의 제안이며, 현재 참가자 과정에는 적용하지 않습니다.
 
 ---
 
-## 🔴 P1: 실습 미션이 성립하지 않는 결정적 이슈
+## 🔴 P1: 과거 데이터 품질 탐지 실습 제안 (현재 참가자 실습에서 제외)
 
 ### 1. 참조 무결성 오류 케이스 **0건**
-- 미션 5의 "참조 무결성 검증" 실습에서 발견할 오류가 없음
+- 당시 미션 5의 "참조 무결성 검증" 실습에서 발견할 오류가 없음
 - 모든 `order_id`, `customer_id`, `product_id`, `campaign_id`가 완벽하게 존재함
 - **필요**: 예를 들어 `payments.csv`에 `order_id=O999`(존재하지 않음) 1건, `support_tickets.csv`에 `customer_id=C999` 1건 삽입
 
 ### 2. PK 중복 케이스 **0건**
-- 미션 5의 "중복 키 존재 여부" 검증에서 발견할 것이 없음
+- 당시 미션 5의 "중복 키 존재 여부" 검증에서 발견할 것이 없음
 - **필요**: `shipments.csv`에 같은 `shipment_id`를 갖는 행 1건 추가, 또는 `customers.csv`에 `C002` 중복
 
 ### 3. 결측값(NULL) 케이스 사실상 **0건**
 - 유일한 결측은 `shipments.SH005.delivered_at`인데, 이는 `InTransit`이라 정당한 NULL
-- 미션 2 DoD "이슈 목록 최소 5개"를 달성하기 어려움
+- 당시 미션 2 DoD "이슈 목록 최소 5개"를 달성하기 어려움
 - **필요**: `customer_segment` NULL 1건, `order_date` NULL 1건, `payment_status` NULL 1건, `return_reason` NULL 1건 등
 
 ### 4. 이상값(음수/극단값) **0건**
-- 미션 2의 "이상값 확인" 실습에서 발견할 것이 없음
+- 당시 미션 2의 "이상값 확인" 실습에서 발견할 것이 없음
 - **필요**: `order_items.quantity=-1`, `products.unit_price=0`, `promotions.discount_amount=-5`, `inventory_snapshots.on_hand_qty=-3` 중 2~3건
 
 ### 5. 표준 코드셋 위반 케이스는 있지만 **문서화 안 됨**
@@ -103,43 +117,55 @@
 
 ## 🔵 P4: 문서화·강사 지원
 
-### 17. README 부재
-- `track1/data/` 폴더에 데이터셋 개요·의도된 노이즈·라이선스 안내 파일 없음
-- **필요**: `README.md`에 다음 명시
-  - 파일별 행수·주요 컬럼
-  - **의도적으로 삽입된 품질 이슈 매트릭스** (강사용, 참가자용 별도)
-  - 로드 순서 및 참조 관계 다이어그램
-  - 시나리오 Q1/Q2/Q3와 필요 테이블 매핑
+### 17. README 부재 (historical; resolved)
+- 이 검토 시점에는 `track1/data/`의 데이터셋 개요 문서가 없었습니다.
+- 현재 [Track1 data README](../../track1/data/README.md)는 14개 CSV, `load_order.txt`,
+  행 수·주요 컬럼, 의도된 품질 이슈, 관계, 검증 규칙, Q1~Q5 매핑을 정의합니다.
+- 따라서 이 항목은 새 README 작성 요구가 아니라 과거의 개선 기록입니다.
 
 ### 18. 강사용 정답 노트 없음
 - 각 미션의 "예상 발견 이슈 리스트" (Answer Key)가 필요
-- 예: 미션 2 프로파일링 → "결측: X건 발견 예상 / 중복: Y건 / 이상값: Z건"
+- 당시 예: 미션 2 프로파일링 → "결측: X건 발견 예상 / 중복: Y건 / 이상값: Z건"
 
-### 19. WorkIQ 매칭용 샘플 M365 콘텐츠 시드 목록 없음
-- 준비물 문서에는 "샘플 콘텐츠 30~50건 필요"라 되어 있으나, **어떤 캠페인/상품/주문을 언급하는 문서가 필요한지** 구체 목록 없음
-- **필요**: 예를 들어 "SummerPush 캠페인 kickoff 이메일 (2026-04-15)", "P005 재고 부족 대응 Teams 스레드 (2026-05-16)" 같은 시드 문서 명세 15~20건
+### 19. WorkIQ 매칭용 샘플 M365 콘텐츠 시드 목록 없음 (historical; resolved)
+- 이 검토의 “30~50건 필요”와 “15~20건 명세” 제안은 당시의 추정치이며 현재
+  준비 계약이 아닙니다.
+- 현재 기준 시드는 **19건**(SharePoint 6, Outlook 5, Teams 5, OneDrive 3)이고,
+  확장 패키지는 **60개 업무 항목**(SharePoint 15, Outlook 15, Teams 18개 스레드,
+  OneDrive 12)입니다. 정확한 제목·엔터티·검수·fallback은
+  [seed specification](../../track1/docs/Track1_WorkIQ_Seed_Content_Specification.md)을
+  따릅니다.
 
 ---
 
 ## 요약 - 데이터 개선 우선순위
 
+> 아래 P1 조치는 v1.2 데이터/강사용 회귀 자료에는 반영되었지만, 참가자 완료
+> 기준에서는 제외되었습니다. 참가자는 삽입된 오류의 위치·건수를 제출하지 않습니다.
+
 | 우선순위 | 조치 | 예상 소요 |
 |---|---|---|
-| 🔴 P1-1 | 참조 무결성 오류 2건 삽입 | 5분 |
-| 🔴 P1-2 | PK 중복 1건 삽입 | 2분 |
-| 🔴 P1-3 | 결측값 4~5건 삽입 | 10분 |
-| 🔴 P1-4 | 이상값 3건 삽입 | 5분 |
-| 🔴 P1-5 | 표준 코드셋 위반 강사노트 문서화 | 10분 |
+| 🔴 P1-1 | 참조 무결성 사례 — 강사/회귀 참고만 유지 | 참가자 실습 제외 |
+| 🔴 P1-2 | PK 중복 사례 — 강사/회귀 참고만 유지 | 참가자 실습 제외 |
+| 🔴 P1-3 | 결측값 사례 — 강사/회귀 참고만 유지 | 참가자 실습 제외 |
+| 🔴 P1-4 | 이상값 사례 — 강사/회귀 참고만 유지 | 참가자 실습 제외 |
+| 🔴 P1-5 | 표준 코드셋의 의미는 설명하고 매핑 설계에만 활용 | 오류 탐지 실습 제외 |
 | 🟡 P2-6 | Q3용 재고부족-CS 시나리오 3건 추가 | 15분 |
 | 🟡 P2-7 | products/promotions에 name 컬럼 추가 | 10분 |
 | 🟡 P2-8 | campaigns 컬럼 확장 | 10분 |
 | 🟡 P2-9 | 프로모션 실제 반영 로직 정리 (gross/net) | 20분 |
 | 🟢 P3-10 | 값 정합성 mismatch 2건 삽입 | 5분 |
 | 🟢 P3-11~16 | 포맷·통화·코드 정리 | 20분 |
-| 🔵 P4-17 | `README.md` 작성 | 20분 |
+| 🔵 P4-17 | historical — current Track1 data README로 대체됨 | — |
 | 🔵 P4-18 | 강사용 정답노트 작성 | 30분 |
-| 🔵 P4-19 | WorkIQ 시드 콘텐츠 명세 | 30분 |
+| 🔵 P4-19 | historical — current 19건 seed/60개 확장 계약으로 대체됨 | — |
 
-**핵심 메시지**: 지금 데이터는 "정답지"에 가깝고, 워크숍은 "지저분한 원천을 정리하는 실습"이 목적입니다. **의도된 노이즈 15~20건을 삽입하고, 강사용 정답 노트로 그 위치를 문서화**하는 것이 최소한의 개선입니다.
+**Historical conclusion:** 이 문단은 당시 데이터 개선 제안입니다. 현재 활성
+커리큘럼의 의도된 노이즈와 강사용 정답 기준은
+[Track1 data README](../../track1/data/README.md) 및
+[instructor answer key](../../track1/docs/Track1_Instructor_Data_Answer_Key.md)를
+따릅니다.
 
-원하시면 P1(필수 데이터 오염)과 P2(시나리오 완결성)를 바로 반영해서 v1.1 데이터셋을 만들어 드릴 수 있습니다.
+현재 참가자 과정은 P1 오류 탐지·수정 과제를 다시 활성화하지 않습니다. 강사 또는
+회귀 테스트가 사례를 사용할 때도 참가자 산출물이나 Track2 시작 조건으로 요구하지
+않습니다.

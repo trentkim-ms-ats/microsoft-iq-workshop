@@ -1,7 +1,7 @@
 # 트랙1 강사용 진행 대본(분단위) v1.0
 
 - 트랙명: Track 1 — FabricIQ 시맨틱 레이어: Fabric + Ontology(Preview) 데이터 준비
-- 3-IQ 통합 스택 내 위치: **FabricIQ 시맨틱 구축 단계** (Track 2 WorkIQ / Track 3 FoundryIQ의 그라운딩 소스가 됨)
+- 네 구성요소 Microsoft IQ 흐름 내 위치: **FabricIQ 시맨틱 구축 단계** (Track 2 WorkIQ / Track 3 WebIQ / Track 4 FoundryIQ의 그라운딩 소스가 됨)
 - 총 시간: 150분 (실습 140분 + 휴식 10분)
 - 권장 시간대: 09:35-12:05
 - 대상: 데이터/SQL 기초 보유자
@@ -12,12 +12,12 @@
 - 고급 기준 시나리오: [End-to-End 복합 관계 시나리오](Track1_Data_Structure_Detailed_Guide.md#advanced-scenario)
 - 미션 1 핵심 질문(고급 Q1~Q5): [WORKBOOK.md](../WORKBOOK.md)
 - 미션 1 참고: [원천 테이블 구조와 역할](Track1_Data_Structure_Detailed_Guide.md#source-table-structure)
-- 미션 2 참고: [프로파일링 관점 체크포인트](Track1_Data_Structure_Detailed_Guide.md#profiling-checkpoints)
+- 미션 2 참고: [데이터 품질 개념 체크포인트](Track1_Data_Structure_Detailed_Guide.md#profiling-checkpoints)
 - 미션 3 참고: [표준화 규칙의 구조적 의미](Track1_Data_Structure_Detailed_Guide.md#standardization-rules)
 - 미션 4 참고: [Ontology 구조(의미 모델)](Track1_Data_Structure_Detailed_Guide.md#ontology-model)
-- 미션 5 참고: [3단 매핑 구조](Track1_Data_Structure_Detailed_Guide.md#mapping-3step), [검증 구조](Track1_Data_Structure_Detailed_Guide.md#validation-structure), [의미 질의 검증 구조(선택)](Track1_Data_Structure_Detailed_Guide.md#semantic-validation-structure)
+- 미션 5 참고: [3단 매핑 구조](Track1_Data_Structure_Detailed_Guide.md#mapping-3step), [의미 질의 확인 구조](Track1_Data_Structure_Detailed_Guide.md#semantic-validation-structure)
 - Track2 시작 체크: [PREREQUISITES.md](../../track2/PREREQUISITES.md)
-- 전체 당일 운영 체크: [Instructor_Day_of_Operations_Checklist.md](../../common/docs/Instructor_Day_of_Operations_Checklist.md)
+- 전체 당일 운영 체크: [Microsoft IQ Instructor Day-of Operations Checklist](../../common/docs/Microsoft_IQ_Instructor_Day_of_Operations_Checklist.md)
 
 ## 운영 원칙
 1. 30분 단위 진도체크, 10분 이상 지연 팀은 즉시 보조 지원.
@@ -29,20 +29,20 @@
 
 미션-시간 매핑 요약:
 - 미션1 (질문 정리): T+00~10 (10분)
-- 미션2 (프로파일링): T+10~40 (30분)
+- 미션2 (데이터 구조·품질 개념): T+10~40 (30분)
 - 미션3 (표준 스키마): T+40~70 (30분)
 - 미션4 (Ontology 설계): T+70~90 및 T+100~120 (총 40분, 사이 휴식)
 - 휴식: T+90~100 (10분)
-- 미션5 (매핑/검증): T+120~150 (30분)
+- 미션5 (매핑/의미 경로 확인): T+120~150 (30분)
 
 | 시간(분) | 미션 | 진행 스크립트(강사용) | 참가자 액션 | 강사 체크포인트 |
 |---|---|---|---|---|
-| T+00~03 | M1 | "Track 1의 목표는 데이터 정리 자체가 아니라 **FabricIQ가 이해할 시맨틱 구조** 완성입니다. 여기서 만든 Ontology가 Track 2 WorkIQ 인덱스와 Track 3 FoundryIQ 에이전트의 공통 어휘로 재사용됩니다." | 화면/자료 준비 | 시작 상태 통일, 3-IQ 흐름 안내 |
+| T+00~03 | M1 | "Track 1의 목표는 데이터 정리 자체가 아니라 **FabricIQ가 이해할 시맨틱 구조** 완성입니다. 여기서 만든 Ontology가 Track 2 WorkIQ, Track 3 WebIQ 공개 확인 범위, Track 4 FoundryIQ의 공통 어휘로 재사용됩니다." | 화면/자료 준비 | 시작 상태 통일, Microsoft IQ workshop 흐름 안내 |
 | T+03~05 | M1 | "최종 제출물 5개를 먼저 확인하고 시작합니다." | 제출물 템플릿 오픈 | 팀별 템플릿 준비 |
 | T+05~10 | M1 | "워크숍 공통 질문 5개(Q1~Q5)를 먼저 확정하세요. 질문이 모델을 결정합니다. 오늘은 **고급 Q1~Q5(캠페인·결제·배송·프로모션·재고·반품·CS)** 기준으로 진행합니다." ([고급 시나리오](Track1_Data_Structure_Detailed_Guide.md#advanced-scenario)) | 질문 확정, 질문-데이터 매핑 초안 | Q1~Q5 확정 여부·매핑표 초안 |
-| T+10~20 | M2 | "프로파일링 쿼리 실행: 결측, 중복, 분포부터. 먼저 14개 테이블 접근과 필수 컬럼 존재를 확인하세요." ([미션2 참조](Track1_Data_Structure_Detailed_Guide.md#profiling-checkpoints)) | SQL 실행 | 실행 실패 팀 파악, 필수 컬럼 누락 테이블 식별 |
-| T+20~30 | M2 | 순회 코칭: 결측률/중복률 이슈 분류, "이상값은 조건을 숫자로 명확히 정의하세요." | 이상값 룰 작성 | 이슈 3개 이상 도출·룰의 측정 가능성 |
-| T+30~40 | M2 | "품질 이슈 심각도(High/Med/Low) 부여", 상위 2개 공통 이슈 공유 유도 | 이슈 우선순위화·팀 발표 | High 이슈 최소 1개, 전팀 진도 확인 |
+| T+10~20 | M2 | "P1 데이터 품질은 오늘 탐지·수정하지 않습니다. 참조 무결성, 중복, 결측, 이상값이 KPI와 Ontology를 왜곡하는 이유만 설명하겠습니다." ([미션2 참조](Track1_Data_Structure_Detailed_Guide.md#profiling-checkpoints)) | 설명 청취, 영향 메모 | P1 쿼리 실행 팀이 없도록 확인 |
+| T+20~30 | M2 | "14개 테이블의 행 수·필수 컬럼·로드 순서를 확인하고 Q1~Q5에 필요한 키를 찾으세요." | 데이터 사전과 질문-키 연결표 작성 | 필수 컬럼 누락 여부, 질문별 키 연결 |
+| T+30~40 | M2 | "품질 개념이 Q1~Q5 해석에 미치는 영향을 한 줄씩 정리하세요. 위치나 건수는 찾지 않습니다." | 영향 요약·팀 공유 | 개념 이해와 시나리오 연결 확인 |
 | T+40~55 | M3 | "이제 표준 스키마: 키/타입/코드 규칙 통일" ([미션3 참조](Track1_Data_Structure_Detailed_Guide.md#standardization-rules)) | 스키마 규칙표 작성 | 규칙 누락 여부 |
 | T+55~65 | M3 | 표준 코드 딕셔너리 확정 유도(주문/결제/배송 + 문의유형 + 반품사유 코드) | 코드셋 정리 | 상태코드·문의·반품사유 표준화 |
 | T+65~70 | M3 | 미니 리뷰: 규칙표 상호 점검 | 팀 내 크로스 체크 | 규칙 확정 |
@@ -52,8 +52,8 @@
 | T+100~110 | M4 | "관계 카디널리티(1:N/N:M) 빠짐없이 기입" (동사형). **Fabric Ontology 관계 구성**: ① 마스터 테이블 기반 1:N 관계부터(FK 매핑 8개): Customer-Order, Channel-Order, Product-OrderItem, Order-OrderItem, Product-Inventory, Promotion-OrderPromotion, Campaign-CampaignAttribution ② 브릿지 테이블(N:M): OrderPromotion과 CampaignAttribution을 통한 간접 N:M 관계 ③ 각 관계에 "사람", "상품을 주문한다" 등 의미 설명 추가. 스크린샷: 관계도 뷰에서 연결선 확인. 캠페인-주문은 Last-touch(1:N)인지 Multi-touch(N:M)인지 선택 근거를 기록하세요. | 관계 생성 및 매핑 | 관계 8개 이상(FK기반) + 2개(N:M 브릿지) 확인, 카디널리티 레이블 표기 완료 |
 | T+110~120 | M4 | 복합 관계 강조: 캠페인→주문→결제→배송→반품, 프로모션→주문→마진. `Margin`은 파생지표(계산식 명시)로 기록. **논리 관계(다중경로 분석) 추가**: Payment→Order→Return(결제 이력이 있는 반품), Shipment→Order→Return(배송 후 반품), Order→OrderPromotion→Promotion(주문별 적용 프로모션 추적). 예상 관계 20-25개 도출. 스크린샷: 관계도 전체 뷰(각 경로별 색상/legend 구분) | 논리 관계 정의 | 관계 20개 이상 확정, 파생 지표(Margin) 계산식 명시, 관계도 스크린샷 |
 | T+120~130 | M5 | 매핑표 작성 가이드: 원천→표준→Ontology ([매핑 참조](Track1_Data_Structure_Detailed_Guide.md#mapping-3step)) | 매핑표 작성 | 결제/배송/프로모션/캠페인/CS 포함 70% |
-| T+130~138 | M5 | 검증 쿼리 3종 실행 지시 ([검증 참조](Track1_Data_Structure_Detailed_Guide.md#validation-structure)) | 참조 무결성 + 코드 유효성 + 중복/결측 검증 실행 | 쿼리 3종 결과 캡처 확인 |
-| T+138~145 | M5 | 오류 해석: 참조 누락/코드값 오류/중복 키 (수정 가능/불가 분리). **여유 팀은 의미 질의 검증 미니 실습(선택)**: 질문 1개를 온톨로지 경로로 고정하고 SQL 기준값과 비교 로그를 남기게 안내 | 이슈 수정 또는 메모(선택: semantic validation 로그) | 트랙2 인계용 이슈 목록 정리 + (선택) 의미 질의 검증 로그 확보 |
+| T+130~138 | M5 | "시나리오 A/B의 엔터티-관계 경로가 `getDefinition`에 있는지 확인하세요." | 의미 경로 2개 확인 | 경로·방향·매핑 기록 |
+| T+138~145 | M5 | "제공 SQL baseline을 저장하세요. GraphModel 가능 팀만 `executeQuery`와 비교합니다." | baseline 저장, 선택 Graph 비교 | 의미 경로 로그 확보 또는 미실행 사유 |
 | T+145~148 | 마감 | "제출물 5개 + Track2 인계 패키지 최종 점검" | 파일 정리/제출 | 누락 항목 확인 |
 | T+148~150 | 마감 | 마감 멘트: "Track 2에서 이 Ontology를 WorkIQ의 M365 문서 태그와 연결하고, 크로스 소스 품질 게이트를 통과시킵니다." | 제출 완료 | 100% 제출 확인 |
 
@@ -65,7 +65,7 @@
 | 관계가 모호함 | "주어-동사-목적어 문장으로 말해본 뒤 관계명 확정하세요." |
 | 쿼리 오류 다발 | "SQL 디버깅은 보조 트랙에서 처리하고 본 트랙은 결과물부터 맞춥니다." |
 | 시간 지연 | "선택 미션은 생략하고 DoD 3개를 먼저 충족하세요." |
-| 검증 쿼리 2개만 실행함 | "검증은 3종이 완료 기준입니다. 중복/결측 검증 쿼리를 반드시 추가 실행하세요." |
+| 참가자가 P1 탐지 쿼리를 실행함 | "P1은 설명 전용입니다. 쿼리를 중단하고 Ontology 매핑과 의미 경로 확인으로 돌아가세요." |
 | 캠페인 관계 모델 혼선 | "어트리뷰션 기준을 먼저 정하세요. Last-touch면 1:N, Multi-touch면 N:M으로 표기하고 근거를 남기세요." |
 | 마진 정의가 없음 | "`Margin`은 파생지표입니다. 계산식과 가정값을 매핑표 비고에 명시하세요." |
 | Track2에서 문서 매칭이 안 됨 | "Track1 인계 패키지의 WorkIQ 키워드(캠페인/상품/고객등급) 표기를 먼저 통일하고 재검색하세요." |
@@ -78,7 +78,7 @@
 
 1. `WORKSPACE_ID`, `ONTOLOGY_ID`, Ontology 이름 기록
 2. 엔터티/관계 수량 + 핵심 경로 3개 기록
-3. 미해결 이슈 Top 3(영향/우회안 포함) 기록
+3. 실제 구현 제한 또는 `none-known` 기록
 4. WorkIQ 검색 키워드(캠페인명/상품명/고객등급) 기록
 
 강사 멘트(권장):
@@ -86,9 +86,10 @@
 
 ---
 
-## 선택 심화 운영 가이드 (의미 질의 검증, 10~15분)
+## 의미 질의 확인 운영 가이드 (Level A 필수, Level B 선택)
 
-시간 여유가 있는 팀에만 적용합니다(Track1 기본 제출 필수 아님).
+Level A(경로와 SQL baseline)는 기본 제출이며, GraphModel을 사용하는 Level B만
+시간과 환경이 허용되는 팀에 적용합니다.
 
 1. 질문 1개 선택  
    - 예: "캠페인 유입 주문 중 결제 실패 주문은?"

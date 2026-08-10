@@ -14,14 +14,14 @@ Track2는 아래 인계 패키지가 있어야 지연 없이 시작할 수 있�
 | 모델 요약 | 엔터티/관계 개수, 핵심 경로 3개 |
 | 매핑 근거 | `Entity -> table.column` 핵심 매핑 5개 이상 |
 | WorkIQ 검색 키 | 캠페인명/상품명/고객등급 키워드 |
-| 품질 이슈 Top3 | 영향도 + 임시 우회안 |
-| 검증 로그 | Track1 SQL 검증 결과 링크/캡처 |
+| 구현 제한 | 실제 Ontology/GraphModel/매핑 제한과 우회안 또는 `none-known` |
+| 의미 경로 로그 | 매핑 검토, SQL baseline, 선택 Graph 비교 |
 
 참조:
 - [WORKBOOK.md](../track1/WORKBOOK.md) (Track2 인계 패키지 템플릿)
 - [Track1_WorkIQ_Seed_Content_Specification.md](../track1/docs/Track1_WorkIQ_Seed_Content_Specification.md)
 - [track2/data/README.md](./data/README.md) (60개 업무 항목 생성·배포 패키지)
-- [Instructor_Day_of_Operations_Checklist.md](../common/docs/Instructor_Day_of_Operations_Checklist.md)
+- [Microsoft IQ Instructor Day-of Operations Checklist](../common/docs/Microsoft_IQ_Instructor_Day_of_Operations_Checklist.md)
 
 ## 1) 핵심 준비물
 
@@ -109,21 +109,25 @@ immediateAction=<정규화/권한/범위 조치>
 - 실제 임직원 콘텐츠 대신 샘플/격리된 테넌트 콘텐츠 사용
 - 권한 최소화 원칙 적용
 - 검색 결과의 권한 기반 노출(ACL)과 링크 유효성 확인
-- Track1 이슈 Top3를 무시하지 말고 Track2 품질 점수 산정 시 감점/보정 근거로 반영
+- Track1의 실제 구현 제한을 검색·매핑 품질 해석에 반영하되, P1 데이터 오류 탐지 결과는 요구하지 않음
 
-## 7) Track3 인계 패키지 (Track2 종료 시 필수)
+## 7) Track3 WebIQ 입력 패키지 (Track2 종료 시 필수)
 
 | 인계 항목 | 필수 내용 |
 |---|---|
 | 인덱스 카탈로그 | 소스별 범위/필터/갱신 시각 |
 | 품질 점수 리포트 | 8대 항목 점수 + 미달 항목 |
 | 근거 링크 샘플 | 유효 링크 최소 5건 |
-| 우선 조치 이슈 | Track3 응답 품질에 직접 영향 주는 이슈 Top3 |
+| 우선 조치 이슈 | 이후 WebIQ/FoundryIQ 결합 품질에 영향 주는 WorkIQ 이슈 Top3 |
 | 검색 재현 세트 | 동일 결과를 재현할 수 있는 질의 3개 |
 
 복붙 템플릿:
+`TRACK3_WEBIQ_HANDOFF_PACKAGE` marker는 Track3 WebIQ 입력용 **WorkIQ handoff package**입니다.
+canonical participant handoff는 Track2 WorkIQ → Track3 WebIQ입니다. Track3가 이 내부 근거를 먼저 소비하고 공개 URL
+citation을 별도로 검토한 뒤 `TRACK4_FOUNDRYIQ_HANDOFF_PACKAGE`를 Track4 FoundryIQ에 전달합니다.
+
 ```text
-[TRACK3_HANDOFF_PACKAGE]
+[TRACK3_WEBIQ_HANDOFF_PACKAGE]
 team=<팀명>
 handoffAtKst=<YYYY-MM-DD HH:MM>
 indexCatalogRef=<경로/문서>
@@ -132,5 +136,5 @@ failedQualityItems=<항목1;항목2 또는 ->
 evidenceLinks=<URL1;URL2;URL3;URL4;URL5>
 priorityIssues=<이슈1|영향|임시조치; 이슈2|영향|임시조치; 이슈3|영향|임시조치>
 reproQueries=<질의1;질의2;질의3>
-[/TRACK3_HANDOFF_PACKAGE]
+[/TRACK3_WEBIQ_HANDOFF_PACKAGE]
 ```

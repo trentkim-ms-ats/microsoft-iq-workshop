@@ -1,3 +1,6 @@
 __pycache__/
 *.py[cod]
 *.log
+tools/github/commit_and_push.sh
+track4/data/generated/microsoft_iq_responses/
+track4/data/generated/reports/microsoft_iq_*

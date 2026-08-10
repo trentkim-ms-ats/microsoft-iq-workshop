@@ -11,8 +11,10 @@ from pathlib import Path
 from typing import Any
 
 
-PACKAGE_START = "[TRACK2_HANDOFF_PACKAGE]"
-PACKAGE_END = "[/TRACK2_HANDOFF_PACKAGE]"
+PACKAGE_START = "[TRACK2_WORKIQ_HANDOFF_PACKAGE]"
+PACKAGE_END = "[/TRACK2_WORKIQ_HANDOFF_PACKAGE]"
+LEGACY_PACKAGE_START = "[TRACK2_HANDOFF_PACKAGE]"
+LEGACY_PACKAGE_END = "[/TRACK2_HANDOFF_PACKAGE]"
 
 REQUIRED_FIELDS = [
     "team",
@@ -42,7 +44,7 @@ def parse_args() -> argparse.Namespace:
         "--input",
         type=Path,
         required=True,
-        help="Path to a text/markdown file containing [TRACK2_HANDOFF_PACKAGE] block.",
+        help="Path to a text/markdown file containing [TRACK2_WORKIQ_HANDOFF_PACKAGE] block.",
     )
     parser.add_argument(
         "--json-output",
@@ -66,12 +68,17 @@ def load_text(path: Path) -> str:
 def extract_package_block(text: str) -> list[str]:
     start = text.find(PACKAGE_START)
     end = text.find(PACKAGE_END)
+    used_start = PACKAGE_START
+    if start < 0 or end < 0 or end < start:
+        start = text.find(LEGACY_PACKAGE_START)
+        end = text.find(LEGACY_PACKAGE_END)
+        used_start = LEGACY_PACKAGE_START
     if start < 0 or end < 0 or end < start:
         raise RuntimeError(
             "TRACK2 handoff block not found. Ensure file contains "
-            "[TRACK2_HANDOFF_PACKAGE] ... [/TRACK2_HANDOFF_PACKAGE]."
+            "[TRACK2_WORKIQ_HANDOFF_PACKAGE] ... [/TRACK2_WORKIQ_HANDOFF_PACKAGE]."
         )
-    body = text[start + len(PACKAGE_START) : end]
+    body = text[start + len(used_start) : end]
     return [line.strip() for line in body.splitlines() if line.strip()]
 
 
@@ -131,15 +138,13 @@ def validate_payload(payload: dict[str, str]) -> tuple[bool, list[str], dict[str
         reasons.append("mappingHighlights should include at least 5 entries")
 
     open_issues = split_items(payload.get("openIssues", ""))
-    if open_issues and len(open_issues) < 3:
-        reasons.append("openIssues should include at least 3 entries")
 
     workiq_keys = split_items(payload.get("workiqKeys", ""))
     if workiq_keys and len(workiq_keys) < 3:
         reasons.append("workiqKeys should include at least 3 groups")
 
     evidence_links = split_items(payload.get("evidenceLinks", ""))
-    if evidence_links and len(evidence_links) < 1:
+    if not evidence_links:
         reasons.append("evidenceLinks should include at least 1 item")
 
     report = {

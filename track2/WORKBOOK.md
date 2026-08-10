@@ -1,29 +1,36 @@
 # 트랙2 실습지(참가자용) v1.0
 
+> M365 샘플과 품질 게이트를 기준대로 적용합니다. 완료 후
+> [Track3 WebIQ](../track3/QUICKSTART.md)를 거쳐
+> [Track4 FoundryIQ](../track4/QUICKSTART.md)로 이동합니다.
+
 - 트랙명: Track 2 — WorkIQ 업무 컨텍스트 연결 + 크로스 소스 품질 검증
-- 3-IQ 통합 스택 내 위치: **WorkIQ 구축 단계**. Track 1의 Ontology 인계 패키지를 입력으로 받아 M365(Outlook/Teams/SharePoint/OneDrive) 업무 컨텍스트를 색인·검증하고, Track 3의 FoundryIQ 에이전트가 근거로 사용할 인덱스·품질 리포트를 만듭니다.
+- four-component Microsoft IQ flow 통합 스택 내 위치: **WorkIQ 구축 단계**. Track 1의 Ontology 인계 패키지를 입력으로 받아 M365(Outlook/Teams/SharePoint/OneDrive) 업무 컨텍스트를 색인·검증하고, Track3 WebIQ가 먼저 사용할 인덱스·품질 리포트를 만듭니다. Track3의 `TRACK4_FOUNDRYIQ_HANDOFF_PACKAGE`를 통해 해당 WorkIQ 근거가 Track4 FoundryIQ로 이어집니다.
 - 총 시간: 110분 (휴식 없이 연속 진행)
-- 권장 시간대: 12:40-14:30
+- 현재 1일 운영 시간대: 12:35-14:25.
+  [canonical 통합 계획](../common/docs/Microsoft_IQ_Workshop_Integrated_Plan.md#current-480-minute-schedule)의
+  순서를 따릅니다.
 - 대상: Track 1을 이수했거나 Track1 인계 패키지를 전달받은 참가자
 
 ## 참고 자료
 - Track2 실습 준비물 상세: [PREREQUISITES.md](PREREQUISITES.md)
 - WorkIQ 매칭용 샘플 M365 콘텐츠 시드 명세(키워드 프로브 포함): [Track1_WorkIQ_Seed_Content_Specification.md](../track1/docs/Track1_WorkIQ_Seed_Content_Specification.md)
-- 실행 가능한 확장 샘플 데이터(생성·배포·검증): [track2/data/README.md](./data/README.md)
+- 실행 가능한 샘플 데이터(생성·배포·검증): [track2/data/README.md](./data/README.md)
 - 미션1~2 실행 워크벤치 노트북: [track2/data/Track2_Mission1_2_Workbench.ipynb](./data/Track2_Mission1_2_Workbench.ipynb)
-- Track1 인계 패키지 출처(`TRACK2_HANDOFF_PACKAGE` 템플릿): [WORKBOOK.md](../track1/WORKBOOK.md)
-- Track3 시작 입력 계약(본 트랙의 산출물이 어떻게 쓰이는지): [PREREQUISITES.md](../track3/PREREQUISITES.md)
-- Track3 참가자 실습지(인계 이후 실행 경로): [WORKBOOK.md](../track3/WORKBOOK.md)
-- WorkIQ 연동 방식 및 M365 검색 API 기술 안내(선택 경로): [Track3_Appendix_WorkIQ_Integration_and_M365_Search_API_Guide.md](../track3/docs/Track3_Appendix_WorkIQ_Integration_and_M365_Search_API_Guide.md)
-- 강사용 당일 운영 체크리스트: [Instructor_Day_of_Operations_Checklist.md](../common/docs/Instructor_Day_of_Operations_Checklist.md)
-- 통합 계획(트랙별 시간/DoD 근거): [Fabric_Ontology_AI_Workshop_Integrated_Plan_v2.0.md](../common/docs/Fabric_Ontology_AI_Workshop_Integrated_Plan_v2.0.md)
+- Track1 인계 패키지 출처(`TRACK2_WORKIQ_HANDOFF_PACKAGE` 템플릿): [WORKBOOK.md](../track1/WORKBOOK.md)
+- Track3 WebIQ 실습지(공개 확인 질문): [WORKBOOK.md](../track3/WORKBOOK.md)
+- Track4 FoundryIQ 시작 입력 계약: [PREREQUISITES.md](../track4/PREREQUISITES.md)
+- Track4 FoundryIQ 참가자 실습지(인계 이후 실행 경로): [WORKBOOK.md](../track4/WORKBOOK.md)
+- WorkIQ 연동 방식 및 M365 검색 API 기술 안내(선택 경로): [Track4 Appendix](../track4/docs/Track3_Appendix_WorkIQ_Integration_and_M365_Search_API_Guide.md)
+- 강사용 당일 운영 체크리스트: [Microsoft IQ Instructor Day-of Operations Checklist](../common/docs/Microsoft_IQ_Instructor_Day_of_Operations_Checklist.md)
+- 통합 계획(트랙별 시간/DoD 근거): [Microsoft IQ Workshop Integrated Plan](../common/docs/Microsoft_IQ_Workshop_Integrated_Plan.md)
 
 
 ## 실습 목표
 1. Track1 인계 패키지를 5분 내 검수하고, 고정 키워드 5종 프로브로 WorkIQ 검색 가용성을 확인한다.
 2. Outlook/Teams/SharePoint/OneDrive 4대 M365 소스를 WorkIQ로 색인·검색해 소스 인벤토리(인덱스 카탈로그)를 작성한다.
 3. Ontology 엔터티(캠페인/상품/고객등급)와 M365 문서를 교차 매핑해 크로스 소스 근거를 확보한다.
-4. 정형+비정형 크로스 소스 품질 8대 항목을 `0/25/50/75/100` 루브릭으로 채점하고, Track3 인계 패키지를 완성한다.
+4. 정형+비정형 크로스 소스 품질 8대 항목을 `0/25/50/75/100` 루브릭으로 채점하고, Track3 WebIQ가 먼저 소비할 WorkIQ 인계 패키지를 완성한다.
 
 ## 완료 기준(DoD)
 1. `TRACK2_KICKOFF_CHECK` 작성 완료 — 키워드 5개 중 **4개 이상** 검색 성공(실패 키워드 정규화 재시도 로그 포함).
@@ -31,7 +38,7 @@
 3. Ontology 엔터티(캠페인/상품/고객등급)별 M365 문서 **최소 1건** 매핑 — Q3 핵심 상품 3종(AeroPhone X, SmartWatch Pro, UltraBook 15)은 **각 2건 이상**.
 4. 품질 8대 항목 각각 점수화(`0/25/50/75/100`) + 근거(쿼리 결과/검색 결과/유효 링크 중 1개 이상) 첨부.
 5. 품질 게이트 통과: 8개 항목 중 **6개 이상**이 75점 이상(PASS).
-6. `TRACK3_HANDOFF_PACKAGE` 제출 — 유효 근거 링크 5건 이상, 재현 질의 3개 포함.
+6. `TRACK3_WEBIQ_HANDOFF_PACKAGE` 제출 — **먼저 Track3 WebIQ가 소비**하는 WorkIQ 입력 패키지다. 유효 내부 근거 링크 5건 이상·재현 질의 3개를 포함하고, Track3가 WebIQ citation을 더해 `TRACK4_FOUNDRYIQ_HANDOFF_PACKAGE`를 Track4 FoundryIQ에 전달한다.
 
 ## 실습 준비물
 | 항목 | 설명 |
@@ -44,7 +51,7 @@
 | 검색/검증 도구 | 제공 WorkIQ 커넥터 화면(기본) 또는 Microsoft Graph Explorer/API 클라이언트(선택, Appendix A 참조) |
 | 샘플 콘텐츠 시드셋 | 기준 시드 19건: SharePoint 6/Outlook 5/Teams 5/OneDrive 3 ([준비 계약 및 배치 완료 검수](../track1/docs/Track1_WorkIQ_Seed_Content_Specification.md#3-소스별-샘플-데이터-준비-계약)) |
 | 확장 샘플 데이터 | 총 60개 업무 항목: SharePoint 15/Outlook 15/Teams 18 스레드/OneDrive 12 ([생성·배포 방법](./data/README.md)) |
-| Track1 인계 패키지 | `TRACK2_HANDOFF_PACKAGE` (Ontology 식별정보/모델요약/매핑근거/이슈Top3/WorkIQ 키워드/검증 로그) |
+| Track1 인계 패키지 | `TRACK2_WORKIQ_HANDOFF_PACKAGE` (Ontology 식별정보/모델요약/매핑근거/구현 제한/WorkIQ 키워드/의미 경로 로그) |
 
 준비물 상세는 [PREREQUISITES.md](PREREQUISITES.md)를 참조.
 
@@ -53,7 +60,7 @@
 - 제목만 있는 빈 콘텐츠는 사용하지 않는다. 본문에 상황, 영향, 결정 또는 후속 조치 중 최소 2개와 지정 엔터티명을 포함한다.
 - 문서 본문의 상품명/캠페인명 표기는 정형 데이터(Track1 Ontology)와 **정확히 일치**해야 매칭이 성립한다. 오탈자·별칭은 표기 정규화 실습 소재로 활용한다.
 - 권한 최소화 원칙을 적용하고, 검색 결과가 **권한 기반 노출(ACL/Security trimming)**을 따르는지 확인한다(Appendix C).
-- Track1에서 넘어온 미해결 이슈 Top3는 무시하지 않고, 품질 점수 산정 시 감점/보정 근거로 반영한다.
+- Track1에서 넘어온 실제 구현 제한은 무시하지 않고, 검색·매핑 품질 해석에 반영한다. P1 데이터 오류 탐지 결과는 Track2 입력으로 요구하지 않는다.
 
 ## 중간 점검 타임마커
 - **T+15 (미션1 초반)**
@@ -67,14 +74,14 @@
 - **T+85 (미션3 종료)**
   - 품질 8대 항목 각각 최소 1개 증적 확보
 - **T+110 (미션4 종료)**
-  - 스코어링 워크시트 완성 + `TRACK3_HANDOFF_PACKAGE` 제출
+  - 스코어링 워크시트 완성 + Track3 WebIQ 입력용 `TRACK3_WEBIQ_HANDOFF_PACKAGE` 제출
 
 ## 단계별 미션
 
 ### 미션 1. 킥오프 검수 + M365 소스 인벤토리 (25분)
 
 #### 1-1. Track1 인계 패키지 검수 (0-5분)
-`TRACK2_HANDOFF_PACKAGE`에서 아래 6개 필수 필드를 확인한다.
+`TRACK2_WORKIQ_HANDOFF_PACKAGE`에서 아래 6개 필수 필드를 확인한다.
 
 | # | 검수 필드 | 확인 내용 | 완료(Y/N) |
 |---|---|---|---|
@@ -82,8 +89,8 @@
 | 2 | 모델 요약 | 엔터티/관계 개수, 핵심 경로 3개(예: Campaign→Order→Payment) |  |
 | 3 | 매핑 근거 | `Entity -> table.column` 핵심 매핑 5개 이상 |  |
 | 4 | WorkIQ 검색 키 | 캠페인명/상품명/고객등급 키워드 표기 확인 |  |
-| 5 | 품질 이슈 Top3 | 영향도 + 임시 우회안 명시 여부 |  |
-| 6 | 검증 로그 | Track1 SQL 검증 결과 링크/캡처 존재 |  |
+| 5 | 구현 제한 | 실제 제한과 우회안 또는 `none-known` |  |
+| 6 | 의미 경로 로그 | 매핑 검토, SQL baseline, 선택 Graph 비교 링크 |  |
 
 > 필드 누락 시 즉시 Track1 담당 팀에 보정 요청하고, 미보정 필드는 `blockingIssue`로 기록한다.
 
@@ -99,7 +106,7 @@
 | 고객 맥락 | `Platinum` | Outlook, OneDrive |  |  |  |  |
 
 - **기본 경로(제공 커넥터/UI)**: WorkIQ 검색 화면에 키워드를 입력하고, 반환된 항목의 소스 유형·제목·수정일을 기록한다.
-- **선택 경로(Microsoft Graph Search API)**: 커스텀 검증이 필요할 때만 사용한다. 요청 구조는 임의로 확장하지 않고 [Track3 Appendix](../track3/docs/Track3_Appendix_WorkIQ_Integration_and_M365_Search_API_Guide.md#3-기본-요청-구조개념)에 정의된 형태를 그대로 따른다.
+- **선택 경로(Microsoft Graph Search API)**: 커스텀 검증이 필요할 때만 사용한다. 요청 구조는 임의로 확장하지 않고 [Track4 Appendix](../track4/docs/Track3_Appendix_WorkIQ_Integration_and_M365_Search_API_Guide.md)에 정의된 workshop adapter 경계를 따른다.
   ```json
   {
     "requests": [
@@ -227,11 +234,11 @@ python track2/data/verify_entity_document_mapping.py \
 - 8대 항목 각각 최소 1개 증적 확보
 - 항목별 잠정 이슈(있다면) 기록
 
-### 미션 4. 점수화 및 리포트 + Track3 인계 (25분)
+### 미션 4. 점수화 및 리포트 + Track3 WebIQ 인계 (25분)
 1. **스코어링 워크시트** 작성: 항목별 `0/25/50/75/100` 점수 부여, PASS(≥75) 여부 판정.
 2. 8개 항목 평균 점수 계산, PASS 개수 확인, DoD(8개 중 6개 이상 PASS) 충족 여부 판정.
 3. 미달 항목(75점 미만)에 대해 우선 조치안을 작성한다.
-4. `TRACK3_HANDOFF_PACKAGE`를 작성해 제출한다.
+4. `TRACK3_WEBIQ_HANDOFF_PACKAGE`를 작성해 Track3 WebIQ에 제출한다. Track3는 이 WorkIQ 패키지와 공개 citation을 분리해 검토한 뒤 `TRACK4_FOUNDRYIQ_HANDOFF_PACKAGE`를 Track4 FoundryIQ에 전달한다.
 
 **품질 스코어링 워크시트**
 
@@ -253,7 +260,7 @@ python track2/data/verify_entity_document_mapping.py \
 #### 체크
 - 스코어링 워크시트 8개 항목 모두 채점 완료
 - PASS 개수 ≥ 6/8 확인 (미충족 시 조치안 최소 2건 작성)
-- `TRACK3_HANDOFF_PACKAGE` 제출 완료(근거 링크 5건, 재현 질의 3개 포함)
+- `TRACK3_WEBIQ_HANDOFF_PACKAGE` 제출 완료(Track3 WebIQ 입력용 내부 근거 링크 5건, 재현 질의 3개 포함)
 
 ## 제출물
 1. `TRACK2_KICKOFF_CHECK` 로그
@@ -261,23 +268,23 @@ python track2/data/verify_entity_document_mapping.py \
 3. 엔터티-문서 교차 매핑표
 4. 품질 8대 항목 증적 수집표
 5. 품질 스코어링 워크시트
-6. `TRACK3_HANDOFF_PACKAGE`(아래 템플릿)
+6. `TRACK3_WEBIQ_HANDOFF_PACKAGE`(아래 템플릿)
 
-## Track3 시작 인계 패키지 (필수, 10분 이내 작성)
+## Track3 WebIQ 시작 입력 패키지 (필수, 10분 이내 작성)
 
-Track2 산출물을 Track3에서 바로 사용할 수 있도록, 아래 항목을 **한 번에** 정리해 전달합니다.
+Track2 산출물을 **먼저 Track3 WebIQ가 사용**하도록 아래 항목을 한 번에 정리해 전달합니다. `[TRACK3_WEBIQ_HANDOFF_PACKAGE]` marker는 Track3 WebIQ 입력용 WorkIQ 인계 계약입니다. Track3는 이 내부 근거와 별도로 공개 URL citation을 검토하고, 둘을 섞지 않은 `TRACK4_FOUNDRYIQ_HANDOFF_PACKAGE`를 Track4 FoundryIQ에 전달합니다.
 
 | 인계 항목 | 필수 내용 |
 |---|---|
 | 인덱스 카탈로그 | 소스별 범위/필터/갱신 시각 |
 | 품질 점수 리포트 | 8대 항목 점수 + 미달 항목 |
 | 근거 링크 샘플 | 유효 링크 최소 5건 |
-| 우선 조치 이슈 | Track3 응답 품질에 직접 영향 주는 이슈 Top3 |
+| 우선 조치 이슈 | 이후 WebIQ/FoundryIQ 결합 품질에 영향 주는 WorkIQ 이슈 Top3 |
 | 검색 재현 세트 | 동일 결과를 재현할 수 있는 질의 3개 |
 
 복붙 템플릿:
 ```text
-[TRACK3_HANDOFF_PACKAGE]
+[TRACK3_WEBIQ_HANDOFF_PACKAGE]
 team=<팀명>
 handoffAtKst=<YYYY-MM-DD HH:MM>
 indexCatalogRef=<경로/문서>
@@ -286,7 +293,7 @@ failedQualityItems=<항목1;항목2 또는 ->
 evidenceLinks=<URL1;URL2;URL3;URL4;URL5>
 priorityIssues=<이슈1|영향|임시조치; 이슈2|영향|임시조치; 이슈3|영향|임시조치>
 reproQueries=<질의1;질의2;질의3>
-[/TRACK3_HANDOFF_PACKAGE]
+[/TRACK3_WEBIQ_HANDOFF_PACKAGE]
 ```
 
 ## 참가자 자가점검표
@@ -299,14 +306,14 @@ reproQueries=<질의1;질의2;질의3>
 | 엔터티-문서 교차 매핑표 100% 작성(Q3 핵심 3상품 각 2건 이상) |  |
 | 품질 8대 항목 증적 수집 완료 |  |
 | 품질 스코어링 워크시트 완성, PASS ≥6/8 확인 |  |
-| `TRACK3_HANDOFF_PACKAGE` 작성/제출 완료 |  |
+| `TRACK3_WEBIQ_HANDOFF_PACKAGE` 작성/제출 완료 (Track3 WebIQ 입력) |  |
 
 ---
 
 <a id="appendix-a-quality-checks"></a>
 ## Appendix A. 품질 8대 항목 상세 점검 절차
 
-각 항목은 **기본 경로(제공 WorkIQ 커넥터/UI 검색)** 로 먼저 수행하고, 정밀 검증이 필요할 때만 **선택 경로(Microsoft Graph Search API)** 를 사용합니다. 두 경로는 명확히 분리해서 기록하며, 문서에 정의되지 않은 CLI 명령이나 API 엔드포인트를 임의로 가정하지 않습니다. Graph Search API 요청/응답 구조는 [Track3 Appendix](../track3/docs/Track3_Appendix_WorkIQ_Integration_and_M365_Search_API_Guide.md#3-기본-요청-구조개념)에 정의된 형태만 사용합니다.
+각 항목은 **기본 경로(제공 WorkIQ 커넥터/UI 검색)** 로 먼저 수행하고, 정밀 검증이 필요할 때만 **선택 경로(Microsoft Graph Search API)** 를 사용합니다. 두 경로는 명확히 분리해서 기록하며, 문서에 정의되지 않은 CLI 명령이나 API 엔드포인트를 임의로 가정하지 않습니다. Graph Search API와 Track4 adapter의 역할 경계는 [Track4 Appendix](../track4/docs/Track3_Appendix_WorkIQ_Integration_and_M365_Search_API_Guide.md)를 따릅니다.
 
 ### A-1. 정확성
 - 기본 경로: 매칭된 문서 본문의 날짜/채널/수치 언급이 Track1 정형 데이터(Ontology 매핑 근거)와 일치하는지 대조한다.
@@ -356,6 +363,6 @@ reproQueries=<질의1;질의2;질의3>
 ## Appendix C. 프라이버시 및 ACL 가이드
 1. **샘플/격리 테넌트만 사용**한다. 실제 임직원 메일·채팅·문서를 색인하거나 검색 대상으로 삼지 않는다.
 2. **권한 최소화**: WorkIQ/Graph 접근 권한은 실습에 필요한 범위(Mail.Read, Files.Read.All, ChannelMessage.Read.All, Sites.Read.All 등)로 제한한다.
-3. **ACL 기반 노출(Security trimming) 확인(간이)**: 가능하다면 동일 키워드를 서로 다른 팀 계정으로 검색해 결과 차이가 권한에 따라 발생하는지 관찰하고, 참조무결성/유효성 항목의 근거로 활용한다. 정식 ACL 회귀 점검은 Track3의 `WORKIQ_API_HANDOFF_CHECK`(aclProbe)에서 수행한다.
+3. **ACL 기반 노출(Security trimming) 확인(간이)**: 가능하다면 동일 키워드를 서로 다른 팀 계정으로 검색해 결과 차이가 권한에 따라 발생하는지 관찰하고, 참조무결성/유효성 항목의 근거로 활용한다. 정식 ACL 회귀 점검은 승인된 테넌트에서 Track2 참가자·제한 테스트 계정으로 수행하고, 결과를 WorkIQ 증적으로 기록한다.
 4. **불필요한 민감 정보 미수집**: 증적 캡처 시 실제 개인정보가 포함되지 않도록 샘플 콘텐츠 범위 내에서만 캡처한다.
 5. **데이터 보존 정책 연계**: 적시성 항목 점검 시, 문서 보존/폐기 정책 대상 여부를 함께 확인한다.

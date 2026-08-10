@@ -1,16 +1,17 @@
 # Track1 실습 데이터 구조 상세 설명
 
-이 문서는 [WORKBOOK.md](../WORKBOOK.md)에서 사용되는 데이터 구조를 상세히 설명합니다. 본 데이터 구조는 워크숍 3-IQ 스택(FabricIQ + WorkIQ + FoundryIQ)의 **공통 시맨틱 어휘**로 사용됩니다.
+이 문서는 [WORKBOOK.md](../WORKBOOK.md)에서 사용되는 데이터 구조를 상세히 설명합니다. 본 데이터 구조는 워크숍 네 구성요소 Microsoft IQ 흐름(FabricIQ + WorkIQ + WebIQ + FoundryIQ)의 **내부 공통 시맨틱 어휘**로 사용됩니다.
 
-## 3-IQ 스택에서의 역할
+## Microsoft IQ workshop에서의 역할
 
 | 계층 | 이 구조를 사용하는 방식 |
 |---|---|
 | **FabricIQ (Track 1)** | Ontology 엔터티/관계로 정형 데이터를 의미화하고 시맨틱 질의를 수행 |
 | **WorkIQ (Track 2)** | 동일한 엔터티명(Customer/Campaign/Product/Order 등)을 M365 문서 태그로 사용해 정형↔비정형을 연결 |
-| **FoundryIQ (Track 3)** | 에이전트가 이 엔터티/관계 경로를 지식 그래프로 참조해 근거 기반 답변 생성 |
+| **WebIQ (Track 3)** | 공개 확인 질문에 이 공통 키를 사용하되 내부 수치는 계산하지 않음 |
+| **FoundryIQ (Track 4)** | 에이전트가 이 엔터티/관계 경로를 정형 근거 trace로 참조해 근거 기반 답변 생성 |
 
-세 계층 모두 동일한 엔터티/속성 이름을 재사용하므로, Track 1에서 정의한 이름·상태 코드는 **Track 2 매핑표와 Track 3 프롬프트에 그대로 인용**됩니다. 명명 규칙 일관성이 3-IQ 통합 품질의 전제 조건입니다.
+네 계층은 동일한 엔터티/속성 이름을 재사용하므로, Track 1에서 정의한 이름·상태 코드는 **Track 2 매핑표, Track 3 공개 확인 범위, Track 4 Foundry prompt에 그대로 인용**됩니다. 명명 규칙 일관성이 Microsoft IQ workshop 통합 품질의 전제 조건입니다.
 
 > ⚠️ **실행 전 확인**: 본 문서의 SQL 예시는 Notebook 셀 언어가 **Spark SQL**일 때 실행됩니다. 각 SQL 실행 전에 셀 언어를 Spark SQL로 전환하세요.
 
@@ -19,10 +20,10 @@
 - 공통 설계 의도: [데이터 구조 설계 의도](#design-intent)
 - 고급 기준 시나리오: [End-to-End 복합 관계 시나리오](#advanced-scenario)
 - 미션 1(비즈니스 질문 정리): [질문 세트(Q1~Q5)와 권장 쿼리](#mission1-question-set), [원천 테이블 구조와 역할](#source-table-structure)
-- 미션 2(데이터 프로파일링): [프로파일링 관점 체크포인트](#profiling-checkpoints)
+- 미션 2(데이터 구조·품질 개념): [데이터 품질 개념 체크포인트](#profiling-checkpoints)
 - 미션 3(표준 스키마 설계): [표준화 규칙의 구조적 의미](#standardization-rules)
 - 미션 4(Ontology 엔터티/관계 설계): [Ontology 구조(의미 모델)](#ontology-model)
-- 미션 5(매핑 및 1차 검증): [3단 매핑 구조](#mapping-3step), [검증 구조](#validation-structure), [의미 질의 검증 구조(선택)](#semantic-validation-structure)
+- 미션 5(매핑 및 의미 경로 확인): [3단 매핑 구조](#mapping-3step), [운영 검증 개념](#validation-structure), [의미 질의 검증 구조](#semantic-validation-structure)
 
 <a id="design-intent"></a>
 ## 0) 데이터 구조 설계 의도
@@ -463,7 +464,11 @@ ORDER BY repurchase_rate ASC;
 - `support_tickets.ticket_reason -> ticket_reason_std -> SupportTicket.reason`
 
 <a id="validation-structure"></a>
-## 7) 검증 구조(실습 미션 5)
+## 7) 운영 데이터 검증 구조(개념 설명용, 참가자 실행 제외)
+
+아래 규칙은 운영에서 왜 필요한지 설명하기 위한 참고입니다. 현재 Track1 참가자
+실습에서는 P1 오류를 찾거나 수정하는 SQL을 실행하지 않으며, 결과 건수도 제출하거나
+채점하지 않습니다. 강사·운영 회귀가 필요할 때만 정답노트를 사용합니다.
 1. 참조 무결성 검증  
    - 예: `payments.order_id`가 `orders.order_id`에 존재하는지 확인
    - 예: `order_promotions.promotion_id`가 `promotions.promotion_id`에 존재하는지 확인
@@ -472,7 +477,7 @@ ORDER BY repurchase_rate ASC;
 3. 중복/결측 검증  
    - PK/FK 결측, 중복 키 존재 여부 확인
 
-### 값 정합성 규칙 예시(권장 확장 검증)
+### 값 정합성 규칙 예시(운영 참고)
 트랙2 품질 점수화에서 그대로 재사용할 수 있는 값 정합성 규칙 예시입니다.
 - `SUM(order_items.sales_amount) BY order_id` == `orders.gross_amount` (할인 전 금액과 일치, 오차 0.01 허용 → 데이터셋에 의도적 불일치 2건 포함)
 - `orders.net_amount` == `orders.gross_amount - orders.discount_applied` (할인 후 순액 정합)
@@ -482,8 +487,9 @@ ORDER BY repurchase_rate ASC;
 - 재고 스냅샷 `on_hand_qty >= 0` 및 `reserved_qty >= 0`
 
 <a id="semantic-validation-structure"></a>
-### 7-1) 온톨로지 의미 질의/추론 검증 구조(선택 심화)
-SQL 검증은 "데이터 품질/정합성"을 검증하고, 의미 질의 검증은 "질문 경로가 온톨로지에서 재현되는가"를 검증합니다.
+### 7-1) 온톨로지 의미 질의/추론 확인 구조(미션 5)
+이 미션은 데이터 오류 탐지가 아니라 "질문 경로가 온톨로지에서 재현되는가"를
+확인합니다. Level A는 참가자 기본 과정이고 Level B는 환경이 지원할 때만 수행합니다.
 
 권장 2단계:
 1. **Level A (환경 무관)**  
@@ -513,7 +519,10 @@ SQL 검증은 "데이터 품질/정합성"을 검증하고, 의미 질의 검증
 이 구조를 쓰면 "SQL이 되는가?"를 넘어 "온톨로지 의미 경로가 실제 질의 엔진에서 일관되게 동작하는가?"까지 확인할 수 있습니다.
 
 <a id="profiling-checkpoints"></a>
-## 8) 프로파일링 관점 체크포인트(실습 미션 2)
+## 8) 데이터 품질 개념 체크포인트(미션 2 설명용)
+
+강사가 아래 개념과 분석 영향을 설명합니다. 참가자는 실제 오류 위치·건수를 탐지하거나
+수정하지 않고 Q1~Q5에 미치는 영향만 기록합니다.
 1. 결측률
    - 핵심 키(`order_id`, `customer_id`, `product_id`, `payment_id`, `shipment_id`) 및 기준 날짜 컬럼의 결측 여부를 우선 점검
 2. 중복률
@@ -522,11 +531,12 @@ SQL 검증은 "데이터 품질/정합성"을 검증하고, 의미 질의 검증
    - `order_status`, `payment_status`, `shipment_status`, `ticket_type`, `return_reason` 등 범주형 값의 분포/이상값 확인
 4. 이상값
    - `unit_price`, `order_value`, `sales_amount`, `discount_amount`, `on_hand_qty`, `quantity`의 음수/비정상 극단값 확인
-5. 이슈 심각도 분류
+5. 운영 시 이슈 심각도 분류 예
    - High: 무결성/분석 결과 왜곡 가능
    - Medium: 일부 지표 영향
    - Low: 해석 가능하나 품질 개선 필요
 
 ---
 
-실습 수행 시에는 [WORKBOOK.md](../WORKBOOK.md)의 단계별 미션 순서에 맞춰 본 문서를 참고하세요.
+실습 수행 시에는 [WORKBOOK.md](../WORKBOOK.md)의 단계별 미션 순서를 따릅니다.
+P1 탐지 SQL은 이 문서의 설명과 별개로 참가자 실습에 포함되지 않습니다.

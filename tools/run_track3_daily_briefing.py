@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
-"""Run Track3 daily pipeline and build a leadership briefing markdown file."""
+"""Run the Track4 FoundryIQ daily pipeline and build a leadership briefing.
+
+The filename and TRACK3 response block are retained legacy FoundryIQ identifiers.
+"""
 
 from __future__ import annotations
 
@@ -14,7 +17,9 @@ from typing import Any
 
 def parse_args() -> argparse.Namespace:
     repo_root_default = Path(__file__).resolve().parents[1]
-    parser = argparse.ArgumentParser(description="Execute Track3 daily run and generate leadership briefing.")
+    parser = argparse.ArgumentParser(
+        description="Execute the Track4 FoundryIQ daily run and generate a leadership briefing."
+    )
     parser.add_argument(
         "--repo-root",
         type=Path,
@@ -23,12 +28,12 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument(
         "--pipeline-version",
-        default="track3-prod-v1",
+        default="track4-foundry-prod-v1",
         help="Pipeline version tag forwarded to run_track3_simulation.py.",
     )
     parser.add_argument(
         "--prompt-version",
-        default="track3-prompt-v1",
+        default="track4-foundry-prompt-v1",
         help="Prompt version tag forwarded to run_track3_simulation.py.",
     )
     parser.add_argument(
@@ -38,8 +43,8 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument(
         "--toolset-version",
-        default="fabriciq-v1+workiq-v1",
-        help="Toolset version tag forwarded to run_track3_simulation.py.",
+        default="fabriciq-v1+workiq-v1+webiq-v1",
+        help="Toolset version tag forwarded to run_microsoft_iq_simulation.py.",
     )
     parser.add_argument(
         "--run-fallback-check",
@@ -73,7 +78,7 @@ def clean_response_files(responses_dir: Path) -> None:
         path.unlink()
 
 
-def format_track3_response_block(question: str, response: dict[str, Any]) -> str:
+def format_legacy_track3_response_block(question: str, response: dict[str, Any]) -> str:
     metrics = response.get("keyFindings", [])
     links = response.get("evidenceLinks", [])
     actions = response.get("recommendedActions", [])
@@ -106,7 +111,7 @@ def format_track3_response_block(question: str, response: dict[str, Any]) -> str
 
 def compose_briefing(responses: list[dict[str, Any]], generated_at: str) -> str:
     lines: list[str] = []
-    lines.append("# Track3 Leadership Briefing")
+    lines.append("# Track4 FoundryIQ Leadership Briefing")
     lines.append("")
     lines.append(f"- generatedAtUtc: {generated_at}")
     lines.append("- source: Q1~Q3 normal mode responses")
@@ -161,13 +166,13 @@ def compose_briefing(responses: list[dict[str, Any]], generated_at: str) -> str:
         lines.append("- 근거 링크 없음")
 
     lines.append("")
-    lines.append("## TRACK3_RESPONSE Blocks")
+    lines.append("## Legacy TRACK3_RESPONSE Blocks")
     lines.append("")
     for payload in responses:
         response = payload.get("response", {})
         question = response.get("question", "unknown")
         lines.append("```text")
-        lines.append(format_track3_response_block(question, response))
+        lines.append(format_legacy_track3_response_block(question, response))
         lines.append("```")
         lines.append("")
 
@@ -177,17 +182,17 @@ def compose_briefing(responses: list[dict[str, Any]], generated_at: str) -> str:
 def main() -> None:
     args = parse_args()
     repo_root = args.repo_root.resolve()
-    track3_data_dir = repo_root / "track3" / "data"
-    responses_dir = track3_data_dir / "generated" / "responses"
-    reports_dir = track3_data_dir / "generated" / "reports"
+    foundry_data_dir = repo_root / "track4" / "data"
+    responses_dir = foundry_data_dir / "generated" / "microsoft_iq_responses"
+    reports_dir = foundry_data_dir / "generated" / "reports"
     reports_dir.mkdir(parents=True, exist_ok=True)
     clean_response_files(responses_dir)
 
-    run_command(["python3", "generate_track3_samples.py"], cwd=track3_data_dir)
+    run_command(["python3", "generate_track3_samples.py"], cwd=foundry_data_dir)
     run_command(
         [
             "python3",
-            "run_track3_simulation.py",
+            "run_microsoft_iq_simulation.py",
             "--all",
             "--mode",
             "normal",
@@ -200,15 +205,17 @@ def main() -> None:
             "--toolset-version",
             args.toolset_version,
         ],
-        cwd=track3_data_dir,
+        cwd=foundry_data_dir,
     )
-    run_command(["python3", "evaluate_track3_outputs.py", "--strict"], cwd=track3_data_dir)
+    run_command(["python3", "evaluate_microsoft_iq_outputs.py", "--strict"], cwd=foundry_data_dir)
 
     if args.run_fallback_check:
-        run_command(["python3", "run_track3_simulation.py", "--scenario-id", "Q1", "--mode", "tool-a-down"], cwd=track3_data_dir)
-        run_command(["python3", "run_track3_simulation.py", "--scenario-id", "Q1", "--mode", "tool-b-down"], cwd=track3_data_dir)
-        run_command(["python3", "run_track3_simulation.py", "--scenario-id", "Q1", "--mode", "both-down"], cwd=track3_data_dir)
-        run_command(["python3", "evaluate_track3_outputs.py", "--strict"], cwd=track3_data_dir)
+        run_command(["python3", "run_microsoft_iq_simulation.py", "--scenario-id", "Q1", "--mode", "fabric-down"], cwd=foundry_data_dir)
+        run_command(["python3", "run_microsoft_iq_simulation.py", "--scenario-id", "Q1", "--mode", "work-down"], cwd=foundry_data_dir)
+        run_command(["python3", "run_microsoft_iq_simulation.py", "--scenario-id", "Q1", "--mode", "web-down"], cwd=foundry_data_dir)
+        run_command(["python3", "run_microsoft_iq_simulation.py", "--scenario-id", "Q1", "--mode", "internal-down"], cwd=foundry_data_dir)
+        run_command(["python3", "run_microsoft_iq_simulation.py", "--scenario-id", "Q1", "--mode", "all-down"], cwd=foundry_data_dir)
+        run_command(["python3", "evaluate_microsoft_iq_outputs.py", "--strict"], cwd=foundry_data_dir)
 
     responses: list[dict[str, Any]] = []
     for scenario_id in ("Q1", "Q2", "Q3"):
@@ -225,18 +232,25 @@ def main() -> None:
     if stale_llm_briefing.exists():
         stale_llm_briefing.unlink()
 
-    if str(track3_data_dir) not in sys.path:
-        sys.path.insert(0, str(track3_data_dir))
-    from foundry_responses import FoundryResponsesConfig, generate_leadership_briefing
-
-    foundry_config = FoundryResponsesConfig.from_env()
+    foundry_config = None
     llm_briefing_path: Path | None = None
-    if foundry_config.is_configured:
-        llm_briefing = generate_leadership_briefing(briefing, config=foundry_config)
-        llm_briefing_path = reports_dir / "leadership_briefing_llm.md"
-        llm_briefing_path.write_text(llm_briefing, encoding="utf-8")
-    elif args.require_llm_refine:
-        foundry_config.require_configured()
+    try:
+        if str(foundry_data_dir) not in sys.path:
+            sys.path.insert(0, str(foundry_data_dir))
+        from foundry_responses import FoundryResponsesConfig, generate_leadership_briefing  # noqa: PLC0415
+
+        foundry_config = FoundryResponsesConfig.from_env()
+        if foundry_config.is_configured:
+            llm_briefing = generate_leadership_briefing(briefing, config=foundry_config)
+            llm_briefing_path = reports_dir / "leadership_briefing_llm.md"
+            llm_briefing_path.write_text(llm_briefing, encoding="utf-8")
+        elif args.require_llm_refine:
+            foundry_config.require_configured()
+    except ModuleNotFoundError:
+        if args.require_llm_refine:
+            raise RuntimeError(
+                "foundry_responses module not found but --require-llm-refine was set"
+            ) from None
 
     run_meta = {
         "generatedAtUtc": generated_at,
@@ -244,7 +258,7 @@ def main() -> None:
         "sourceContract": {
             "structured": "FabricIQ simulation generated from Track1 CSV",
             "unstructured": "WorkIQ simulation generated from Track2 manifest",
-            "orchestrator": "Foundry Responses API" if foundry_config.is_configured else "rules-only",
+            "orchestrator": "Foundry Responses API" if (foundry_config and foundry_config.is_configured) else "rules-only",
         },
         "pipelineVersion": args.pipeline_version,
         "promptVersion": args.prompt_version,
@@ -257,7 +271,7 @@ def main() -> None:
     metadata_path = reports_dir / "daily_run_metadata.json"
     metadata_path.write_text(json.dumps(run_meta, ensure_ascii=False, indent=2), encoding="utf-8")
 
-    print("[Track3 Daily Briefing]")
+    print("[Track4 FoundryIQ Daily Briefing]")
     print(f"- briefing: {briefing_path}")
     print(f"- llmBriefing: {llm_briefing_path or '(skipped: Responses API not configured)'}")
     print(f"- metadata: {metadata_path}")

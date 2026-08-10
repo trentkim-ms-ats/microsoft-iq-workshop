@@ -1,4 +1,6 @@
-# Track3 daily briefing + notifications (KST 08:30 weekdays)
+# Track4 FoundryIQ daily briefing + notifications (KST 08:30 weekdays)
+# Legacy filename and TRACK3_* notification variables are retained for external
+# compatibility. Do not install or enable this schedule without human approval.
 # Assumes UTC host timezone: 30 23 * * 0-4
 # Adjust to 30 8 * * 1-5 if host is already in KST.
 #
@@ -14,7 +16,7 @@
   --model-version foundry-responses-v1 \
   --toolset-version fabriciq-1.4+workiq-2.1 \
   && /usr/bin/python3 tools/send_track3_notifications.py \
-  --reports-dir track3/data/generated/reports \
+  --reports-dir track4/data/generated/reports \
   --teams-webhook-url "$TRACK3_TEAMS_WEBHOOK_URL" \
   --email-enabled \
   --smtp-host "$TRACK3_SMTP_HOST" \
@@ -23,4 +25,4 @@
   --smtp-password "$TRACK3_SMTP_PASSWORD" \
   --email-from "$TRACK3_EMAIL_FROM" \
   --email-to "$TRACK3_EMAIL_TO" \
-  >> /var/log/track3-daily-briefing.log 2>&1
+  >> /var/log/track4-foundry-daily-briefing.log 2>&1

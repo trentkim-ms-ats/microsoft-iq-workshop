@@ -1,0 +1,14 @@
+[TRACK2_WORKIQ_HANDOFF_PACKAGE]
+team=Team-A
+handoffAtKst=<YYYY-MM-DD HH:MM>
+workspaceId=<WORKSPACE_ID>
+ontologyId=<ONTOLOGY_ID>
+ontologyName=retail_track1_ontology_v1
+entityCount=14
+relationshipCount=20
+corePaths=Campaign->Order->Payment;Order->Shipment->Return;Promotion->Order->Margin
+mappingHighlights=Order:orders.order_status;Payment:payments.payment_status;Shipment:shipments.shipment_status;Campaign:campaign_attribution.campaign_id;SupportTicket:support_tickets.ticket_reason
+openIssues=GraphModel live query not run|environment dependency|use SQL baseline;Ontology API preview|contract may change|keep definition export;mapping coverage sample only|full review pending|complete mapping sheet
+workiqKeys=캠페인명,SummerPush,VIPRetention,FlashWeek,BackToSchool;상품명,AeroPhone X,SmartWatch Pro,UltraBook 15,DailyTee Cotton;고객등급,Platinum
+evidenceLinks=generated/workbench/mission5_mapping_review.json
+[/TRACK2_WORKIQ_HANDOFF_PACKAGE]

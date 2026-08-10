@@ -1,6 +1,14 @@
 # GitHub Copilot Multi-Agent Workshop Environment
 
-이 폴더는 GitHub Copilot CLI가 자동 탐색하는 저장소 범위 Custom Agent 프로필을 제공합니다. 참가자와 운영자는 역할별 Subagent와 `/fleet`을 사용해 3-IQ 워크숍을 병렬 리뷰하고, 안전하게 시뮬레이션·테스트할 수 있습니다.
+이 폴더는 GitHub Copilot CLI가 자동 탐색하는 저장소 범위 Custom Agent 프로필을 제공합니다. 참가자와 운영자는 역할별 Subagent와 `/fleet`을 사용해 Microsoft IQ 워크숍을 병렬 리뷰하고, 안전하게 시뮬레이션·테스트할 수 있습니다. 참가자 학습 순서는 Track1 FabricIQ → Track2 WorkIQ → Track3 WebIQ → Track4 FoundryIQ입니다.
+
+모든 에이전트의 현재 계획 원본은
+[Microsoft IQ 워크숍 통합 계획](../../common/docs/Microsoft_IQ_Workshop_Integrated_Plan.md)입니다.
+legacy 두 소스 계획과 체크리스트는 historical 비교에만 사용합니다.
+
+모든 문서·프롬프트는 사람이 읽는 명칭으로 **Microsoft IQ**를 사용합니다.
+숫자 기반 legacy 브랜드 별칭을 다시 도입하지 마세요. 실제 외부 저장소 slug/URL과
+`track3_*`/`TRACK3_*`/`run_track3_*` 같은 기술 호환성 식별자만 예외입니다.
 
 ## 1. 제공 에이전트
 
@@ -70,8 +78,8 @@ Copilot CLI에서 Plan Mode로 전환하려면 `Shift+Tab`을 사용합니다. �
 
 ```text
 /fleet 승인된 계획을 구현해줘.
-@workshop-coder는 track3/data의 코드 변경만 담당하고,
-@documentation-reviewer는 common/docs와 track3 문서 동기화만 담당해줘.
+@workshop-coder는 track4/data의 FoundryIQ 코드 변경만 담당하고,
+@documentation-reviewer는 common/docs와 track3/track4 문서 동기화만 담당해줘.
 서로 같은 파일을 수정하지 말고, --execute와 라이브 endpoint 호출은 금지해줘.
 ```
 
@@ -83,7 +91,7 @@ Copilot CLI에서 Plan Mode로 전환하려면 `Shift+Tab`을 사용합니다. �
 
 ```text
 /fleet 최종 배포 준비도를 병렬 검증해줘.
-먼저 @workshop-tester가 AGENTS.md의 비파괴 검증과 Track3 normal/fallback 회귀를 완료하게 해줘.
+먼저 @workshop-tester가 AGENTS.md의 비파괴 검증과 Track4 Foundry normal/fallback 회귀를 완료하게 해줘.
 테스트가 생성 파일 쓰기를 모두 마친 후에만,
 @security-auditor는 diff와 완성된 생성 산출물의 시크릿·권한 위험을 감사하고,
 @documentation-reviewer는 로컬 링크와 교차 문서 정책 일관성을 병렬 검사해줘.
@@ -95,8 +103,8 @@ PASS, FAIL, BLOCKED, NOT RUN을 구분하고 라이브 검증이 필요한 항�
 ### 전체 워크숍 안전 리허설
 
 ```text
-/fleet 참가자가 Track1에서 Track3까지 워크숍을 실행할 수 있는지 비파괴 방식으로 리허설해줘.
-먼저 @workshop-tester가 Track2 생성·배포 dry-run과 Track3 normal·fallback·strict 평가를 실행하게 해줘.
+/fleet 참가자가 Track1 → Track2 → Track3 WebIQ → Track4 FoundryIQ 순서로 워크숍을 실행할 수 있는지 비파괴 방식으로 리허설해줘.
+먼저 @workshop-tester가 Track2 생성·배포 dry-run과 Track4 Foundry normal·fallback·strict 평가를 실행하게 해줘.
 테스트 완료 후 @workshop-runner는 QUICKSTART와 강사 체크리스트 기준으로 결과, 단계별 준비도, handoff를 점검하고,
 @security-auditor는 샘플/격리 원칙, 시크릿, ACL 증적의 충분성을 감사하고,
 @documentation-reviewer는 참가자 명령과 링크를 병렬 확인하게 해줘.
@@ -108,19 +116,21 @@ M365 --execute, live endpoint, 실제 사용자 데이터는 사용하지 말고
 ```text
 /fleet Track2 참가자 흐름을 점검해줘.
 먼저 @workshop-tester가 60개 샘플 분포와 deployment_config.json dry-run을 검증하게 해줘.
-검증 완료 후 @workshop-runner는 Track1 handoff → 키워드 프로브 → 4대 소스 → 품질 8항목 → Track3 handoff 순서와 결과를 검토하고,
+검증 완료 후 @workshop-runner는 Track1 handoff → 키워드 프로브 → 4대 소스 → 품질 8항목 → Track3 WebIQ → Track4 Foundry handoff 순서와 결과를 검토하고,
 @security-auditor는 ACL probe가 실제 security trimming을 과장하지 않는지 감사하게 해줘.
 라이브 배포는 하지 마.
 ```
 
-### Track3 장애 훈련
+### Track4 FoundryIQ Microsoft IQ 장애 훈련
 
 ```text
-/fleet Track3 Q1 장애 훈련을 실행해줘.
-먼저 @workshop-tester가 normal, tool-a-down, tool-b-down, both-down simulation과 strict 평가를 실행하게 해줘.
+/fleet Track4 FoundryIQ Q1 장애 훈련을 실행해줘.
+먼저 @workshop-tester가 Track3 WebIQ fixture를 검증하고, Track4 FoundryIQ normal Q1~Q3,
+Q1 fabric-down/work-down/web-down/internal-down/all-down simulation, 그리고 해당 출력 전체의 strict 평가를 순서대로 실행하게 해줘.
 실행 완료 후 @workshop-runner는 5초→10초→20초 재시도 및 부분응답 정책을 참가자 관점에서 판정하고,
 @security-auditor는 오류가 성공 형태의 빈 응답으로 숨겨지지 않는지 감사하게 해줘.
 simulation 결과를 live 결과로 표현하지 마.
+legacy two-source Microsoft IQ regression은 명시적으로 요청된 경우에만 별도 실행·보고해줘.
 ```
 
 ## 6. 검증 기준
@@ -131,8 +141,11 @@ Subagent는 루트 `AGENTS.md`를 최우선으로 적용해야 합니다. 최소
 2. Python 문법 검사 통과
 3. Track2 60개 샘플 생성과 배포 dry-run 통과
 4. Track1 handoff 및 ACL 보고서가 제공된 경우 strict 검증
-5. Track3 샘플 생성, normal simulation, strict 평가 통과
-6. 필요 시 Tool A/B 장애와 양쪽 장애 fallback 검증
+5. Track3 WebIQ fixture 검증 후 Track4 FoundryIQ normal Q1~Q3 simulation, Q1
+   `fabric-down`/`work-down`/`web-down`/`internal-down`/`all-down`, 그리고 전체
+   출력의 strict 평가 통과
+6. legacy two-source Microsoft IQ regression은 명시적으로 요청된 경우에만 실행하고 Microsoft IQ
+   게이트와 분리해 보고
 7. 노트북 JSON·코드 셀, Actions YAML, Logic Apps JSON 구문 확인
 8. 소스·노트북·문서·생성 산출물의 하드코딩 시크릿 0건
 

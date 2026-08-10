@@ -4,12 +4,12 @@
   "parameters": {
     "logicAppName": {
       "type": "string",
-      "defaultValue": "track3-daily-briefing-la"
+      "defaultValue": "track4-foundry-daily-briefing-la"
     },
     "runnerWebhookUrl": {
       "type": "string",
       "metadata": {
-        "description": "HTTPS endpoint that runs tools/run_track3_daily_briefing.py (Function/App/Container endpoint)"
+        "description": "HTTPS endpoint that runs the Track4 FoundryIQ helper tools/run_track3_daily_briefing.py"
       }
     },
     "runnerWebhookKey": {
@@ -40,7 +40,7 @@
       "name": "[parameters('logicAppName')]",
       "location": "[resourceGroup().location]",
       "properties": {
-        "state": "Enabled",
+        "state": "Disabled",
         "definition": {
           "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
           "contentVersion": "1.0.0.0",
@@ -71,7 +71,7 @@
             }
           },
           "actions": {
-            "Invoke_Track3_Runner": {
+            "Invoke_Track4_Foundry_Runner": {
               "type": "Http",
               "inputs": {
                 "method": "POST",

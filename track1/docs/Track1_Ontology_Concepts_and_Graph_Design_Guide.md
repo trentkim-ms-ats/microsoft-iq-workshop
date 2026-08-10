@@ -3,7 +3,7 @@
 이 문서는 Track 1의 고급 시나리오(캠페인/결제/배송/재고/프로모션/CS)를 기준으로, 데이터 구조를 **Ontology 관점**에서 설명합니다.
 
 > 📌 **관계명 규칙 안내**: 이 문서의 관계명(`contains`, `has_payment`, `applies_promotion` 등)은 개념 이해를 돕는 **예시 표현**입니다.
-> 실습에서 실제로 사용하는 **정규 엔터티/관계명·카디널리티**는 [WORKBOOK.md 미션 4](../WORKBOOK.md#미션-4-ontology-엔터티관계-설계-40분---상세-설명)의 "권장 기준 관계 전체 목록(20개)"을 기준으로 삼으세요. 3-IQ 통합 품질을 위해 Track 2/3에서도 실습지 미션 4의 이름을 그대로 재사용합니다.
+> 실습에서 실제로 사용하는 **정규 엔터티/관계명·카디널리티**는 [WORKBOOK.md 미션 4](../WORKBOOK.md#미션-4-ontology-엔터티관계-설계-40분---상세-설명)의 "권장 기준 관계 전체 목록(20개)"을 기준으로 삼으세요. Microsoft IQ workshop 통합 품질을 위해 Track 2/3에서도 실습지 미션 4의 이름을 그대로 재사용합니다.
 
 ## 1) 먼저 전체 그림
 
@@ -244,7 +244,7 @@ Return
    - 경로: `Campaign -> Order -> Return`
 2. FabricIQ(정형)에서 수치 집계
 3. WorkIQ(비정형)에서 문서 근거 검색
-4. FoundryIQ가 수치 + 근거를 결합해 최종 답변 생성
+4. Track4 FoundryIQ가 FabricIQ 수치, WorkIQ 근거, Track3 WebIQ citation을 결합해 최종 답변 생성
 
 즉, Ontology는 데이터 사전을 넘어 **질문 라우팅 스키마** 역할을 합니다.
 

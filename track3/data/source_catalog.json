@@ -1,0 +1,57 @@
+{
+  "schemaVersion": "1.0",
+  "catalogAsOf": "2026-07-28",
+  "defaultMarket": "ko-KR",
+  "policy": {
+    "minimumCitationsPerScenario": 2,
+    "requireOfficialPrimarySource": true,
+    "humanApprovalRequired": true,
+    "forbiddenQueryFields": [
+      "customer_id",
+      "order_id",
+      "email",
+      "internal_url",
+      "unpublished_metric"
+    ]
+  },
+  "scenarios": [
+    {
+      "scenarioId": "Q1",
+      "internalQuestion": "결제 실패가 캠페인 전환율에 미치는 영향은 무엇인가?",
+      "webQuestion": "분석 기간에 외부 결제 서비스의 공식 장애 공지가 있었는가?",
+      "queryTemplate": "공식 결제 서비스 상태 페이지에서 {date_range} 장애 또는 성능 저하 공지를 찾아 발생 시각과 복구 시각을 URL과 함께 보여줘",
+      "allowedDomains": [
+        "status.stripe.com",
+        "paypal-status.com",
+        "www.paypal-status.com"
+      ],
+      "interpretationBoundary": "내부 결제 제공자가 확인되고 시간대가 일치할 때만 원인 후보로 제시한다."
+    },
+    {
+      "scenarioId": "Q2",
+      "internalQuestion": "배송 지연은 반품률과 고객 불만 티켓에 어떤 영향을 미치는가?",
+      "webQuestion": "분석 기간과 배송 지역에 공식 기상 또는 교통 경보가 있었는가?",
+      "queryTemplate": "{date_range} {region} 공식 기상 경보와 항공·교통 운영 공지를 찾아 적용 지역과 시간을 URL과 함께 보여줘",
+      "allowedDomains": [
+        "api.weather.gov",
+        "weather.gov",
+        "www.weather.gov",
+        "nasstatus.faa.gov"
+      ],
+      "interpretationBoundary": "샘플 데이터에 지역이 없으면 외부 사건을 배송 지연의 직접 원인으로 단정하지 않는다."
+    },
+    {
+      "scenarioId": "Q3",
+      "internalQuestion": "Q3 핵심 상품 3종의 매출/반품 신호를 어떻게 해석할 것인가?",
+      "webQuestion": "전자제품 범주의 공식 안전 공지나 사이버보안 지침이 있는가?",
+      "queryTemplate": "{date_range} 스마트폰 스마트워치 노트북 범주의 공식 안전 리콜 또는 사이버보안 지침을 URL과 함께 보여줘",
+      "allowedDomains": [
+        "cpsc.gov",
+        "www.cpsc.gov",
+        "nist.gov",
+        "www.nist.gov"
+      ],
+      "interpretationBoundary": "AeroPhone X, SmartWatch Pro, UltraBook 15는 가상 상품이므로 외부 공지는 범주 수준 참고로만 사용한다."
+    }
+  ]
+}

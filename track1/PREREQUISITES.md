@@ -1,10 +1,11 @@
 # Track1 실습 준비물 상세 설명
 
 이 문서는 트랙1(FabricIQ 시맨틱 레이어) 실습 준비물을 상세히 설명합니다.  
-Track 2/3 준비물은 아래 별도 문서를 참조하세요.
+Track2 완료 뒤에는 Track3 WebIQ를 거쳐 Track4 FoundryIQ로 이동합니다. 준비물은 아래 문서를 참조하세요.
 
 - Track 2: [PREREQUISITES.md](../track2/PREREQUISITES.md)
-- Track 3: [PREREQUISITES.md](../track3/PREREQUISITES.md)
+- Track 3 WebIQ: [PREREQUISITES.md](../track3/PREREQUISITES.md)
+- Track 4 FoundryIQ: [PREREQUISITES.md](../track4/PREREQUISITES.md)
 
 > Track1 종료 시에는 Track2 시작을 위해 [WORKBOOK.md](WORKBOOK.md)의 **Track2 인계 패키지**를 반드시 작성합니다.
 
@@ -223,8 +224,10 @@ Track 2/3 준비물은 아래 별도 문서를 참조하세요.
 - 로드 순서 가이드(TXT): `load_order.txt`
 - 데이터셋 개요: [track1/data/README.md](./data/README.md)
 
-> ⚠️ **의도된 노이즈 포함**: 이 데이터는 프로파일링/표준화/검증 미션이 성립하도록 결측·중복·이상값·참조 무결성 오류·비표준 코드셋을 **의도적으로** 포함합니다.
-> 강사/운영자는 [Track1_Instructor_Data_Answer_Key.md](./docs/Track1_Instructor_Data_Answer_Key.md)에서 노이즈의 정확한 위치와 미션별 예상 발견을 확인하세요.
+> ⚠️ **강사/회귀용 P1 사례 포함**: 결측·중복·이상값·참조 무결성 사례는
+> 품질 개념 설명과 회귀 재현을 위해 남아 있습니다. 참가자는 이를 찾거나 수정하지
+> 않으며 제출물·평가·Track2 시작 조건에도 포함하지 않습니다. 강사/운영자만
+> [Track1_Instructor_Data_Answer_Key.md](./docs/Track1_Instructor_Data_Answer_Key.md)를 참고하세요.
 > WorkIQ 매칭용 M365 시드 콘텐츠는 [Track1_WorkIQ_Seed_Content_Specification.md](./docs/Track1_WorkIQ_Seed_Content_Specification.md) 참고.
 
 ### Fabric에서 데이터 적재하는 방법 (권장: Notebook PySpark 일괄 로드)
@@ -341,10 +344,10 @@ SELECT COUNT(*) AS cnt FROM support_tickets;
 
 ### 권장 포함 항목
 1. 질문 정의서 (공통 질문 5개, 필요한 테이블/컬럼)
-2. 프로파일링 결과 (결측/중복/분포/이상값, 이슈 심각도)
+2. 데이터 구조·품질 개념 요약 (P1 오류 위치·건수 탐지 제외)
 3. 표준 스키마 규칙표 (키/타입/코드 규칙)
 4. Ontology 모델 v0.1 (엔터티/관계/카디널리티)
-5. 매핑표 및 검증 결과 (원천->표준->Ontology, 검증 쿼리 결과)
+5. 매핑표 및 의미 경로 확인 결과 (원천->표준->Ontology, SQL baseline)
 
 ### Markdown 표 예시
 ```md

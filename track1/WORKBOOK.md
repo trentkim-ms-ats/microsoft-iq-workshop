@@ -1,9 +1,13 @@
 # 트랙1 실습지(참가자용) v1.0
 
+> 이 트랙의 시나리오, CSV, Ontology 계약을 기준으로 진행합니다. 전체 순서는 [Microsoft IQ 입문자 학습 지도](../common/docs/Microsoft_IQ_Beginner_Learning_Map.md)를 참조하세요.
+
 - 트랙명: Track 1 — FabricIQ 시맨틱 레이어: Fabric + Ontology(Preview) 데이터 준비
-- 3-IQ 통합 스택 내 위치: **FabricIQ 구축 단계**. Track 2에서 WorkIQ 인덱스와 연결되고, Track 3에서 FoundryIQ 에이전트의 그라운딩 소스로 사용됩니다.
+- 네 구성요소 Microsoft IQ 흐름 내 위치: **FabricIQ 구축 단계**. Track2에서 WorkIQ 인덱스와 연결되고, Track3에서 WebIQ 공개 확인 질문과 분리해 사용한 뒤, Track4에서 FoundryIQ orchestration의 정형 근거로 사용됩니다.
 - 총 시간: 150분 (실습 140분 + 휴식 10분)
-- 권장 시간대: 09:35-12:05
+- 현재 1일 운영 시간대: 09:30-12:00.
+  [canonical 통합 계획](../common/docs/Microsoft_IQ_Workshop_Integrated_Plan.md#current-480-minute-schedule)의
+  순서와 분량을 따릅니다.
 - 대상: 데이터/SQL 기초 보유자
 
 ## 참고 자료
@@ -14,23 +18,23 @@
 - 공통 설계 의도: [데이터 구조 설계 의도](./docs/Track1_Data_Structure_Detailed_Guide.md#design-intent)
 - 고급 기준 시나리오: [End-to-End 복합 관계 시나리오](./docs/Track1_Data_Structure_Detailed_Guide.md#advanced-scenario)
 - 미션 1 참고: [원천 테이블 구조와 역할](./docs/Track1_Data_Structure_Detailed_Guide.md#source-table-structure)
-- 미션 2 참고: [프로파일링 관점 체크포인트](./docs/Track1_Data_Structure_Detailed_Guide.md#profiling-checkpoints)
+- 미션 2 참고: [데이터 품질 개념과 구조 확인](./docs/Track1_Data_Structure_Detailed_Guide.md#profiling-checkpoints)
 - 미션 3 참고: [표준화 규칙의 구조적 의미](./docs/Track1_Data_Structure_Detailed_Guide.md#standardization-rules)
 - 미션 4 참고: [Ontology 구조(의미 모델)](./docs/Track1_Data_Structure_Detailed_Guide.md#ontology-model)
-- 미션 5 참고: [3단 매핑 구조](./docs/Track1_Data_Structure_Detailed_Guide.md#mapping-3step), [검증 구조](./docs/Track1_Data_Structure_Detailed_Guide.md#validation-structure), [의미 질의 검증 구조(선택)](./docs/Track1_Data_Structure_Detailed_Guide.md#semantic-validation-structure)
+- 미션 5 참고: [3단 매핑 구조](./docs/Track1_Data_Structure_Detailed_Guide.md#mapping-3step), [의미 질의 검증 구조](./docs/Track1_Data_Structure_Detailed_Guide.md#semantic-validation-structure)
 
 
 ## 실습 목표
 1. 원천 데이터를 FabricIQ가 이해 가능한 표준 시맨틱 구조로 정리한다.
-2. Ontology 엔터티/관계/속성을 정의해 3-IQ 스택 공통 어휘로 만든다.
-3. 원천-표준-온톨로지 매핑 및 1차 정합성 검증을 통과해 Track 2/3의 입력을 확정한다.
+2. Ontology 엔터티/관계/속성을 정의해 Microsoft IQ workshop 공통 어휘로 만든다.
+3. 원천-표준-온톨로지 매핑과 의미 경로를 확인해 WorkIQ, WebIQ, FoundryIQ의 공통 내부 기준을 확정한다.
 
 ## 완료 기준(DoD)
 1. 엔터티 10-16개, 관계 15-25개 정의 완료.
    - **통과 범위**는 10-16/15-25이며, 본 워크숍의 **권장 기준 모델**은 엔터티 14개/관계 20개입니다.
 2. 매핑표(원천 컬럼 -> 표준 컬럼 -> Ontology 속성) 100% 작성.
-3. 검증 쿼리 3종(참조 무결성, 코드 유효성, 중복/결측) 실행 및 결과 제출 완료.
-   - 참조 무결성 오류 2건, PK 중복 1건, 금액 정합성 불일치 2건을 실제로 검출해 목록화.
+3. 핵심 매핑 5개 이상과 Ontology 의미 경로 2개를 확인하고 결과 제출 완료.
+   - P1 데이터 오류 탐지·수정 쿼리는 참가자 실습과 완료 기준에 포함하지 않음.
 
 ## 실습 준비물
 1. Fabric Workspace 접근 권한
@@ -48,13 +52,13 @@
 ## 중간 점검 타임마커
 - **T+20 (미션2 초반)**  
   - 14개 테이블 접근/필수 컬럼 확인 완료
-  - 프로파일링 쿼리 실행 시작 상태 확인
+  - 데이터 품질 개념 설명과 Q1~Q5 영향 연결 완료
 - **T+60 (미션3 진행 중)**  
   - 표준 스키마(키/타입/코드) 초안 확정
   - 주문/결제/배송 + 문의유형 + 반품사유 코드셋 정렬 상태 확인
 - **T+130 (미션5 진행 중)**  
   - 매핑표 70% 이상 작성
-  - 검증 쿼리 3종(참조 무결성/코드 유효성/중복·결측) 실행 여부 확인
+  - 의미 경로 2개와 SQL 기준값 준비 여부 확인
 
 ## 단계별 미션
 
@@ -362,87 +366,35 @@ ORDER BY repurchase_rate ASC;
 - `returned_customers`가 매우 작은 조합(표본 왜곡)과 고객등급 결측 그룹은 별도로 분리해 해석합니다.
 - **해석**: 동일한 "반품"이라도 저등급·품질불만 세그먼트의 이탈 위험이 가장 크므로, 보상 정책과 상세 안내 개선의 **우선순위**를 이 조합에 두어야 합니다.
 
-> **신호 재현·확인**: 위 Q1~Q5 수치는 v1.2 데이터셋(seed `20260701`) 기준 근사치이며 방향성이 핵심입니다. `python track1/data/generate_track1_samples.py`로 데이터를 재생성하면 동일한 신호와 모든 의도적 노이즈가 그대로 재현됩니다. 상세 기대치는 [강사용 정답노트](./docs/Track1_Instructor_Data_Answer_Key.md)와 [데이터 README](./data/README.md#7-q1q5-기대-신호-강사-확인용)를 참고하세요.
+> **신호 재현·확인**: 위 Q1~Q5 수치는 v1.2 데이터셋(seed `20260701`) 기준 근사치이며 방향성이 핵심입니다. 데이터 재생성은 강사/운영자가 수행하며, 참가자는 [데이터 README](./data/README.md#7-q1q5-기대-신호-강사-확인용)의 분석 신호만 참고합니다. P1 사례의 위치·건수는 참가자 과제가 아닙니다.
 
 #### 체크
 - 질문 5개 확정
 - 질문-테이블 매핑 완료
 
-### 미션 2. 데이터 프로파일링 (30분) - [상세 설명](./docs/Track1_Data_Structure_Detailed_Guide.md#profiling-checkpoints)
-1. 결측률, 중복률, 이상값, 코드값 분포를 점검한다.
-2. 품질 이슈를 심각도(High/Medium/Low)로 분류한다.
+### 미션 2. 데이터 구조 읽기와 품질 개념 이해 (30분) - [상세 설명](./docs/Track1_Data_Structure_Detailed_Guide.md#profiling-checkpoints)
 
-#### 미션 2 핵심 프로파일링 쿼리 3종 (분리 실행)
+P1 데이터 검증은 설명만 듣고, 오류 위치·건수 탐지와 수정 쿼리는 실행하지 않습니다.
 
-##### 2-1) 결측률 점검 (payments)
+1. 14개 테이블의 행 수, 필수 컬럼, 로드 순서를 확인한다.
+2. Q1~Q5마다 필요한 키와 날짜·상태·금액 컬럼을 데이터 사전에서 찾는다.
+3. 강사의 설명을 듣고 품질 문제가 분석에 주는 영향을 한 줄씩 기록한다.
 
-**왜 이 쿼리를 먼저 보는가**  
-결측은 조인 누락/집계 왜곡의 가장 기본 원인입니다. 특히 `payment_status` 결측은 Q1(결제 실패↔전환율) 해석에 직접 영향을 줍니다.
+| 품질 개념 | 운영 영향 예 | 이 실습에서 하는 일 |
+|---|---|---|
+| 참조 무결성 | 주문과 결제가 연결되지 않아 경로가 끊김 | 개념과 영향만 이해 |
+| PK 중복 | 배송 건수가 과대 집계될 수 있음 | 개념과 영향만 이해 |
+| 결측 | 상태·날짜 기준 분류가 불가능할 수 있음 | 개념과 영향만 이해 |
+| 이상값 | 매출·재고·마진 지표가 왜곡될 수 있음 | 개념과 영향만 이해 |
+| 비표준 코드 | 같은 상태가 여러 표현으로 나뉨 | 미션 3에서 표준 매핑 설계 |
 
-**무엇을 확인하는가**  
-- `payment_id` 결측률: 식별자 결측 여부  
-- `order_id` 결측률: 주문 연결 가능 여부(FK 관점)  
-- `payment_status` 결측률: 결제 성공/실패 분류 가능 여부
-
-```sql
-SELECT
-  SUM(CASE WHEN payment_id IS NULL THEN 1 ELSE 0 END) * 100.0 / COUNT(*) AS null_rate_payment_id,
-  SUM(CASE WHEN order_id IS NULL THEN 1 ELSE 0 END) * 100.0 / COUNT(*) AS null_rate_order_id,
-  SUM(CASE WHEN payment_status IS NULL OR payment_status = '' THEN 1 ELSE 0 END) * 100.0 / COUNT(*) AS null_rate_payment_status
-FROM payments;
-```
-
-**결과 해석 포인트**  
-- `payment_status` 결측이 0이 아니면, 미션 3에서 코드 표준화 전에 결측 처리 정책(삭제/보정/Unknown 코드)을 먼저 합의해야 합니다.
-
-##### 2-2) 중복 키 점검 (shipments)
-
-**왜 이 쿼리를 보는가**  
-중복 키는 1:N 관계를 의도치 않게 N:N으로 바꿔버려, 주문/배송 관련 집계를 과대 계산하게 만듭니다.
-
-**무엇을 확인하는가**  
-- `shipment_id`가 유일해야 하는 식별자인지  
-- 중복 발생 시 어떤 키에서 몇 건 중복인지
-
-```sql
-SELECT shipment_id, COUNT(*) cnt
-FROM shipments
-GROUP BY shipment_id
-HAVING COUNT(*) > 1;
-```
-
-**결과 해석 포인트**  
-- 결과가 1건 이상이면 미션 3에서 PK 규칙 위반으로 분류하고, 중복 제거 기준(최신건 우선/완전중복 제거)을 명시해야 합니다.
-
-##### 2-3) 이상값 점검 (가격/할인/재고/수량)
-
-**왜 이 쿼리를 보는가**  
-이상값은 지표를 즉시 왜곡합니다. 예를 들어 음수 수량/음수 재고/음수 할인은 매출·재고·마진 해석을 깨뜨립니다.
-
-**무엇을 확인하는가**  
-- 0 이하 가격, 음수 할인, 음수 재고, 0 이하 수량의 위반 건수
-- 위반 유형을 한 번에 비교할 수 있도록 `issue` 라벨과 건수로 집계
-
-```sql
-SELECT 'products.unit_price<=0' AS issue, COUNT(*) c FROM products WHERE unit_price <= 0
-UNION ALL SELECT 'promotions.discount<0', COUNT(*) FROM promotions WHERE discount_amount < 0
-UNION ALL SELECT 'inventory.on_hand<0', COUNT(*) FROM inventory_snapshots WHERE on_hand_qty < 0
-UNION ALL SELECT 'order_items.qty<=0', COUNT(*) FROM order_items WHERE quantity <= 0;
-```
-
-**결과 해석 포인트**  
-- 건수가 0이 아닌 항목은 미션 3에서 유효범위 규칙(`unit_price>=0`, `discount>=0`, `on_hand>=0`, `qty>0`)으로 강제해야 합니다.
-
-> 💡 이 데이터셋에는 품질 이슈가 **의도적으로** 포함되어 있습니다. 아래 유형을 모두 찾으면 이슈 10개 이상 도출이 가능합니다.
-> - 결측(NULL) 5건 (customer_segment / order_date / payment_status / return_reason / ticket_reason)
-> - 이상값 4건 (price 0 / 음수 할인 / 음수 재고 / 음수 수량)
-> - 비표준 상태 코드셋 3종 (orders / payments / shipments) → 미션 3에서 표준화
-> - 금액 정합성 불일치 2건 (`gross_amount` ≠ `SUM(order_items.sales_amount)`)
-> - 날짜(Date)와 타임스탬프(DateTime) 포맷 혼재
+> 데이터셋에는 강사 설명과 회귀 재현을 위한 P1 사례가 남아 있습니다. 참가자는
+> 사례를 찾거나 수정하지 않으며, 해당 건수는 제출물·평가·Track2 시작 조건이 아닙니다.
 
 #### 체크
-- 필수 테이블 14개 중 10개 이상 프로파일링 완료
-- 이슈 목록 최소 5개 기록 (본 데이터셋은 10개 이상 발견 가능)
+- 14개 테이블 접근과 필수 컬럼 확인
+- Q1~Q5 질문-키-컬럼 연결표 작성
+- 품질 개념이 KPI/Ontology에 미치는 영향 요약
 
 ### 미션 3. 표준 스키마 설계 (30분) - [상세 설명](./docs/Track1_Data_Structure_Detailed_Guide.md#standardization-rules)
 1. 공통 키 규칙을 정의한다.
@@ -662,55 +614,32 @@ Workspace 준비 → Ontology item 생성 → Entity type 추가 → Property �
 - 엔터티/관계 수량 기준 충족
 - 카디널리티 누락 없음
 
-### 미션 5. 매핑 및 1차 검증 (30분) - [매핑](./docs/Track1_Data_Structure_Detailed_Guide.md#mapping-3step) / [검증](./docs/Track1_Data_Structure_Detailed_Guide.md#validation-structure)
+### 미션 5. 매핑 및 의미 경로 확인 (30분) - [매핑](./docs/Track1_Data_Structure_Detailed_Guide.md#mapping-3step) / [의미 경로 확인](./docs/Track1_Data_Structure_Detailed_Guide.md#semantic-validation-structure)
 1. 원천 컬럼 -> 표준 컬럼 -> Ontology 속성 매핑을 작성한다.
-2. 무결성 검증 쿼리 3종을 실행한다.
-3. (선택) [의미 질의 검증 구조](./docs/Track1_Data_Structure_Detailed_Guide.md#semantic-validation-structure) 기준으로 온톨로지 경로 기반 검증을 수행한다.
+2. 시나리오 A와 B의 엔터티-관계 경로가 `getDefinition`에 존재하는지 확인한다.
+3. 제공된 SQL 기준값을 실행해 의미 경로 비교용 baseline을 저장한다.
+4. GraphModel 사용 가능 환경에서만 `executeQuery` 결과와 비교한다.
 
-```sql
--- 참조 무결성: payments.order_id -> orders.order_id  (기대: 1건 검출)
-SELECT p.payment_id
-FROM payments p
-LEFT JOIN orders o ON p.order_id = o.order_id
-WHERE o.order_id IS NULL;
+| 시나리오 | 질문 | 확인 경로 |
+|---|---|---|
+| A | 캠페인 유입 주문 중 결제 실패 주문은? | `Campaign -> CampaignAttribution -> Order -> Payment` |
+| B | 프로모션 유형별 재구매율은? | `Promotion -> OrderPromotion -> Order -> Customer` |
 
--- 참조 무결성: support_tickets.customer_id -> customers  (기대: 1건 검출)
-SELECT t.ticket_id
-FROM support_tickets t
-LEFT JOIN customers c ON t.customer_id = c.customer_id
-WHERE c.customer_id IS NULL;
-
--- 코드값 유효성
-SELECT shipment_status, COUNT(*)
-FROM shipments
-GROUP BY shipment_status;
-
--- 중복/결측 검증  (기대: shipment_id 1건 중복)
-SELECT shipment_id, COUNT(*) AS cnt
-FROM shipments
-GROUP BY shipment_id
-HAVING COUNT(*) > 1;
-
--- 금액 정합성: gross_amount == SUM(order_items.sales_amount)  (기대: 2건 불일치)
-SELECT o.order_id, o.gross_amount, SUM(i.sales_amount) AS items_sum
-FROM orders o
-JOIN order_items i ON o.order_id = i.order_id
-GROUP BY o.order_id, o.gross_amount
-HAVING ABS(o.gross_amount - SUM(i.sales_amount)) > 0.01;
-```
+> 참조 무결성·PK 중복·결측·이상값·금액 불일치 탐지 쿼리는 이 미션에서 실행하지
+> 않습니다. 운영 검증 규칙은 [개념 참고](./docs/Track1_Data_Structure_Detailed_Guide.md#validation-structure)로만 제공합니다.
 
 #### 체크
 - 매핑표 100% 작성
-- 검증 쿼리 3종 결과 캡처
-- 기대 검출: 참조 무결성 **2건**, PK 중복 **1건**, 금액 정합성 불일치 **2건**
-- (선택) 의미 질의 검증 로그 1세트(경로 정의 + SQL 기준값 + GraphModel 실행 결과/미실행 사유)
+- 의미 경로 2개와 SQL 기준값 저장
+- `getDefinition` 경로 확인 기록
+- (선택) GraphModel 비교 로그 또는 미실행 사유
 
 ## 제출물
 1. 질문 정의서
-2. 프로파일링 결과(SQL + 이슈 목록)
+2. 데이터 구조·품질 개념 요약
 3. 표준 스키마 규칙표
 4. Ontology 모델 v0.1
-5. 매핑표 + 검증 결과
+5. 매핑표 + 의미 경로 확인 결과
 6. Track2 인계 패키지(아래 템플릿)
 
 ## Track2 시작 인계 패키지 (필수, 10분)
@@ -722,13 +651,13 @@ Track1 산출물을 Track2에서 바로 사용할 수 있도록, 아래 항목�
 | Ontology 식별 정보 | `WORKSPACE_ID`, `ONTOLOGY_ID`, Ontology 이름 |
 | 모델 요약 | 엔터티/관계 개수, 핵심 경로 3개(예: Campaign->Order->Payment) |
 | 매핑 근거 | `Entity -> table/column` 핵심 매핑 5개 이상 |
-| 품질 이슈 | 미해결 이슈 Top 3 (영향도 + 임시 우회안) |
-| WorkIQ 매칭 키 | 캠페인명/상품명/고객등급 등 문서 검색 키워드 |
-| 검증 로그 | 미션5 SQL 결과 캡처 + (선택) 의미 질의 검증 로그 |
+| 구현 제한 | 실제 Ontology/GraphModel/매핑 관련 제한 또는 `none-known` |
+| WorkIQ 검색 키 | 캠페인명/상품명/고객등급 등 문서 검색 키워드 |
+| 의미 경로 로그 | 매핑 검토 + 의미 경로 SQL baseline + (선택) GraphModel 비교 |
 
 복붙 템플릿:
 ```text
-[TRACK2_HANDOFF_PACKAGE]
+[TRACK2_WORKIQ_HANDOFF_PACKAGE]
 team=<팀명>
 handoffAtKst=<YYYY-MM-DD HH:MM>
 workspaceId=<GUID>
@@ -738,22 +667,22 @@ entityCount=<숫자>
 relationshipCount=<숫자>
 corePaths=<Path1;Path2;Path3>
 mappingHighlights=<Entity:table.column,...>
-openIssues=<이슈1|영향|우회안; 이슈2|영향|우회안; 이슈3|영향|우회안>
+openIssues=<구현 제한|영향|우회안; ... 또는 none-known>
 workiqKeys=<캠페인명,...; 상품명,...; 고객등급,...>
 evidenceLinks=<노트북/캡처 경로>
-[/TRACK2_HANDOFF_PACKAGE]
+[/TRACK2_WORKIQ_HANDOFF_PACKAGE]
 ```
 
 ## 참가자 자가점검표
 | 항목 | 완료(Y/N) |
 |---|---|
 | 질문-테이블 매핑 완료 |  |
-| 프로파일링 이슈 5개 이상 도출 (10개 이상 가능) |  |
+| 데이터 구조와 P1 품질 개념의 영향 설명 |  |
 | 비표준 상태 코드 3종 표준화 |  |
 | 표준 스키마 규칙 확정 |  |
 | DoD 범위(엔터티 10-16/관계 15-25) 충족; 권장 14/20 확인 |  |
 | 매핑표 100% 작성 |  |
-| 검증 쿼리 3종 실행 (FK 2건·PK중복 1건·금액불일치 2건 검출) |  |
+| 의미 경로 2개와 SQL baseline 확인 |  |
 | Track2 인계 패키지 작성/공유 완료 |  |
 
 ---

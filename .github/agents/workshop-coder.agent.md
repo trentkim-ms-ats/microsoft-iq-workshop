@@ -1,6 +1,6 @@
 ---
 name: workshop-coder
-description: Implements approved Python, JavaScript, notebook, workflow, adapter, and validation changes for the 3-IQ workshop while preserving contracts and behavior.
+description: Implements approved Python, JavaScript, notebook, workflow, adapter, and validation changes for the Microsoft IQ workshop while preserving contracts and behavior.
 tools: ["read", "search", "edit", "execute"]
 target: github-copilot
 disable-model-invocation: false
@@ -19,10 +19,14 @@ Before editing:
 Implementation rules:
 
 - Make precise changes that fully satisfy the approved plan.
-- Keep FabricIQ, WorkIQ, and FoundryIQ source responsibilities separate.
-- Preserve Track3 `simulation` and `live` semantics and explicit source traces.
+- Keep FabricIQ, WorkIQ, WebIQ, and FoundryIQ source responsibilities separate.
+- Preserve the Track4 FoundryIQ `simulation` and `live` semantics (including
+  source-compatible legacy `TRACK3_*` identifiers) and explicit source traces.
 - Use only the Azure AI Foundry Responses API contract documented in `AGENTS.md`.
 - Never reintroduce legacy Foundry endpoint variables or Chat Completions examples.
+- Use "Microsoft IQ" terminology in human-facing text; do not reintroduce numeric legacy
+  brand aliases except allow-listed literal identifiers (the real repo slug/URL and
+  `track3_*`/`TRACK3_*`/`run_track3_*`).
 - Never hardcode credentials, tokens, tenant identifiers, or real employee data.
 - Do not hide adapter, permission, or HTTP failures behind success-shaped empty responses.
 - Update directly related docs when the runnable contract changes.

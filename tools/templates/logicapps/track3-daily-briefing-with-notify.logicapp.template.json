@@ -4,7 +4,7 @@
   "parameters": {
     "logicAppName": {
       "type": "string",
-      "defaultValue": "track3-daily-briefing-with-notify-la"
+      "defaultValue": "track4-foundry-daily-briefing-with-notify-la"
     },
     "runnerWebhookUrl": {
       "type": "string"
@@ -53,7 +53,7 @@
       "name": "[parameters('logicAppName')]",
       "location": "[resourceGroup().location]",
       "properties": {
-        "state": "Enabled",
+        "state": "Disabled",
         "definition": {
           "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
           "contentVersion": "1.0.0.0",
@@ -84,7 +84,7 @@
             }
           },
           "actions": {
-            "Invoke_Track3_Runner": {
+            "Invoke_Track4_Foundry_Runner": {
               "type": "Http",
               "inputs": {
                 "method": "POST",
@@ -112,11 +112,11 @@
                   "Content-Type": "application/json"
                 },
                 "body": {
-                  "text": "Track3 daily briefing completed. pipeline=@{body('Invoke_Track3_Runner')?['pipelineVersion']} model=@{body('Invoke_Track3_Runner')?['modelVersion']}"
+                  "text": "Track4 FoundryIQ daily briefing completed. pipeline=@{body('Invoke_Track4_Foundry_Runner')?['pipelineVersion']} model=@{body('Invoke_Track4_Foundry_Runner')?['modelVersion']}"
                 }
               },
               "runAfter": {
-                "Invoke_Track3_Runner": [
+                "Invoke_Track4_Foundry_Runner": [
                   "Succeeded"
                 ]
               }
@@ -132,8 +132,8 @@
                 },
                 "body": {
                   "to": "[parameters('emailTo')]",
-                  "subject": "[Track3 Daily Briefing] @{body('Invoke_Track3_Runner')?['pipelineVersion']}",
-                  "message": "Track3 daily briefing completed. metadata=@{string(body('Invoke_Track3_Runner'))}"
+                  "subject": "[Track4 FoundryIQ Daily Briefing] @{body('Invoke_Track4_Foundry_Runner')?['pipelineVersion']}",
+                  "message": "Track4 FoundryIQ daily briefing completed. metadata=@{string(body('Invoke_Track4_Foundry_Runner'))}"
                 }
               },
               "runAfter": {

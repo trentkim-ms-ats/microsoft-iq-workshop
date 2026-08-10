@@ -185,7 +185,7 @@
       [
         "액션",
         [
-          "동일 쿼리와 기준 시각을 Track3 재현 질의에 포함한다."
+          "동일 쿼리와 기준 시각을 Track4 FoundryIQ 재현 질의에 포함한다."
         ]
       ]
     ]
@@ -304,7 +304,7 @@
       "원본 링크",
       "조치안"
     ],
-    "summary": "Track3에서 정형 지표와 M365 근거를 결합하는 브리핑 구조를 제공한다.",
+    "summary": "Track4 FoundryIQ에서 정형 지표와 M365 근거를 결합하는 브리핑 구조를 제공한다.",
     "sections": [
       [
         "한 줄 결론",
@@ -430,9 +430,9 @@
   },
   {
     "id": "OD10",
-    "file": "10_Track3_Grounded_Briefing_Draft.docx",
+    "file": "10_Track4_FoundryIQ_Grounded_Briefing_Draft.docx",
     "folder": "Briefings",
-    "title": "Track3 근거 통합 브리핑 초안",
+    "title": "Track4 FoundryIQ 근거 통합 브리핑 초안",
     "type": "Briefing Draft",
     "date": "2026-07-12",
     "owner": [
@@ -447,7 +447,7 @@
       "BackToSchool",
       "원본 링크"
     ],
-    "summary": "정형 사실과 M365 업무 맥락을 결합해 Track3 에이전트가 생성할 브리핑의 기준 예시를 제공한다.",
+    "summary": "정형 사실과 M365 업무 맥락을 결합해 Track4 FoundryIQ가 사용할 브리핑의 기준 예시를 제공한다.",
     "sections": [
       [
         "정형 사실",

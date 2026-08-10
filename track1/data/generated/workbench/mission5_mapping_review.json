@@ -1,0 +1,19 @@
+{
+  "mappingRowCount": 5,
+  "mappedEntities": [
+    "Campaign",
+    "Order",
+    "Payment",
+    "Shipment",
+    "SupportTicket"
+  ],
+  "requiredEntities": [
+    "Campaign",
+    "Order",
+    "Payment",
+    "Shipment",
+    "SupportTicket"
+  ],
+  "requiredMappingsPresent": true,
+  "p1ValidationExecuted": false
+}
