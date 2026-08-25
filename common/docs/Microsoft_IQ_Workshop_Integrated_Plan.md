@@ -7,6 +7,7 @@
 - 기준일: 2026-07-30
 - 대상: 데이터·AI 도구를 처음 연결해 보는 입문자
 - 운영 기준: **480분 (1일)**
+- 산업별 PoC 확장 템플릿: [Microsoft IQ 산업별 대표 활용 시나리오](Microsoft_IQ_Industry_Scenarios.md)
 
 ## 0. 운영 원칙
 
@@ -15,7 +16,7 @@
 3. 입문자는 `simulation`으로 계약을 익힌 뒤 권한이 있을 때만 `live`를 실행한다.
 4. Track1 P1 데이터 품질 사례는 설명 전용이며 참가자 제출·진입 게이트에 포함하지 않는다.
 
-## 1. 네 가지 IQ의 책임
+## 1. Microsoft IQ의 책임
 
 | IQ | 주 소스 | 한 문장 책임 | 최종 브리핑 예 |
 |---|---|---|---|
@@ -66,7 +67,7 @@ Microsoft 제품 경계에서 Foundry IQ는 정책·권위 문서·재사용 지
 
 ## 3. 학습 목표
 
-이 워크숍은 "정답을 빠르게 내는 것"이 아니라 **네 IQ가 각각 무엇을 하고, 왜 이 순서로 연결되는지를 직접 경험하는 것**을 목표로 합니다.
+이 워크숍은 "정답을 빠르게 내는 것"이 아니라 **Microsoft IQ 구성요소가 각각 무엇을 하고, 왜 이 순서로 연결되는지를 직접 경험하는 것**을 목표로 합니다.
 
 1. FabricIQ·WorkIQ·WebIQ·FoundryIQ가 각각 어떤 데이터 소스를 사용하고 무엇을 책임지는지 설명할 수 있다.
 2. 동일한 비즈니스 질문이 IQ마다 어떻게 다르게 처리되는지 비교할 수 있다.
@@ -79,7 +80,7 @@ Microsoft 제품 경계에서 Foundry IQ는 정책·권위 문서·재사용 지
 
 | 시간 | 세션 | 분 | 간단 설명 | 참고 |
 |---|---|---:|---|---|
-| 09:00-09:30 | 오프닝·네 요소 Microsoft IQ 개념 | 30 | 네 IQ 역할 경계와 실습 흐름 소개 | [통합 아키텍처](Microsoft_IQ_Workshop_Full_Architecture.pptx) |
+| 09:00-09:30 | 오프닝·Microsoft IQ 개념 | 30 | Microsoft IQ 역할 경계와 실습 흐름 소개 | [통합 아키텍처](Microsoft_IQ_Workshop_Full_Architecture.pptx) |
 | 09:30-12:00 | Track1 FabricIQ(휴식 포함) | 150 | 정형 데이터·Ontology 준비 후 Track2 인계 생성 | [Track1 실습지](../../track1/WORKBOOK.md) · [Track1 개요](Track1_Overview.pptx) · [QUICKSTART](../../track1/QUICKSTART.md) |
 | 12:00-12:35 | 점심 | 35 | 중간 휴식 및 팀별 진행 상태 정리 | — |
 | 12:35-14:25 | Track2 WorkIQ | 110 | M365 근거 수집·품질 게이트·Track3 입력 패키지 작성 | [Track2 실습지](../../track2/WORKBOOK.md) · [Track2 개요](Track2_Overview.pptx) · [QUICKSTART](../../track2/QUICKSTART.md) |
@@ -110,7 +111,7 @@ Track4 FoundryIQ
 | FabricIQ→WorkIQ | Workspace/Ontology 식별 정보, 엔터티·관계 수, 핵심 경로 3개, 핵심 매핑 5개 이상, 구현 제한 또는 `none-known`, WorkIQ 키, 의미 경로 로그 | Track2 첫 5분에 6개 범주 검수 |
 | WorkIQ→WebIQ | 인덱스 카탈로그, 품질 8개 점수, 내부 근거 링크 5개 이상, 우선 이슈 3개, 재현 질의 3개 | 6/8 게이트 통과, 내부 질문과 공개 확인 질문 분리 |
 | WebIQ→FoundryIQ | URL·제목·관찰 시각·scope·fact status·한계, 실행 모드, privacy 점검 | Q1~Q3 각 citation 2개, 출처 품질 5/6 이상 |
-| FoundryIQ→최종 | 세 근거와 네 IQ sourceTrace | normal Q1~Q3와 fallback 5종 strict PASS |
+| FoundryIQ→최종 | 세 근거와 Microsoft IQ sourceTrace | normal Q1~Q3와 fallback 5종 strict PASS |
 
 ## 6. 실행 프로필과 완료 기준
 
@@ -122,7 +123,7 @@ Track4 FoundryIQ
 |---|---|
 | Track1~4 각 트랙 실습 완료 및 인계 패키지 생성 | 각 트랙 WORKBOOK 체크리스트 |
 | Q1~Q3 통합 시나리오 end-to-end 실행 완료 | Track4 통합 미니 프로젝트 결과 |
-| 참가자가 네 IQ의 역할과 순서를 설명할 수 있음 | 리뷰·클로징 세션 확인 |
+| 참가자가 Microsoft IQ의 역할과 순서를 설명할 수 있음 | 리뷰·클로징 세션 확인 |
 | 각 응답에 사용된 IQ 근거 출처가 명시됨 | 최종 산출물 점검 |
 
 기술 검증 기준(fixture schema 검증, simulation evaluation, fallback 테스트)은 [Track4 FoundryIQ 기술 가이드](../../track4/docs/Track3_FoundryIQ_Introduction_and_Technical_Guide.md)를 참조합니다.

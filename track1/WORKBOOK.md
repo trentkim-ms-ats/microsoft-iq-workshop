@@ -3,7 +3,7 @@
 > 이 트랙의 시나리오, CSV, Ontology 계약을 기준으로 진행합니다. 전체 순서는 [Microsoft IQ 입문자 학습 지도](../common/docs/Microsoft_IQ_Beginner_Learning_Map.md)를 참조하세요.
 
 - 트랙명: Track 1 — FabricIQ 시맨틱 레이어: Fabric + Ontology(Preview) 데이터 준비
-- 네 구성요소 Microsoft IQ 흐름 내 위치: **FabricIQ 구축 단계**. Track2에서 WorkIQ 인덱스와 연결되고, Track3에서 WebIQ 공개 확인 질문과 분리해 사용한 뒤, Track4에서 FoundryIQ orchestration의 정형 근거로 사용됩니다.
+- Microsoft IQ 흐름 내 위치: **FabricIQ 구축 단계**. Track2에서 WorkIQ 인덱스와 연결되고, Track3에서 WebIQ 공개 확인 질문과 분리해 사용한 뒤, Track4에서 FoundryIQ orchestration의 정형 근거로 사용됩니다.
 - 총 시간: 150분 (실습 140분 + 휴식 10분)
 - 현재 1일 운영 시간대: 09:30-12:00.
   [canonical 통합 계획](../common/docs/Microsoft_IQ_Workshop_Integrated_Plan.md#current-480-minute-schedule)의

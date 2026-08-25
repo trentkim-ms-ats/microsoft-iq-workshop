@@ -1,6 +1,6 @@
 # Track1 실습 데이터 구조 상세 설명
 
-이 문서는 [WORKBOOK.md](../WORKBOOK.md)에서 사용되는 데이터 구조를 상세히 설명합니다. 본 데이터 구조는 워크숍 네 구성요소 Microsoft IQ 흐름(FabricIQ + WorkIQ + WebIQ + FoundryIQ)의 **내부 공통 시맨틱 어휘**로 사용됩니다.
+이 문서는 [WORKBOOK.md](../WORKBOOK.md)에서 사용되는 데이터 구조를 상세히 설명합니다. 본 데이터 구조는 워크숍 Microsoft IQ 흐름(FabricIQ + WorkIQ + WebIQ + FoundryIQ)의 **내부 공통 시맨틱 어휘**로 사용됩니다.
 
 ## Microsoft IQ workshop에서의 역할
 

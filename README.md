@@ -22,13 +22,14 @@ Track1 FabricIQ → Track2 WorkIQ → Track3 WebIQ → Track4 FoundryIQ
 
 ## 권장 시작 순서
 
-1. [Microsoft IQ 입문자 학습 지도](common/docs/Microsoft_IQ_Beginner_Learning_Map.md)
-2. [Microsoft IQ 워크숍 통합 계획](common/docs/Microsoft_IQ_Workshop_Integrated_Plan.md)
-3. [Track1 FabricIQ 빠른 시작](track1/QUICKSTART.md)
-4. [Track2 WorkIQ 빠른 시작](track2/QUICKSTART.md)
-5. [Track3 WebIQ 빠른 시작](track3/QUICKSTART.md)
-6. [Track4 FoundryIQ 빠른 시작](track4/QUICKSTART.md)
-7. 강사·운영자용
+1. [Microsoft IQ Playground](playground/README.md)에서 Microsoft IQ의 역할과 근거 흐름 탐색
+2. [Microsoft IQ 입문자 학습 지도](common/docs/Microsoft_IQ_Beginner_Learning_Map.md)
+3. [Microsoft IQ 워크숍 통합 계획](common/docs/Microsoft_IQ_Workshop_Integrated_Plan.md)
+4. [Track1 FabricIQ 빠른 시작](track1/QUICKSTART.md)
+5. [Track2 WorkIQ 빠른 시작](track2/QUICKSTART.md)
+6. [Track3 WebIQ 빠른 시작](track3/QUICKSTART.md)
+7. [Track4 FoundryIQ 빠른 시작](track4/QUICKSTART.md)
+8. 강사·운영자용
    [Microsoft IQ 당일 운영 체크리스트](common/docs/Microsoft_IQ_Instructor_Day_of_Operations_Checklist.md)
 
 각 트랙의 상세 실습 절차는
@@ -36,6 +37,14 @@ Track1 FabricIQ → Track2 WorkIQ → Track3 WebIQ → Track4 FoundryIQ
 [Track2](track2/WORKBOOK.md),
 [Track3](track3/WORKBOOK.md),
 [Track4](track4/WORKBOOK.md) 실습지를 따릅니다.
+
+### 인터랙티브 Playground
+
+[`playground/`](playground/)는 Ontology Playground와 유사한 학습 경험으로
+FabricIQ·WorkIQ·WebIQ·FoundryIQ의 관계를 탐색합니다. 실제 저장소 산출물에서
+데이터를 생성하며 Q1~Q3 근거, `sourceTrace`, 5개 fallback 모드를 브라우저에서
+확인할 수 있습니다. 외부 endpoint를 호출하지 않는 simulation 도구이며 실행과
+배포 방법은 [Playground 안내](playground/README.md)를 따릅니다.
 
 ## 준비 사항
 
@@ -318,7 +327,7 @@ WebIQ 출처 선정, 비용, 데이터 경계, prompt-injection 방어는
 - Track2 고정 검색어 5개 중 4개 이상 검색 성공
 - Track2 품질 항목 8개 중 6개 이상이 75점 이상
 - normal Q1~Q3와 fallback 5종의 strict 평가가 `failed: 0`
-- normal 응답의 `sourceTrace`에 네 IQ가 모두 분리되어 표시
+- normal 응답의 `sourceTrace`에 Microsoft IQ 구성요소가 모두 분리되어 표시
 - simulation 응답과 브리핑에 fixture 안내가 표시
 - 공개 웹만 남은 상태가 `blocked`
 - live 운영 시 실제 URL citation, M365 ACL, adapter와 Responses API를 별도 승인 환경에서 검증

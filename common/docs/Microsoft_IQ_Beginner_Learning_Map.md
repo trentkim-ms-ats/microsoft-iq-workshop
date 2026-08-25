@@ -25,12 +25,13 @@ Foundry IQ는 조직의 권위 지식 계층(authoritative knowledge layer)이�
 
 | 순서 | 문서 | 읽고 답할 질문 |
 |---:|---|---|
-| 1 | [저장소 README](../../README.md) | 전체 결과가 무엇인가? |
-| 2 | [Microsoft IQ 워크숍 통합 계획](Microsoft_IQ_Workshop_Integrated_Plan.md) | 네 IQ의 책임은 어떻게 다른가? |
-| 3 | [Track1 FabricIQ Quick Start](../../track1/QUICKSTART.md) | 내부 수치는 어디서 오는가? |
-| 4 | [Track2 WorkIQ Quick Start](../../track2/QUICKSTART.md) | 내부 문서는 어떻게 연결되는가? |
-| 5 | [Track3 WebIQ Quick Start](../../track3/QUICKSTART.md) | 공개 웹을 어떻게 안전하게 쓰는가? |
-| 6 | [Track4 FoundryIQ Quick Start](../../track4/QUICKSTART.md) | 세 근거를 어떻게 결합하는가? |
+| 1 | [Microsoft IQ Playground](../../playground/README.md) | Microsoft IQ가 어떤 근거 흐름으로 연결되는가? |
+| 2 | [저장소 README](../../README.md) | 전체 결과가 무엇인가? |
+| 3 | [Microsoft IQ 워크숍 통합 계획](Microsoft_IQ_Workshop_Integrated_Plan.md) | Microsoft IQ 구성요소의 책임은 어떻게 다른가? |
+| 4 | [Track1 FabricIQ Quick Start](../../track1/QUICKSTART.md) | 내부 수치는 어디서 오는가? |
+| 5 | [Track2 WorkIQ Quick Start](../../track2/QUICKSTART.md) | 내부 문서는 어떻게 연결되는가? |
+| 6 | [Track3 WebIQ Quick Start](../../track3/QUICKSTART.md) | 공개 웹을 어떻게 안전하게 쓰는가? |
+| 7 | [Track4 FoundryIQ Quick Start](../../track4/QUICKSTART.md) | 세 근거를 어떻게 결합하는가? |
 
 처음에는 Appendix와 자동 배포 문서를 읽지 않아도 됩니다. 각 Quick Start에서 트러블슈팅이 필요할 때만 세부 문서로 이동합니다.
 

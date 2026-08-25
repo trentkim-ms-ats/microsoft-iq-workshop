@@ -338,7 +338,7 @@ def build_full_deck() -> None:
     add_header(
         slide,
         kicker="SYSTEM CONTEXT",
-        title="네 구성요소 Microsoft IQ 아키텍처",
+        title="Microsoft IQ 아키텍처",
         subtitle="FoundryIQ가 질문을 라우팅하고 FabricIQ, WorkIQ, WebIQ가 책임별 근거를 제공합니다.",
         number=2,
         source="AGENTS.md · integrated plan",

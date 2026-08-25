@@ -43,12 +43,12 @@ python3 evaluate_microsoft_iq_outputs.py --strict
 
 | 순서 | 세션 | 분 | 강사 게이트 |
 |---:|---|---:|---|
-| 1 | 오프닝·네 IQ 개념 | 35 | 책임 경계와 simulation/live 차이 설명 |
+| 1 | 오프닝·Microsoft IQ 개념 | 35 | 책임 경계와 simulation/live 차이 설명 |
 | 2 | Track1 FabricIQ | 140 | P1 설명 전용, `TRACK2_WORKIQ_HANDOFF_PACKAGE` 제출 |
 | 3 | Track2 WorkIQ | 110 | 8개 중 6개 이상 PASS |
 | 4 | Track3 WebIQ | 45 | 안전한 검색어, citation 품질 5/6, `TRACK4_FOUNDRYIQ_HANDOFF_PACKAGE` |
 | 5 | Track4 FoundryIQ | 145 | core 100분 + WebIQ 결합·fallback 45분 |
-| 6 | 통합 프로젝트·비교 | 50 | 네 IQ trace, 과잉 인과 제거 |
+| 6 | 통합 프로젝트·비교 | 50 | Microsoft IQ trace, 과잉 인과 제거 |
 | 7 | 리뷰·복습·클로징 | 20 | 사람 승인과 실행 모드 설명 |
 | — | 점심·휴식 | 55 | 트랙 순서를 바꾸지 않음 |
 

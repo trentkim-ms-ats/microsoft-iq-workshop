@@ -1,0 +1,70 @@
+name: Microsoft IQ Playground Pages
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - "playground/**"
+      - "track1/data/generated/workbench/mission4_*.json"
+      - "track2/data/generated/manifests/content_catalog.json"
+      - "track3/data/source_catalog.json"
+      - "track3/data/web_evidence_fixture.json"
+      - "track4/data/generated/scenarios.json"
+      - "track4/data/generated/tool_a_metrics.json"
+      - "track4/data/generated/tool_b_evidence.json"
+      - ".github/workflows/playground-pages.yml"
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Enable Corepack
+        run: corepack enable
+
+      - name: Install dependencies
+        working-directory: playground
+        run: pnpm install --frozen-lockfile
+
+      - name: Build Playground
+        working-directory: playground
+        run: pnpm build
+
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: playground/dist
+
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build
+    timeout-minutes: 10
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

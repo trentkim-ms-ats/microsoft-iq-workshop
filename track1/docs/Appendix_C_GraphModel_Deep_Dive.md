@@ -58,7 +58,7 @@ requests.post(f"{FABRIC_API_BASE}/workspaces/{WORKSPACE_ID}/graphModels/{GRAPH_M
 
 ### C-4. 언제 GraphModel을 고려하나
 
-- **필요 없음(Track1 기본)**: 엔터티/관계 의미 모델 정의, 네 구성요소 Microsoft IQ 흐름 공통 어휘, WorkIQ/WebIQ/FoundryIQ 그라운딩 → **Ontology만으로 충분**.
+- **필요 없음(Track1 기본)**: 엔터티/관계 의미 모델 정의, Microsoft IQ 흐름 공통 어휘, WorkIQ/WebIQ/FoundryIQ 그라운딩 → **Ontology만으로 충분**.
 - **고려할 만함**: 다중 홉 경로 탐색(예: 캠페인→주문→결제→반품 경로를 그래프 순회), 커뮤니티/중심성 등 그래프 분석, MATCH 패턴 질의를 직접 실행하고 싶을 때.
 
 > ⚠️ GraphModel의 `executeQuery`는 현재 `beta` 파라미터가 필요한 Preview 기능입니다. 테넌트/리전에 따라 미지원일 수 있으므로, 사용 전 Fabric 공개 미리보기 제한 사항과 워크숍 환경을 먼저 확인하세요.

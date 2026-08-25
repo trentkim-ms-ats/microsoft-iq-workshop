@@ -23,7 +23,7 @@ flowchart LR
 
 | 상황 | 동작 |
 | --- | --- |
-| normal | 네 IQ trace와 분리된 근거 |
+| normal | Microsoft IQ trace와 분리된 근거 |
 | Fabric/Work/Web 하나 실패 | 명시 경고 partial |
 | Fabric+Work 실패 | public-web-only 분석 blocked |
 | transient | 5초→10초→20초, 3회 재시도 |

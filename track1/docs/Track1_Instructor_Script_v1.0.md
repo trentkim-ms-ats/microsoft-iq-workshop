@@ -1,7 +1,7 @@
 # 트랙1 강사용 진행 대본(분단위) v1.0
 
 - 트랙명: Track 1 — FabricIQ 시맨틱 레이어: Fabric + Ontology(Preview) 데이터 준비
-- 네 구성요소 Microsoft IQ 흐름 내 위치: **FabricIQ 시맨틱 구축 단계** (Track 2 WorkIQ / Track 3 WebIQ / Track 4 FoundryIQ의 그라운딩 소스가 됨)
+- Microsoft IQ 흐름 내 위치: **FabricIQ 시맨틱 구축 단계** (Track 2 WorkIQ / Track 3 WebIQ / Track 4 FoundryIQ의 그라운딩 소스가 됨)
 - 총 시간: 150분 (실습 140분 + 휴식 10분)
 - 권장 시간대: 09:35-12:05
 - 대상: 데이터/SQL 기초 보유자
