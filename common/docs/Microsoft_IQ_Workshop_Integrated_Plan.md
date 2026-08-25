@@ -7,7 +7,7 @@
 - 기준일: 2026-07-30
 - 대상: 데이터·AI 도구를 처음 연결해 보는 입문자
 - 운영 기준: **480분 (1일)**
-- 산업별 PoC 확장 템플릿: [Microsoft IQ 산업별 대표 활용 시나리오](Microsoft_IQ_Industry_Scenarios.md)
+- 산업별 PoC 확장 템플릿: [Microsoft IQ 산업별 대표 활용 시나리오](../../industry_playground/Microsoft_IQ_Industry_Scenarios.md)
 
 ## 0. 운영 원칙
 

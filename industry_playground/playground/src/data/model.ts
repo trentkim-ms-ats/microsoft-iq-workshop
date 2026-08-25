@@ -1,5 +1,5 @@
 export type IqId = "fabric" | "work" | "web" | "foundry"
-export type ExplorerTab = "inspector" | "scenario" | "fallback"
+export type ExplorerTab = "inspector" | "scenario" | "fallback" | "industry"
 export type FallbackMode =
   | "normal"
   | "fabric-down"

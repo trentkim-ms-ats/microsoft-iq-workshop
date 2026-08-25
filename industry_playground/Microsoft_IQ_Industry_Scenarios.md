@@ -10,7 +10,7 @@
 
 이 문서는 기존 유통/이커머스 공통 질문 Q1-Q5, Track1-4 런타임, fixture, 평가
 계약을 대체하거나 확장하지 않습니다. 공통 워크숍 구조는
-[Microsoft IQ 워크숍 통합 계획](Microsoft_IQ_Workshop_Integrated_Plan.md)을
+[Microsoft IQ 워크숍 통합 계획](../common/docs/Microsoft_IQ_Workshop_Integrated_Plan.md)을
 따릅니다.
 
 ## 1. 공통 실행 원칙
@@ -555,7 +555,7 @@ FoundryIQ는 가격·마진 가드레일, 재고 배분·보충 정책, 프로�
    남기는가?
 6. 내부 근거가 동시에 없을 때 답변을 **blocked** 처리하는가?
 
-자세한 역할 경계와 실습 흐름은 [Track1 FabricIQ 실습지](../../track1/WORKBOOK.md),
-[Track2 WorkIQ 실습지](../../track2/WORKBOOK.md),
-[Track3 WebIQ 실습지](../../track3/WORKBOOK.md),
-[Track4 FoundryIQ 실습지](../../track4/WORKBOOK.md)를 참조합니다.
+자세한 역할 경계와 실습 흐름은 [Track1 FabricIQ 실습지](../track1/WORKBOOK.md),
+[Track2 WorkIQ 실습지](../track2/WORKBOOK.md),
+[Track3 WebIQ 실습지](../track3/WORKBOOK.md),
+[Track4 FoundryIQ 실습지](../track4/WORKBOOK.md)를 참조합니다.

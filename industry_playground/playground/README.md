@@ -1,7 +1,8 @@
-# Microsoft IQ Playground
+# Microsoft IQ Industry Playground
 
-Track1 FabricIQ, Track2 WorkIQ, Track3 WebIQ, Track4 FoundryIQ의 역할과 근거
-흐름을 한 화면에서 탐색하는 정적 React 애플리케이션입니다.
+Microsoft IQ의 Track1~4 근거 흐름과 여섯 산업별 대표 활용 시나리오를 한 화면에서
+탐색하는 정적 React 애플리케이션입니다. 원문은 상위 폴더의
+[`Microsoft_IQ_Industry_Scenarios.md`](../Microsoft_IQ_Industry_Scenarios.md)입니다.
 
 Ontology Playground의 학습 미션·관계 그래프·검색·인스펙터 패턴을 참고하되,
 Microsoft IQ 워크숍의 canonical 계약에 맞게 다음 기능을 제공합니다.
@@ -11,7 +12,7 @@ Microsoft IQ 워크숍의 canonical 계약에 맞게 다음 기능을 제공합�
 - `normal`, `fabric-down`, `work-down`, `web-down`, `internal-down`,
   `all-down` fallback 실험
 - `sourceTrace`, 해석 경계, 재시도 정책 확인
-- 학습 미션, 진행 점수, 검색, path finder, 공유 가능한 URL 상태
+- 산업 시나리오 원문 섹션 탐색, 학습 미션, 진행 점수, 검색, path finder, 공유 가능한 URL 상태
 - 라이트/다크 Clawpilot 테마와 반응형 레이아웃
 
 ## 로컬 실행
@@ -20,8 +21,8 @@ Microsoft IQ 워크숍의 canonical 계약에 맞게 다음 기능을 제공합�
 
 ```bash
 corepack enable
-pnpm --dir playground install --frozen-lockfile
-pnpm --dir playground dev
+pnpm --dir industry_playground/playground install --frozen-lockfile
+pnpm --dir industry_playground/playground dev
 ```
 
 Vite가 안내하는 `/microsoft-iq-workshop/` 경로를 브라우저에서 엽니다.
@@ -29,7 +30,7 @@ Vite가 안내하는 `/microsoft-iq-workshop/` 경로를 브라우저에서 엽�
 ## 검증
 
 ```bash
-pnpm --dir playground check
+pnpm --dir industry_playground/playground check
 ```
 
 `predev`와 `prebuild`가
@@ -54,5 +55,5 @@ pnpm --dir playground check
 
 ## 배포
 
-[`playground-pages.yml`](../.github/workflows/playground-pages.yml)이 `main`의 관련
+[`playground-pages.yml`](../../.github/workflows/playground-pages.yml)이 `main`의 관련
 데이터 또는 Playground 변경을 감지해 GitHub Pages artifact를 빌드·배포합니다.

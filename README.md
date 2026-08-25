@@ -22,7 +22,7 @@ Track1 FabricIQ → Track2 WorkIQ → Track3 WebIQ → Track4 FoundryIQ
 
 ## 권장 시작 순서
 
-1. [Microsoft IQ Playground](playground/README.md)에서 Microsoft IQ의 역할과 근거 흐름 탐색
+1. [Microsoft IQ Industry Playground](industry_playground/playground/README.md)에서 Microsoft IQ의 역할과 산업 시나리오 탐색
 2. [Microsoft IQ 입문자 학습 지도](common/docs/Microsoft_IQ_Beginner_Learning_Map.md)
 3. [Microsoft IQ 워크숍 통합 계획](common/docs/Microsoft_IQ_Workshop_Integrated_Plan.md)
 4. [Track1 FabricIQ 빠른 시작](track1/QUICKSTART.md)
@@ -40,11 +40,11 @@ Track1 FabricIQ → Track2 WorkIQ → Track3 WebIQ → Track4 FoundryIQ
 
 ### 인터랙티브 Playground
 
-[`playground/`](playground/)는 Ontology Playground와 유사한 학습 경험으로
+[`industry_playground/`](industry_playground/)는 Ontology Playground와 유사한 학습 경험으로
 FabricIQ·WorkIQ·WebIQ·FoundryIQ의 관계를 탐색합니다. 실제 저장소 산출물에서
 데이터를 생성하며 Q1~Q3 근거, `sourceTrace`, 5개 fallback 모드를 브라우저에서
 확인할 수 있습니다. 외부 endpoint를 호출하지 않는 simulation 도구이며 실행과
-배포 방법은 [Playground 안내](playground/README.md)를 따릅니다.
+산업별 시나리오 원문과 함께 제공되며, 배포 방법은 [Playground 안내](industry_playground/playground/README.md)를 따릅니다.
 
 ## 준비 사항
 

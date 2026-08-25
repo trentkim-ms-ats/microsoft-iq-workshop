@@ -25,7 +25,7 @@ Foundry IQ는 조직의 권위 지식 계층(authoritative knowledge layer)이�
 
 | 순서 | 문서 | 읽고 답할 질문 |
 |---:|---|---|
-| 1 | [Microsoft IQ Playground](../../playground/README.md) | Microsoft IQ가 어떤 근거 흐름으로 연결되는가? |
+| 1 | [Microsoft IQ Industry Playground](../../industry_playground/playground/README.md) | Microsoft IQ가 어떤 근거 흐름으로 연결되고 산업별로 어떻게 적용되는가? |
 | 2 | [저장소 README](../../README.md) | 전체 결과가 무엇인가? |
 | 3 | [Microsoft IQ 워크숍 통합 계획](Microsoft_IQ_Workshop_Integrated_Plan.md) | Microsoft IQ 구성요소의 책임은 어떻게 다른가? |
 | 4 | [Track1 FabricIQ Quick Start](../../track1/QUICKSTART.md) | 내부 수치는 어디서 오는가? |

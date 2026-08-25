@@ -411,6 +411,52 @@ function ScenarioContent({
   )
 }
 
+function IndustryScenarioContent({
+  scenario,
+  onSelect,
+}: {
+  scenario: (typeof workshopData.industryScenarios)[number]
+  onSelect: (id: string) => void
+}) {
+  const sectionEntries = Object.entries(scenario.sections)
+  return (
+    <div className="tab-section industry-content">
+      <div className="industry-picker" role="listbox" aria-label="산업 시나리오 선택">
+        {workshopData.industryScenarios.map((item) => (
+          <button
+            key={item.id}
+            type="button"
+            className={item.id === scenario.id ? "is-active" : ""}
+            onClick={() => onSelect(item.id)}
+          >
+            <span>{item.id}</span>
+            <strong>{item.title}</strong>
+          </button>
+        ))}
+      </div>
+      <div className="scenario-heading">
+        <span>{scenario.id}</span>
+        <div>
+          <h3>{scenario.title}</h3>
+          <p>산업별 대표 활용 시나리오 · PoC와 운영 설계 출발점</p>
+        </div>
+      </div>
+      {sectionEntries.map(([heading, content]) => (
+        <section className="industry-section" key={heading}>
+          <h4>{heading}</h4>
+          {content.split("\n").map((line, index) => {
+            const trimmed = line.trim()
+            if (!trimmed) return <div className="industry-spacer" key={`${heading}-${index}`} />
+            if (trimmed.startsWith("- ")) return <p className="industry-bullet" key={`${heading}-${index}`}>• {trimmed.slice(2)}</p>
+            if (trimmed.startsWith("|")) return <code className="industry-table-line" key={`${heading}-${index}`}>{trimmed}</code>
+            return <p key={`${heading}-${index}`}>{trimmed}</p>
+          })}
+        </section>
+      ))}
+    </div>
+  )
+}
+
 function FallbackContent({
   fallback,
   onSelect,
@@ -601,6 +647,9 @@ function SummaryDialog({
 function App() {
   const [selectedIq, setSelectedIq] = useState<IqId>(getInitialIq)
   const [scenarioId, setScenarioId] = useState(getInitialScenarioId)
+  const [industryScenarioId, setIndustryScenarioId] = useState<string>(
+    workshopData.industryScenarios[0]?.id ?? "MFG-01",
+  )
   const [mode, setMode] = useState<FallbackMode>(getInitialMode)
   const [explorerTab, setExplorerTab] = useState<ExplorerTab>("inspector")
   const [activeQuestId, setActiveQuestId] = useState(quests[0].id)
@@ -628,8 +677,11 @@ function App() {
   const selectedFallback =
     fallbackDefinitions.find((definition) => definition.id === mode) ??
     fallbackDefinitions[0]
+  const selectedIndustryScenario =
+    workshopData.industryScenarios.find((scenario) => scenario.id === industryScenarioId) ??
+    workshopData.industryScenarios[0]
 
-  if (!selectedDefinition || !selectedScenario || !selectedFallback) {
+  if (!selectedDefinition || !selectedScenario || !selectedFallback || !selectedIndustryScenario) {
     throw new Error("Microsoft IQ Playground data is incomplete")
   }
 
@@ -938,6 +990,7 @@ function App() {
               ["inspector", "Inspector"],
               ["scenario", "Scenario"],
               ["fallback", "Fallback"],
+              ["industry", "산업 시나리오"],
             ] as const).map(([id, label]) => (
               <button
                 key={id}
@@ -959,6 +1012,12 @@ function App() {
             )}
             {explorerTab === "fallback" && (
               <FallbackContent fallback={selectedFallback} onSelect={setMode} />
+            )}
+            {explorerTab === "industry" && (
+              <IndustryScenarioContent
+                scenario={selectedIndustryScenario}
+                onSelect={setIndustryScenarioId}
+              />
             )}
           </div>
 

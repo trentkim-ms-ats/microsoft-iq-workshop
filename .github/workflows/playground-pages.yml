@@ -6,7 +6,7 @@ on:
     branches:
       - main
     paths:
-      - "playground/**"
+      - "industry_playground/**"
       - "track1/data/generated/workbench/mission4_*.json"
       - "track2/data/generated/manifests/content_catalog.json"
       - "track3/data/source_catalog.json"
@@ -42,11 +42,11 @@ jobs:
         run: corepack enable
 
       - name: Install dependencies
-        working-directory: playground
+        working-directory: industry_playground/playground
         run: pnpm install --frozen-lockfile
 
       - name: Build Playground
-        working-directory: playground
+        working-directory: industry_playground/playground
         run: pnpm build
 
       - name: Configure Pages
@@ -55,7 +55,7 @@ jobs:
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: playground/dist
+          path: industry_playground/playground/dist
 
   deploy:
     environment:
