@@ -1,8 +1,9 @@
 # Microsoft IQ Industry Playground
 
 Microsoft IQ의 Track1~4 근거 흐름과 여섯 산업별 대표 활용 시나리오를 한 화면에서
-탐색하는 정적 React 애플리케이션입니다. 원문은 상위 폴더의
-[`Microsoft_IQ_Industry_Scenarios.md`](../Microsoft_IQ_Industry_Scenarios.md)입니다.
+탐색하는 정적 React 애플리케이션입니다. 산업별 요약은 상위 폴더의
+[`Microsoft_IQ_Industry_Scenarios.md`](../Microsoft_IQ_Industry_Scenarios.md)에서,
+상세 시나리오는 [`scenarios/`](../scenarios/)에서 확인할 수 있습니다.
 
 Ontology Playground의 학습 미션·관계 그래프·검색·인스펙터 패턴을 참고하되,
 Microsoft IQ 워크숍의 canonical 계약에 맞게 다음 기능을 제공합니다.
