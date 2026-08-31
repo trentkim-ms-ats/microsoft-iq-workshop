@@ -11,7 +11,8 @@ export const workshopData = {
     "m365ItemCount": 60,
     "webCitationCount": 6,
     "scenarioCount": 3,
-    "strictGateCount": 8
+    "strictGateCount": 8,
+    "industryScenarioCount": 6
   },
   "ontology": {
     "entities": [
@@ -199,10 +200,43 @@ export const workshopData = {
         "scenarioId": "Q1",
         "title": "결제 실패-전환율 영향 분석",
         "highlights": [
-          "핵심 캠페인 0개를 비교했고 최고 전환율은 -, 최저 전환율은 -이다.",
+          "핵심 캠페인 4개를 비교했고 최고 전환율은 BackToSchool, 최저 전환율은 FlashWeek이다.",
           "payment_status가 Success/RetrySuccess가 아닌 주문은 결제 실패/미확정으로 분류했다."
         ],
-        "perCampaign": []
+        "perCampaign": [
+          {
+            "campaignId": "CA00002",
+            "campaignName": "BackToSchool",
+            "orders": 41,
+            "paymentSuccessOrders": 34,
+            "paymentFailedOrUnknownOrders": 7,
+            "conversionRatePct": 82.93
+          },
+          {
+            "campaignId": "CA00004",
+            "campaignName": "FlashWeek",
+            "orders": 51,
+            "paymentSuccessOrders": 27,
+            "paymentFailedOrUnknownOrders": 24,
+            "conversionRatePct": 52.94
+          },
+          {
+            "campaignId": "CA00001",
+            "campaignName": "SummerPush",
+            "orders": 36,
+            "paymentSuccessOrders": 21,
+            "paymentFailedOrUnknownOrders": 15,
+            "conversionRatePct": 58.33
+          },
+          {
+            "campaignId": "CA00003",
+            "campaignName": "VIPRetention",
+            "orders": 42,
+            "paymentSuccessOrders": 24,
+            "paymentFailedOrUnknownOrders": 18,
+            "conversionRatePct": 57.14
+          }
+        ]
       },
       "workEvidence": [
         {
@@ -659,81 +693,1087 @@ export const workshopData = {
   ],
   "industryScenarios": [
     {
-      "id": "MFG-01",
-      "title": "제조: 품질 이상 조기 감지 및 원인 후보 검증",
-      "sections": {
-        "업무 배경·범위": "품질 책임자와 생산 책임자는 특정 제품군, 생산라인, 교대, 작업지시, 공정 단계,\n설비, 원자재 lot, 분석 기간을 정합니다. 목표는 불량 신호가 기준선에서 벗어났을 때\n원인을 단정하지 않고, 생산·설비·자재·검사 관점의 원인 후보를 검증하는 것입니다.",
-        "탐지 신호와 핵심 질문": "- 불량률, first-pass yield, 재작업률 또는 결함 코드 분포가 조직의 기준선에서\n  의미 있게 벗어났는가?\n- 같은 기간의 공정·설비·교대·원자재 lot 변화가 신호와 시간적으로 겹치는가?\n- 작업 SOP 또는 검사 기준의 편차를 뒷받침하는 내부 근거가 있는가?\n- 출하 보류, 추가 검사, CAPA 개시가 필요한 수준인가?",
-        "FabricIQ — 정형 신호": "| 설계 요소 | 내용 |\n| --- | --- |\n| 주요 데이터 | 제품, 작업지시, 생산실적, 공정 단계, 검사 결과, 결함 코드, 설비 상태·정지, 보전 이력, 원자재 lot, 공급사 |\n| 핵심 KPI | 불량률, first-pass yield, 재작업률, 결함 코드별 비중, 설비 정지·경보 패턴 |\n| 비교 기준 | 제품군·라인·교대·공정별 기준선과 이전 정상 기간 또는 유사 작업지시 |\n| 예시 관계 경로 | **Product → WorkOrder → ProcessStep → Equipment → Inspection**, **MaterialLot → Supplier**, **WorkOrder → Shift** |\n\nFabricIQ는 이상 신호와 관계 경로를 검증합니다. 단일 지표의 변화만으로 특정 설비,\n작업자, 공급사 또는 SOP 위반을 원인으로 확정하지 않습니다.",
-        "WorkIQ — 내부 업무 맥락": "ACL이 적용된 교대 인수인계, 품질 huddle 회의록, CAPA 기록, 작업지침과 개정 이력,\n공정 변경 승인, 설비 보전 기록, 공급사 품질 협의 문서를 검색합니다. 다음 사항을\n확인합니다.\n\n- 설정값·작업 순서·검사 조건·대체 자재·검사 예외가 승인된 변경으로 기록됐는가?\n- 현장팀이 재현 조건, 일시적 우회, 추가 검사 또는 출하 보류를 논의했는가?\n- 품질·생산·보전 책임자와 현재 조치 상태가 문서 근거로 확인되는가?",
-        "WebIQ — 공개 확인": "공개 질문은 제품명·lot·내부 불량률을 제외한 일반화된 형태로 만듭니다. 예를 들어\n같은 기간과 관할에서 관련 안전 공지·리콜·원자재 품질 공지가 있었는지, 또는\n승인된 공급사·운송 구간에 공개적인 공급 위험 공지가 있었는지를 확인합니다. 규제기관\n안전 공지, 공급사의 공식 품질 공지, 공식 운송·기상 공지를 우선합니다.\n\n시간, 제품 범주, 공급 범위가 일치하지 않으면 외부 근거는 원인 후보가 아니라\n추가 확인 항목으로만 표시합니다.",
-        "FoundryIQ — 정책 대조와 승인 조치": "FoundryIQ는 품질 SOP, 검사 기준, 변경관리 정책, 출하 보류 기준, CAPA 절차의\n현재 버전과 FabricIQ·WorkIQ 근거를 대조합니다. 결과는 **SOP 위반 확정**이 아니라\n**추가 확인이 필요한 편차**, **정책과 일치하는 조치**, **근거 불충분**으로 표현합니다.\n\n품질 책임자가 승인할 수 있도록 lot 격리, 추가 검사, 영향 범위 확인, CAPA 개시\n후보를 제안합니다. 시스템이 자동으로 출하를 차단하거나 CAPA를 종결하지 않습니다.",
-        "완료 기준": "브리핑에 지표의 분석 단위·비교 기준, 관련 문서 링크, 공개 근거의 범위, SOP 대조\n결과, 품질 책임자의 승인 지점이 분리되어 있으면 완료입니다."
-      }
-    },
-    {
-      "id": "LOG-01",
-      "title": "물류: 배송 지연 사전 예측 및 대응",
-      "sections": {
-        "업무 배경·범위": "물류 운영 책임자와 고객 서비스 책임자는 주문, 출고 노드, 재고, 운송사, 노선·구간,\n배송권역, ETA와 분석 기간을 정합니다. 목표는 지연 위험 주문을 우선순위화하고,\n고객 영향이 커지기 전에 승인된 대응안을 준비하는 것입니다.",
-        "탐지 신호와 핵심 질문": "- 정시배송률 또는 예측 ETA 대비 편차가 기준선에서 악화됐는가?\n- 특정 허브 체류, 운송 예외, 재고·출고 제약, 노선·운송사 패턴이 겹치는가?\n- 지연 위험이 취소, 반품, 문의, SLA 위반 가능성에 미치는 영향은 무엇인가?\n- 재배차, 대체 출고, 선제 안내, 보상 검토 중 어떤 대응을 사람에게 승인 요청할 것인가?",
-        "FabricIQ — 정형 신호": "| 설계 요소 | 내용 |\n| --- | --- |\n| 주요 데이터 | 주문, 재고, 출고 노드, 배송, 운송사, 노선, 배송 이벤트, ETA 예측, 운송 예외, 취소·반품·문의 집계 |\n| 핵심 KPI | 정시배송률, 지연 위험 주문 수, ETA 편차, 허브 체류 시간, 운송 예외율, 취소·반품·문의 영향 |\n| 비교 기준 | 배송권역·노선·운송사·서비스 등급별 기준선과 같은 요일 또는 정상 기간 |\n| 예시 관계 경로 | **Order → Shipment → Carrier/Route → DeliveryEvent**, **Inventory → FulfillmentNode → Order** |",
-        "WorkIQ — 내부 업무 맥락": "배차·운송사 예외 보고, 창고 backlog 논의, 현장 인수인계, 고객 서비스 공지 초안,\n보상 승인 기록, SLA, 대체 출고 정책을 ACL 범위 안에서 확인합니다. 담당자, 현재\n복구 계획, 운송사와 합의한 조치, 고객 커뮤니케이션 승인 여부를 문서 근거로 검증합니다.",
-        "WebIQ — 공개 확인": "시간·지역·노선 정보를 일반화해 공식 기상, 도로·철도·항만·세관 공지, 운송사의\n공식 상태 페이지를 확인합니다. 외부 사건의 시간과 구간이 내부 배송 신호와 맞을 때만\n관련 가능성으로 표시하며, 일치하지 않는 경우에는 원인으로 단정하지 않습니다.",
-        "FoundryIQ — 정책 대조와 승인 조치": "FoundryIQ는 SLA, 우선 출고 기준, 대체 운송 정책, 고객 안내·보상 정책을 대조해\n영향이 큰 주문군과 가능한 조치를 제안합니다. 재배차, 우선 출고, 고객 안내, 보상은\n운영·고객 서비스 책임자의 승인 후에만 실행합니다.",
-        "완료 기준": "지연 위험의 수치 근거, 내부 운영 상태, 공개 상황의 범위, SLA와 승인 흐름, 고객\n영향 완화 조치가 하나의 브리핑에서 분리되어 있으면 완료입니다."
-      }
-    },
-    {
       "id": "FIN-01",
-      "title": "금융: AML/KYC 컴플라이언스 검토 우선순위화",
-      "sections": {
-        "업무 배경·범위": "준법 책임자 또는 AML 검토 책임자는 승인된 관할, 상품, 고객 위험등급, 분석 기간,\n허용된 가명화 식별자 범위를 정합니다. 목표는 거래·고객 위험 신호를 바탕으로\n검토 대상을 우선순위화하고, 현행 AML/KYC 정책과 승인 흐름에 맞는 검토 패키지를\n만드는 것입니다.",
-        "탐지 신호와 핵심 질문": "- 특정 위험군에서 이상 거래 빈도, 거래량, 경보 발생 또는 케이스 적체가 기준선과\n  다르게 나타나는가?\n- KYC 갱신 지연, 예외 승인 비율, 케이스 aging이 정책상 재검토가 필요한 수준인가?\n- 내부 승인·검토 기록은 현재 정책 버전과 일치하는가?\n- 어떤 케이스를 준법 담당자의 추가 조사 또는 에스컬레이션 대상으로 제안할 것인가?",
-        "FabricIQ — 정형 신호": "| 설계 요소 | 내용 |\n| --- | --- |\n| 주요 데이터 | 가명화 고객, 계좌, 상품, 거래, 고객 위험등급, 모니터링 경보, 케이스, 승인 상태, KYC 갱신 상태 |\n| 핵심 KPI | 이상 거래 빈도·규모, 경보 발생률, KYC 갱신 지연, 케이스 aging, 예외 승인 비율 |\n| 비교 기준 | 승인된 고객 세그먼트·상품·관할·기간별 기준선과 정책상 검토 임계값 |\n| 예시 관계 경로 | **Customer (pseudonymized) → Account → Transaction → MonitoringAlert → Case → Approval** |",
-        "WorkIQ — 내부 업무 맥락": "접근이 허용된 사건 검토 노트, 준법·법무 승인 기록, 정책 예외, 감사 지적, 정책\n버전 관리 문서를 확인합니다. WorkIQ는 누가 어떤 근거로 검토·승인했는지, 보완이\n필요한 문서가 있는지 확인하지만 AML 위험 점수나 법적 결론을 문서에서 계산하지\n않습니다.",
-        "WebIQ — 공개 확인": "규제기관, 제재 당국, 공식 법령·가이드의 변경 공지만 확인합니다. 고객명, 거래\n정보, 내부 탐지 규칙, 경보 사유, 미공개 수치는 외부 검색에 전송하지 않습니다.\n외부 규정 변경은 내부 검토 범위나 정책 재검토의 계기가 될 수 있지만, 특정 고객이나\n거래에 대한 결론을 대신하지 않습니다.",
-        "FoundryIQ — 정책 대조와 승인 조치": "FoundryIQ는 적용 가능한 AML/KYC 정책 버전, 예외·에스컬레이션 절차, 기록 보존\n기준과 세 근거를 대조합니다. 검토 패키지 보완, 증빙 재확인, 우선 검토, 준법\n에스컬레이션을 제안할 수 있습니다.\n\n법적 결론, 계좌 동결, 거래 제한, 당국 신고·제출은 생성형 응답이나 자동화가\n수행하지 않으며, 권한 있는 준법·법무 담당자가 결정하고 실행합니다.",
-        "완료 기준": "가명화·최소 권한 경계, 정책 버전, 우선 검토 근거, 사람의 법적·운영 승인 지점이\n명확하면 완료입니다."
+      "industry": "금융",
+      "title": "AML/KYC 컴플라이언스 검토 우선순위화",
+      "heading": "FIN-01 금융 — AML/KYC 컴플라이언스 검토 우선순위화",
+      "purpose": "승인된 관할·상품·가명화 고객 위험등급·분석 기간을 정해 거래·고객 위험 신호를 검토 우선순위로 정리하고 현행 AML/KYC 정책에 맞는 검토 패키지를 만듭니다.",
+      "exampleQuestions": [
+        {
+          "perspective": "위험 지표 관점",
+          "question": "관할·상품·위험등급별 이상 거래 빈도, 경보 발생률, 케이스 aging이 승인된 기준선과 어떻게 다른가?"
+        },
+        {
+          "perspective": "정책 준수 관점",
+          "question": "KYC 갱신 지연과 예외 승인 사례 중 현재 정책 버전과 검토·승인 기록이 일치하지 않는 것은 무엇인가?"
+        },
+        {
+          "perspective": "검토 우선순위 관점",
+          "question": "가명화된 케이스 중 추가 증빙이나 준법·법무 에스컬레이션을 먼저 제안할 대상은 무엇이며 자동으로 결론 내릴 수 없는 항목은 무엇인가?"
+        }
+      ],
+      "exampleQuestionFlows": [
+        {
+          "questionIndex": 0,
+          "perspective": "위험 지표 관점",
+          "question": "관할·상품·위험등급별 이상 거래 빈도, 경보 발생률, 케이스 aging이 승인된 기준선과 어떻게 다른가?",
+          "fabric": {
+            "metric": "임계치($100,000) 초과 분할 입출금 패턴 28건 감지, 총 이상 자금 $3,400,000",
+            "highlights": [
+              "단기 계좌 간 복수 송금 패턴",
+              "위험도 점수 92점 도출"
+            ]
+          },
+          "work": {
+            "evidenceTitle": "[SharePoint] 'AML 준법감시위원회 고위험 거래 검토 보고서.pdf'",
+            "owner": "정준법 이사 (준법감시실)",
+            "source": "SharePoint · 보안문서",
+            "details": "가상자산 거래소 연계 의심 패턴에 대한 정밀 심사 안건 기록"
+          },
+          "web": {
+            "citationTitle": "[교육용 fixture] [금융정보분석원(FIU)] 고위험 가상자산 연계 의심거래 보고 가이드라인",
+            "domain": "kfiu.go.kr",
+            "observedAt": "2026-08-25",
+            "factStatus": "fixture-contract",
+            "limitations": "현재의 실제 경보·리콜·규제 변경·교통·기상·장애를 증명하지 않는 교육용 고정 샘플입니다."
+          },
+          "foundry": {
+            "briefingAnswer": "교육용 simulation에서는 분할 거래 지표, AML 보고서, WebIQ 규정 fixture를 의심거래보고(STR) 검토 후보로 묶습니다. 실제 보고 여부는 준법 담당자가 원본 근거로 판단해야 합니다.",
+            "proposedAction": "[교육용 검토안 · 사람 승인 필요] FIU 제출용 의심거래보고서(STR) 안건 결재 승인",
+            "warningNotice": "수치·내부 근거·웹 인용은 모두 교육용 fixture이며 실제 조치에 사용할 수 없습니다. 보고서 제출 전 관련 계좌의 추가 거래 내역 재검증이 필요합니다."
+          }
+        },
+        {
+          "questionIndex": 1,
+          "perspective": "정책 준수 관점",
+          "question": "KYC 갱신 지연과 예외 승인 사례 중 현재 정책 버전과 검토·승인 기록이 일치하지 않는 것은 무엇인가?",
+          "fabric": {
+            "metric": "단기 신설 계좌 중 24시간 내 이체 한도 소진 비율 14.5% (평시 1.1%)",
+            "highlights": [
+              "명의 도용 의심 계좌 14건",
+              "비대면 계좌 개설 포함"
+            ]
+          },
+          "work": {
+            "evidenceTitle": "[OneDrive] 'KYC 서류 심사 및 비대면 명의 확인 결과 가이드.docx'",
+            "owner": "송리동 팀장 (KYC심사팀)",
+            "source": "OneDrive · 실무가이드",
+            "details": "신분증 진위확인 및 대포통장 의심 신호 분류 기준 공유"
+          },
+          "web": {
+            "citationTitle": "[교육용 fixture] [경찰청 Cyber] 최근 신종 명의도용 대포통장 수법 주의 경보",
+            "domain": "police.go.kr",
+            "observedAt": "2026-08-26",
+            "factStatus": "fixture-contract",
+            "limitations": "현재의 실제 경보·리콜·규제 변경·교통·기상·장애를 증명하지 않는 교육용 고정 샘플입니다."
+          },
+          "foundry": {
+            "briefingAnswer": "교육용 simulation에서는 한도 소진 비율, KYC 가이드, WebIQ 경보 fixture를 추가 본인 확인이 필요한 계좌 검토 후보를 찾는 예시로 사용합니다.",
+            "proposedAction": "[교육용 검토안 · 사람 승인 필요] 고위험 14개 계좌 한도 임시 동결 조치 승인",
+            "warningNotice": "수치·내부 근거·웹 인용은 모두 교육용 fixture이며 실제 조치에 사용할 수 없습니다. 실제 정상 고객 불이익 최소화를 위해 2차 확인 콜센터 연동을 병행하세요."
+          }
+        },
+        {
+          "questionIndex": 2,
+          "perspective": "검토 우선순위 관점",
+          "question": "가명화된 케이스 중 추가 증빙이나 준법·법무 에스컬레이션을 먼저 제안할 대상은 무엇이며 자동으로 결론 내릴 수 없는 항목은 무엇인가?",
+          "fabric": {
+            "metric": "국제 제재 리스트(Sanctions List) 매칭 가능성 계좌 3건 감지",
+            "highlights": [
+              "성명 및 생년월일 유사도 95%",
+              "해외 송금 대기 중"
+            ]
+          },
+          "work": {
+            "evidenceTitle": "[Outlook] '외환 컴플라이언스팀 제재 대상자 정밀 심사 요청.eml'",
+            "owner": "김외환 수석 (외환운영팀)",
+            "source": "Outlook · 메일",
+            "details": "OFAC 제재 대상자와의 동명이인 검증 및 거래 정지 여부 문의"
+          },
+          "web": {
+            "citationTitle": "[교육용 fixture] [OFAC / UN] 최신 국제 금융 제재 지정 목록",
+            "domain": "treasury.gov",
+            "observedAt": "2026-08-26",
+            "factStatus": "fixture-contract",
+            "limitations": "현재의 실제 경보·리콜·규제 변경·교통·기상·장애를 증명하지 않는 교육용 고정 샘플입니다."
+          },
+          "foundry": {
+            "briefingAnswer": "교육용 simulation에서는 계좌 매칭 데이터, 컴플라이언스 서신, WebIQ 제재 목록 fixture를 준법 검토가 필요한 잠재 일치 후보로 제시합니다. 동결 여부를 판정하지 않습니다.",
+            "proposedAction": "[교육용 검토안 · 사람 승인 필요] 해당 3개 계좌 외환 입출금 일시 정지 승인",
+            "warningNotice": "수치·내부 근거·웹 인용은 모두 교육용 fixture이며 실제 조치에 사용할 수 없습니다. 제재 대상자동명이인 여부를 법무/준법팀에서 최종 확인해야 합니다."
+          }
+        }
+      ],
+      "verificationQuestions": [
+        "이상 거래 빈도·규모, 경보 발생률 또는 케이스 적체가 기준선과 다른가?",
+        "KYC 갱신 지연, 예외 승인 비율, 케이스 aging이 임계값을 넘었는가?",
+        "내부 승인·검토 기록이 현재 정책 버전과 일치하는가?",
+        "어떤 가명화 케이스를 추가 조사 또는 에스컬레이션 대상으로 제안할 것인가?"
+      ],
+      "iq": [
+        {
+          "id": "fabric",
+          "name": "FabricIQ",
+          "label": "정형 지표",
+          "inputScope": "승인된 관할·상품·가명화 고객 위험등급·분석 기간과 고객→계좌→거래→경보→케이스→승인 Ontology 관계 경로.",
+          "processing": "관할·상품·위험등급별 이상 거래 빈도, 경보 발생률, 케이스 aging을 계산하고 승인된 기준선·정책 임계값과 비교합니다. KYC 갱신 지연, 예외 승인 비율이 임계값을 넘는지 확인합니다.",
+          "output": "`structuredMetrics`(경보 발생률·케이스 aging·임계값 초과 여부), `highlights`(가장 벗어난 관할·상품·위험등급), `sourceTrace`(사용한 테이블·관계 경로)를 WorkIQ 검색 범위와 FoundryIQ 대조 단계로 전달합니다. 모든 식별은 가명화 상태로 유지합니다.",
+          "limits": "법적 결론이나 계좌 동결 대상을 단정하지 않고 검토 우선순위 신호만 제시합니다. 실제 고객·계좌 재식별을 시도하지 않습니다. 정형 데이터 접근 실패 시 `정형 수치 미검증` partial로 표시됩니다."
+        },
+        {
+          "id": "work",
+          "name": "WorkIQ",
+          "label": "ACL 근거",
+          "inputScope": "ACL이 적용된 M365 문서·대화 중 사건 검토 노트, 준법·법무 승인 기록, 정책 예외 승인, 감사 지적, 정책 버전 문서.",
+          "processing": "요청자 권한으로 필터링된 검색을 수행하고, FabricIQ가 표시한 가명화 케이스·관할·상품에 맞춰 관련 문서를 좁힙니다. 문서상 정책 버전과 승인 이력이 현재 정책 버전과 일치하는지 확인합니다.",
+          "output": "`evidenceLinks`(문서 제목·링크·승인자·시점), `sourceCoverage`(검색 범위 대비 커버리지), 필요 시 `sourceTrace`를 FoundryIQ로 전달합니다.",
+          "limits": "FabricIQ 수치를 문서 근거로 역산하지 않습니다. 요청자 권한 밖 문서는 조회하지 않습니다. 관련 문서가 없으면 `업무 문서 근거 없음` partial로 표시됩니다."
+        },
+        {
+          "id": "web",
+          "name": "WebIQ",
+          "label": "공개 웹 인용",
+          "inputScope": "고객·거래 정보를 전송하지 않는 공개 웹 검색만 사용하며, 규제기관·제재 당국의 공식 법령·가이드 변경 공지 도메인만 대상으로 합니다.",
+          "processing": "공식 도메인 여부를 확인하고 관측 시각을 기록하며, 분석 기간·관할(scope)과 일치하는지 맞춥니다. simulation에서는 각 인용에 `factStatus: fixture-contract`와 현재 실제 사건을 증명하지 않는 한계(limitations)를 표기합니다.",
+          "output": "`webCitations` 목록(`title`, `url`, `domain`, `observedAt`, `scope`, `factStatus`, `limitations`)만 내부 식별자 없이 FoundryIQ로 전달합니다.",
+          "limits": "공개 정보만으로 개별 케이스의 위법 여부를 판단하지 않습니다. 고객명·계좌번호·거래내역 등 어떤 민감정보도 웹 질의에 넣지 않습니다. 관련 공지가 없거나 조회에 실패하면 `외부 최신 근거 없음` partial로 표시됩니다."
+        },
+        {
+          "id": "foundry",
+          "name": "FoundryIQ",
+          "label": "권위 대조 및 최종 문장화",
+          "inputScope": "FabricIQ `structuredMetrics`, WorkIQ `evidenceLinks`, WebIQ `webCitations`와 정책 버전·예외·에스컬레이션·보존 기준(권위 지식).",
+          "processing": "질문 의도에 맞게 세 근거를 라우팅·결합하고 현재 정책 버전과 대조합니다. 각 소스 호출 실패 시 5초→10초→20초 간격으로 최대 3회 재시도(총 최대 4회 시도)한 뒤 아래 fallback 표에 따라 판정합니다.",
+          "output": "추가 증빙 요청·준법/법무 에스컬레이션 후보와 자동으로 결론 낼 수 없는 항목을 분리한 검토 패키지를 문장화하고, `sourceTrace`에 `FabricIQ`, `WorkIQ`, `WebIQ`, `FoundryIQ`를 명시합니다.",
+          "limits": "근거 없는 수치나 링크를 생성하지 않습니다. 법적 결론, 계좌 동결, 거래 제한, 규제 신고는 제안하지 않으며 준법·법무 담당자의 명시적 승인 없이 진행되지 않습니다."
+        }
+      ],
+      "fallback": [
+        {
+          "condition": "FabricIQ만 실패",
+          "result": "partial: `정형 수치 미검증`"
+        },
+        {
+          "condition": "WorkIQ만 실패",
+          "result": "partial: `업무 문서 근거 없음`"
+        },
+        {
+          "condition": "WebIQ만 실패",
+          "result": "partial: `외부 최신 근거 없음`"
+        },
+        {
+          "condition": "FabricIQ + WorkIQ 동시 실패",
+          "result": "blocked — WebIQ 근거가 있어도 공개 웹만으로 결론을 내리지 않음"
+        }
+      ],
+      "diagram": "[FabricIQ]                    [WorkIQ]                        [WebIQ]\ncustomer(pseudonymized)       case review notes, compliance/    regulator/sanctions body\n->account->transaction        legal approval, policy            official law/guidance\n->alert->case->approval       exception, audit finding           change notice\n(alert rate, case aging,      (ACL-scoped M365)                  (public web only,\n threshold breach)                                                no customer/txn data)\n        |                             |                                |\n        v                             v                                v\n structuredMetrics             evidenceLinks                     webCitations\n highlights, sourceTrace        sourceCoverage                    title/url/domain/\n        |                       (sourceTrace optional)             observedAt/scope/\n        |                             |                             factStatus/limitations\n        +--------------+--------------+---------------+----------------+\n                       |\n                       v\n                 [FoundryIQ]\n     AML/KYC policy version / exception / escalation / retention match\n     route + combine + evaluate; retry 5s/10s/20s (up to 3, total 4 tries)\n     sourceTrace: FabricIQ, WorkIQ, WebIQ, FoundryIQ\n                       |\n                       v\n     review package: priority candidates + unresolved items + approval needed\n                       |\n                       v\n        [Human approval: Compliance/Legal Officer]\n   additional evidence request / escalation / legal conclusion (human-only)",
+      "approval": "준법·법무 담당자만 법적 결론, 계좌 동결, 거래 제한과 신고를 결정합니다. 가명화 범위, 정책 버전, 우선 검토 근거와 법적 승인 지점이 명확해야 합니다.",
+      "sourceDocument": {
+        "path": "industry_playground/scenarios/FIN-01-finance-aml-kyc.md",
+        "url": "https://github.com/trentkim-ms-ats/microsoft-iq-workshop/blob/main/industry_playground/scenarios/FIN-01-finance-aml-kyc.md"
       }
     },
     {
       "id": "HC-01",
-      "title": "헬스케어: 집계 운영 안전 리스크 조기 감지",
-      "sections": {
-        "업무 배경·범위": "환자 안전 책임자와 운영 책임자는 병원, 서비스 라인, 병동, 교대, 분석 기간을\n집계 수준으로 정합니다. 이 시나리오는 병상 운영과 안전 리스크의 조기 감지에\n한정하며, 개별 환자의 진단, 트리아지, 처방, 치료 결정에는 사용하지 않습니다.",
-        "탐지 신호와 핵심 질문": "- 병상 점유, boarding, 대기시간, 입·퇴원 흐름, 재입원 추세, 인력 배치, 안전사건\n  집계 중 무엇이 기준선에서 벗어났는가?\n- 특정 병동·교대·서비스 라인에 운영 부담이 집중되는가?\n- 안전 huddle, 용량 에스컬레이션, 감염관리 또는 운영 프로토콜상 확인할 조치가 있는가?\n- 임상·운영 책임자에게 어떤 집계 수준의 에스컬레이션을 제안할 것인가?",
-        "FabricIQ — 정형 신호": "| 설계 요소 | 내용 |\n| --- | --- |\n| 주요 데이터 | 시설, 서비스 라인, 병동, 교대, 집계 병상 용량, 입·퇴원 흐름, 대기시간, 인력 계획·커버리지, 비식별 안전사건 집계 |\n| 핵심 KPI | 병상 점유율, boarding·대기시간, 입·퇴원 흐름, 재입원 추세, 계획 대비 인력 커버리지, 안전사건 집계 추세 |\n| 비교 기준 | 병동·교대·서비스 라인별 운영 기준선, 승인된 용량·인력 기준, 정상 기간 |\n| 예시 관계 경로 | **Facility → ServiceLine → Unit → Shift → CapacitySnapshot/SafetyEventAggregate**, **Unit → StaffingPlan → Coverage** |\n\n개별 환자 수준의 식별 가능한 정보는 분석·브리핑에 포함하지 않습니다. 필요한 경우\n조직의 비식별화, 최소 필요 정보, 접근 권한 정책을 먼저 적용합니다.",
-        "WorkIQ — 내부 업무 맥락": "안전 huddle, 병상·인력 에스컬레이션, 집계 사고 검토, 감염관리 공지, 운영\n프로토콜, 책임자 승인 기록을 ACL 범위에서 확인합니다. 개인 진료기록이나 면허\n보유 의료진의 전문 판단을 대체하는 근거로 사용하지 않습니다.",
-        "WebIQ — 공개 확인": "보건 당국의 감염병·안전 공지, 지역 재난·기상 경보, 공식 규제 변경을 기간·지역·\n대상 범위가 맞는지 확인합니다. 외부 공지는 내부 운영 신호의 맥락일 수 있으나,\n특정 환자 상태 또는 내부 안전사건의 원인으로 단정하지 않습니다.",
-        "FoundryIQ — 정책 대조와 승인 조치": "FoundryIQ는 승인된 환자 안전·용량·인력·감염관리 운영 프로토콜과 집계 근거를\n대조해 운영 위험 브리핑과 에스컬레이션 후보를 만듭니다. 추가 인력 요청, 병상\n운영 조정, 안전 검토의 개시는 책임자 승인 대상으로 제안할 수 있습니다.\n\n진단, 트리아지, 처방, 치료 우선순위 결정은 지원하거나 자동화하지 않으며, 모든\n임상 판단은 면허 보유 의료진과 조직의 임상 거버넌스가 맡습니다.",
-        "완료 기준": "집계·비식별 범위, 운영 지표, 내부 프로토콜 근거, 외부 상황의 제한, 임상·운영\n책임자의 승인 지점이 명확하면 완료입니다."
+      "industry": "헬스케어",
+      "title": "집계 운영 안전 리스크 조기 감지",
+      "heading": "HC-01 헬스케어 — 집계 운영 안전 리스크 조기 감지",
+      "purpose": "시설·서비스 라인·병동·교대·분석 기간의 집계 데이터만 사용해 병상 운영과 안전 리스크를 조기에 감지합니다. 개별 환자의 진단·트리아지·처방·치료 결정에는 사용하지 않습니다.",
+      "exampleQuestions": [
+        {
+          "perspective": "운영 지표 관점",
+          "question": "병동·교대별 병상 점유율, boarding, 대기시간과 인력 커버리지가 정상 기간 대비 어떻게 변했는가?"
+        },
+        {
+          "perspective": "집중도 분석 관점",
+          "question": "운영 부담과 비식별 안전사건 집계가 특정 서비스 라인이나 교대에 집중되는가?"
+        },
+        {
+          "perspective": "에스컬레이션 관점",
+          "question": "안전 huddle·감염관리·용량 프로토콜에 따라 추가 인력이나 병상 조정을 누구에게 제안해야 하며 임상 판단으로 남겨야 할 사항은 무엇인가?"
+        }
+      ],
+      "exampleQuestionFlows": [
+        {
+          "questionIndex": 0,
+          "perspective": "운영 지표 관점",
+          "question": "병동·교대별 병상 점유율, boarding, 대기시간과 인력 커버리지가 정상 기간 대비 어떻게 변했는가?",
+          "fabric": {
+            "metric": "응급실 병상 가동률 96.5%, 평균 입원 대기시간 4.2시간 (기준 2.0시간 초과)",
+            "highlights": [
+              "응급 병상 잔여 2개",
+              "환자 과밀화 지수 심각 단계"
+            ]
+          },
+          "work": {
+            "evidenceTitle": "[SharePoint] '병동 병상 회전율 개선 및 인계장.docx'",
+            "owner": "이수간호사 (응급간호팀)",
+            "source": "SharePoint · 간호문서",
+            "details": "입원 대기 환자 수용을 위한 일반 병동 예비 병상 전환 안건 기록"
+          },
+          "web": {
+            "citationTitle": "[교육용 fixture] [질병관리청] 계절성 호흡기 감염병 유행 주의보 발표",
+            "domain": "kdca.go.kr",
+            "observedAt": "2026-08-26",
+            "factStatus": "fixture-contract",
+            "limitations": "현재의 실제 경보·리콜·규제 변경·교통·기상·장애를 증명하지 않는 교육용 고정 샘플입니다."
+          },
+          "foundry": {
+            "briefingAnswer": "교육용 simulation에서는 병상 가동률, 간호 인계장, WebIQ 주의보 fixture를 일반 병동의 응급 전환 시나리오를 검토할 신호로 제시합니다. 실제 전환은 임상·운영 책임자가 결정해야 합니다.",
+            "proposedAction": "[교육용 검토안 · 사람 승인 필요] 일반 병동 예비 병상 10개 응급실 전용 전환 승인",
+            "warningNotice": "수치·내부 근거·웹 인용은 모두 교육용 fixture이며 실제 조치에 사용할 수 없습니다. 원내 감염 관리 지침 및 병동 간호 인력 배치를 동시 점검하세요."
+          }
+        },
+        {
+          "questionIndex": 1,
+          "perspective": "집중도 분석 관점",
+          "question": "운영 부담과 비식별 안전사건 집계가 특정 서비스 라인이나 교대에 집중되는가?",
+          "fabric": {
+            "metric": "필수 항생제 A 재고 잔여일수 1.5일 (안전재고 임계치 5.0일 미달)",
+            "highlights": [
+              "일별 소진량 180병",
+              "수급 불균형 심화"
+            ]
+          },
+          "work": {
+            "evidenceTitle": "[Teams] '약제부 수급 비상 채널'",
+            "owner": "박약사 (약제부)",
+            "source": "Teams · 채널메시지",
+            "details": "항생제 A 재고 고갈 대비 대체 약제 B 처방 전환 가이드 공유"
+          },
+          "web": {
+            "citationTitle": "[교육용 fixture] [식약처] 의약품 수급 불안정 모니터링 및 우선 공급 공지",
+            "domain": "mfds.go.kr",
+            "observedAt": "2026-08-25",
+            "factStatus": "fixture-contract",
+            "limitations": "현재의 실제 경보·리콜·규제 변경·교통·기상·장애를 증명하지 않는 교육용 고정 샘플입니다."
+          },
+          "foundry": {
+            "briefingAnswer": "교육용 simulation에서는 약제 재고 수치, 약제부 대화, WebIQ 수급 공지 fixture를 대체 약제 검토안의 입력으로 제시합니다. 임상 적합성은 약제·진료 담당자가 확인해야 합니다.",
+            "proposedAction": "[교육용 검토안 · 사람 승인 필요] EMR 처방 시스템 내 대체 약제 B 우선 추천 팝업 적용 승인",
+            "warningNotice": "수치·내부 근거·웹 인용은 모두 교육용 fixture이며 실제 조치에 사용할 수 없습니다. 대체 약제 B의 환자 알레르기 교차 반응 여부를 EMR에서 자동 체크해야 합니다."
+          }
+        },
+        {
+          "questionIndex": 2,
+          "perspective": "에스컬레이션 관점",
+          "question": "안전 huddle·감염관리·용량 프로토콜에 따라 추가 인력이나 병상 조정을 누구에게 제안해야 하며 임상 판단으로 남겨야 할 사항은 무엇인가?",
+          "fabric": {
+            "metric": "퇴원 수속 대기건 38건, 결제 및 구비서류 수령 평균 1.8시간 소요",
+            "highlights": [
+              "창구 혼잡도 최고치",
+              "환자 만족도 저하"
+            ]
+          },
+          "work": {
+            "evidenceTitle": "[OneDrive] '원무과 퇴원 프로세스 모바일화 매뉴얼.pptx'",
+            "owner": "최원무 파트장 (원무팀)",
+            "source": "OneDrive · 업무매뉴얼",
+            "details": "모바일 결제 및 전자 제증명 발급 도입 시 소요시간 70% 단축 예상"
+          },
+          "web": {
+            "citationTitle": "[교육용 fixture] [보건복지부] 요양급여 제증명서 발급 전자화 지침",
+            "domain": "mohw.go.kr",
+            "observedAt": "2026-08-20",
+            "factStatus": "fixture-contract",
+            "limitations": "현재의 실제 경보·리콜·규제 변경·교통·기상·장애를 증명하지 않는 교육용 고정 샘플입니다."
+          },
+          "foundry": {
+            "briefingAnswer": "교육용 simulation에서는 대기 수속 수치, 원무과 매뉴얼, WebIQ 전자화 지침 fixture를 모바일 퇴원 수속 개선안 검토에 연결합니다.",
+            "proposedAction": "[교육용 검토안 · 사람 승인 필요] 퇴원 대기 환자 대상 모바일 알림톡 및 전자 결제 발송 승인",
+            "warningNotice": "수치·내부 근거·웹 인용은 모두 교육용 fixture이며 실제 조치에 사용할 수 없습니다. 고령 환자 및 보호자 대상 현장 원무 창구 안내 요원을 병행 배치하세요."
+          }
+        }
+      ],
+      "verificationQuestions": [
+        "병상 점유, boarding, 대기시간, 입·퇴원 흐름, 재입원 추세와 인력 커버리지가 기준선에서 벗어났는가?",
+        "특정 병동·교대·서비스 라인에 운영 부담이 집중되는가?",
+        "안전 huddle, 용량 에스컬레이션, 감염관리 프로토콜상 확인할 조치는 무엇인가?"
+      ],
+      "iq": [
+        {
+          "id": "fabric",
+          "name": "FabricIQ",
+          "label": "정형 지표",
+          "inputScope": "시설·서비스 라인·병동·교대·분석 기간의 집계 데이터와 시설→서비스 라인→병동→교대→용량·안전사건 집계 Ontology 관계 경로. 개별 환자 식별자는 사용하지 않습니다.",
+          "processing": "병상 점유율, boarding, 대기시간, 인력 커버리지, 비식별 안전사건 집계를 계산하고 정상 기간 기준선과 비교합니다. 운영 부담이 특정 병동·교대·서비스 라인에 집중되는지 확인합니다.",
+          "output": "`structuredMetrics`(병상 점유율·boarding·대기시간·인력 커버리지), `highlights`(가장 벗어난 병동·교대·서비스 라인), `sourceTrace`(사용한 테이블·관계 경로)를 WorkIQ 검색 범위와 FoundryIQ 대조 단계로 전달합니다.",
+          "limits": "개별 환자의 진단·트리아지·처방·치료 결정에는 사용하지 않습니다. 임상적 원인을 단정하지 않고 운영 신호만 제시합니다. 정형 데이터 접근 실패 시 `정형 수치 미검증` partial로 표시됩니다."
+        },
+        {
+          "id": "work",
+          "name": "WorkIQ",
+          "label": "ACL 근거",
+          "inputScope": "ACL이 적용된 M365 문서·대화 중 안전 huddle 기록, 병상·인력 에스컬레이션, 감염관리 공지, 책임자 승인 기록.",
+          "processing": "요청자 권한으로 필터링된 검색을 수행하고, FabricIQ가 표시한 운영 부담 구간(병동·교대·시점)에 맞춰 관련 문서를 좁힙니다. 승인 상태와 후속 조치 여부를 확인합니다.",
+          "output": "`evidenceLinks`(문서 제목·링크·승인자·시점), `sourceCoverage`(검색 범위 대비 커버리지), 필요 시 `sourceTrace`를 FoundryIQ로 전달합니다.",
+          "limits": "FabricIQ 수치를 문서 근거로 역산하지 않습니다. 요청자 권한 밖 문서나 개별 환자 기록은 조회하지 않습니다. 관련 문서가 없으면 `업무 문서 근거 없음` partial로 표시됩니다."
+        },
+        {
+          "id": "web",
+          "name": "WebIQ",
+          "label": "공개 웹 인용",
+          "inputScope": "내부 식별자·환자 정보를 포함하지 않은 공개 웹 검색만 사용하며, 보건 당국의 감염병·재난·기상·규제 공지 도메인을 기간·지역 범위에 맞춰 대상으로 합니다.",
+          "processing": "공식 도메인 여부를 확인하고 관측 시각을 기록하며, 분석 기간·지역(scope)과 일치하는지 맞춥니다. simulation에서는 각 인용에 `factStatus: fixture-contract`와 현재 실제 사건을 증명하지 않는 한계(limitations)를 표기합니다.",
+          "output": "`webCitations` 목록(`title`, `url`, `domain`, `observedAt`, `scope`, `factStatus`, `limitations`)만 내부 식별자 없이 FoundryIQ로 전달합니다.",
+          "limits": "공개 정보만으로 내부 운영 부담의 원인을 확정하지 않습니다. 환자 정보나 병상·인력 내부 수치를 웹 질의에 넣지 않습니다. 관련 공지가 없거나 조회에 실패하면 `외부 최신 근거 없음` partial로 표시됩니다."
+        },
+        {
+          "id": "foundry",
+          "name": "FoundryIQ",
+          "label": "권위 대조 및 최종 문장화",
+          "inputScope": "FabricIQ `structuredMetrics`, WorkIQ `evidenceLinks`, WebIQ `webCitations`와 환자 안전·용량·인력 프로토콜(권위 지식).",
+          "processing": "질문 의도에 맞게 세 근거를 라우팅·결합하고 안전 huddle·용량 에스컬레이션·감염관리 프로토콜과 대조합니다. 각 소스 호출 실패 시 5초→10초→20초 간격으로 최대 3회 재시도(총 최대 4회 시도)한 뒤 아래 fallback 표에 따라 판정합니다.",
+          "output": "추가 인력·병상 조정·안전 검토 후보와 임상 판단으로 남겨야 할 사항을 분리한 브리핑을 문장화하고, `sourceTrace`에 `FabricIQ`, `WorkIQ`, `WebIQ`, `FoundryIQ`를 명시합니다.",
+          "limits": "근거 없는 수치나 링크를 생성하지 않습니다. 임상적 결정을 대신하지 않으며, 추가 인력·병상 조정·안전 검토 실행은 운영·임상 책임자의 명시적 승인 없이 진행되지 않습니다."
+        }
+      ],
+      "fallback": [
+        {
+          "condition": "FabricIQ만 실패",
+          "result": "partial: `정형 수치 미검증`"
+        },
+        {
+          "condition": "WorkIQ만 실패",
+          "result": "partial: `업무 문서 근거 없음`"
+        },
+        {
+          "condition": "WebIQ만 실패",
+          "result": "partial: `외부 최신 근거 없음`"
+        },
+        {
+          "condition": "FabricIQ + WorkIQ 동시 실패",
+          "result": "blocked — WebIQ 근거가 있어도 공개 웹만으로 결론을 내리지 않음"
+        }
+      ],
+      "diagram": "[FabricIQ]                    [WorkIQ]                        [WebIQ]\nfacility->service line        safety huddle notes, bed/staff    health authority outbreak/\n->ward->shift->capacity/       escalation, infection control     disaster/weather/regulatory\n safety-event aggregate        notice, approval record           notice\n(aggregate only, no PHI)       (ACL-scoped M365)                 (public web only)\n        |                             |                                |\n        v                             v                                v\n structuredMetrics             evidenceLinks                     webCitations\n highlights, sourceTrace        sourceCoverage                    title/url/domain/\n        |                       (sourceTrace optional)             observedAt/scope/\n        |                             |                             factStatus/limitations\n        +--------------+--------------+---------------+----------------+\n                       |\n                       v\n                 [FoundryIQ]\n     patient-safety / capacity / staffing protocol match\n     route + combine + evaluate; retry 5s/10s/20s (up to 3, total 4 tries)\n     sourceTrace: FabricIQ, WorkIQ, WebIQ, FoundryIQ\n                       |\n                       v\n     briefing: candidate actions + clinical-judgment-excluded items + approval needed\n                       |\n                       v\n        [Human approval: Operations/Clinical Lead]\n   additional staffing / bed reallocation / safety review (clinical decisions excluded)",
+      "approval": "운영·임상 책임자가 추가 인력, 병상 조정과 안전 검토를 승인합니다. 비식별·집계 범위, 운영 지표, 프로토콜 근거와 임상 판단의 제외 경계가 명확해야 합니다.",
+      "sourceDocument": {
+        "path": "industry_playground/scenarios/HC-01-healthcare-operations.md",
+        "url": "https://github.com/trentkim-ms-ats/microsoft-iq-workshop/blob/main/industry_playground/scenarios/HC-01-healthcare-operations.md"
       }
     },
     {
-      "id": "TEL-01",
-      "title": "통신: 네트워크 장애 예측 및 고객 영향 최소화",
-      "sections": {
-        "업무 배경·범위": "NOC 책임자와 서비스 책임자는 권역, 사이트 또는 셀, 네트워크 요소, 서비스,\n변경창, 분석 기간을 정합니다. 목표는 장애 징후와 집계 고객 영향을 우선순위화해\n검증·복구·커뮤니케이션을 준비하는 것입니다.",
-        "탐지 신호와 핵심 질문": "- 가용성, 트래픽·혼잡, 지연, 패킷 손실, handover·통화절단, alarm burst 중 어떤\n  신호가 기준선에서 벗어났는가?\n- 계획된 변경, 현장 작업, 특정 네트워크 요소 또는 지역 이벤트와 시간적으로\n  겹치는가?\n- 영향 등급과 검증 우선순위는 어떻게 정하고, 누구에게 현장 출동이나 고객 안내의\n  승인을 요청할 것인가?",
-        "FabricIQ — 정형 신호": "| 설계 요소 | 내용 |\n| --- | --- |\n| 주요 데이터 | 권역, 사이트·셀, 네트워크 요소, 성능 지표, 경보, 계획 변경, 작업지시, 집계 서비스·고객 영향 |\n| 핵심 KPI | 가용성, 트래픽·혼잡, 지연, 패킷 손실, handover·통화절단, alarm burst, 집계 영향 규모 |\n| 비교 기준 | 지역·서비스·요소별 기준선, 변경 전후 창, 정상 시간대 |\n| 예시 관계 경로 | **Region → Site/Cell → NetworkElement → PerformanceMetric/Alarm**, **PlannedChange → WorkOrder → ServiceImpact** |",
-        "WorkIQ — 내부 업무 맥락": "NOC bridge 기록, 변경·유지보수 승인, 현장 출동 보고, runbook, 장애 커뮤니케이션\n초안·승인 기록을 확인합니다. WorkIQ 근거로 현재 완화 조치, 담당 팀, 금지된 변경,\n복구 절차를 검증합니다.",
-        "WebIQ — 공개 확인": "공식 기상·재난·전력·규제 공지와 승인된 대형 행사 공지를 확인합니다. 경쟁사의\n공개 상태 페이지는 시장 맥락일 수 있지만, 자사 장애의 원인 증거가 아닙니다.\n시간·지역·서비스 범위가 맞지 않는 외부 정보는 가설로도 과장하지 않습니다.",
-        "FoundryIQ — 정책 대조와 승인 조치": "FoundryIQ는 runbook, 영향 등급 정책, 변경관리 정책, 장애 커뮤니케이션 절차와\n근거를 대조해 검증 순서, 현장 출동 후보, 고객 안내 초안을 제안합니다. 네트워크\n설정 변경, 현장 출동, 대외 공지는 NOC 또는 권한 있는 책임자의 승인 없이는\n실행하지 않습니다.",
-        "완료 기준": "성능 신호, 내부 변경·복구 맥락, 외부 환경의 제한, 영향 등급과 승인 지점이\n명확히 구분되면 완료입니다."
+      "id": "LOG-01",
+      "industry": "물류",
+      "title": "배송 지연 사전 예측 및 대응",
+      "heading": "LOG-01 물류 — 배송 지연 사전 예측 및 대응",
+      "purpose": "주문·출고 노드·재고·운송사·노선·배송권역·ETA와 분석 기간을 정해 지연 위험 주문을 우선순위화하고 고객 영향이 커지기 전 승인된 대응안을 준비합니다.",
+      "exampleQuestions": [
+        {
+          "perspective": "성과 분석 관점",
+          "question": "지난 7일간 정시배송률과 ETA 편차가 어느 노드·운송사·권역에서 기준선보다 악화됐는가?"
+        },
+        {
+          "perspective": "고객 영향 관점",
+          "question": "지연 위험 주문 중 고객 영향 규모와 예상 반품·문의 부담이 가장 큰 상품·구간은 어디인가?"
+        },
+        {
+          "perspective": "대응 의사결정 관점",
+          "question": "날씨·재고·운송 용량·내부 작업 중 확인된 근거는 무엇이며 재배차나 고객 안내를 누구에게 승인받아야 하는가?"
+        }
+      ],
+      "exampleQuestionFlows": [
+        {
+          "questionIndex": 0,
+          "perspective": "성과 분석 관점",
+          "question": "지난 7일간 정시배송률과 ETA 편차가 어느 노드·운송사·권역에서 기준선보다 악화됐는가?",
+          "fabric": {
+            "metric": "부산항 물동량 체류시간 4.8일 (평시 1.5일), 전체 국제 배송 지연율 24.5%",
+            "highlights": [
+              "컨테이너 1,200개 하역 정체",
+              "고객 납기 지연 리스크 증가"
+            ]
+          },
+          "work": {
+            "evidenceTitle": "[Outlook] '해운물류팀 항만 적체 대응 긴급 회의록.eml'",
+            "owner": "김물류 팀장 (해운운송팀)",
+            "source": "Outlook · 메일",
+            "details": "부산항 하역 지연에 따른 대체 터미널 및 광양항 우회 선적 안건 논의"
+          },
+          "web": {
+            "citationTitle": "[교육용 fixture] [부산항만공사] 북항 컨테이너 터미널 게이트 하역시설 정기 점검 공지",
+            "domain": "busanpa.com",
+            "observedAt": "2026-08-25",
+            "factStatus": "fixture-contract",
+            "limitations": "현재의 실제 경보·리콜·규제 변경·교통·기상·장애를 증명하지 않는 교육용 고정 샘플입니다."
+          },
+          "foundry": {
+            "briefingAnswer": "교육용 simulation에서는 체류시간 지표, 대응 회의록, WebIQ 항만 공지 fixture를 대조해 대체 항만 선적 계획의 검토안을 제시합니다.",
+            "proposedAction": "[교육용 검토안 · 사람 승인 필요] 광양항 우회 선적 배정 및 화주 안내문 발송 승인",
+            "warningNotice": "수치·내부 근거·웹 인용은 모두 교육용 fixture이며 실제 조치에 사용할 수 없습니다. 우회 선적에 따른 추가 운임 발생 비용을 재무팀과 확인하세요."
+          }
+        },
+        {
+          "questionIndex": 1,
+          "perspective": "고객 영향 관점",
+          "question": "지연 위험 주문 중 고객 영향 규모와 예상 반품·문의 부담이 가장 큰 상품·구간은 어디인가?",
+          "fabric": {
+            "metric": "운송 노선 L-12 평균 소요시간 8.5시간 (기준 5.0시간 대비 +70% 지연)",
+            "highlights": [
+              "지연 화물차 45대",
+              "연료 소비 및 기사 과로 리스크"
+            ]
+          },
+          "work": {
+            "evidenceTitle": "[SharePoint] '화물차 기사 배차 및 도로 지연 사유 집계.xlsx'",
+            "owner": "박배차 대리 (육상운송팀)",
+            "source": "SharePoint · 스프레드시트",
+            "details": "영동고속도로 구간 전면 정체로 인한 화물 기사 출발 연기 및 우회 요청"
+          },
+          "web": {
+            "citationTitle": "[교육용 fixture] [국토교통부] 영동고속도로 터널 공사 및 1차선 전면 통제 공시",
+            "domain": "molit.go.kr",
+            "observedAt": "2026-08-26",
+            "factStatus": "fixture-contract",
+            "limitations": "현재의 실제 경보·리콜·규제 변경·교통·기상·장애를 증명하지 않는 교육용 고정 샘플입니다."
+          },
+          "foundry": {
+            "briefingAnswer": "교육용 simulation에서는 운송 지연 수치, 배차 집계, WebIQ 도로 통제 fixture를 결합해 우회 배차 경로 후보를 제시합니다. 실제 통제 상태로 다시 확인해야 합니다.",
+            "proposedAction": "[교육용 검토안 · 사람 승인 필요] 노선 L-12 차량 대상 국도 우회 경로 지침 전달 승인",
+            "warningNotice": "수치·내부 근거·웹 인용은 모두 교육용 fixture이며 실제 조치에 사용할 수 없습니다. 국도 통행 제한 차종 및 과적 기준을 반드시 준수하세요."
+          }
+        },
+        {
+          "questionIndex": 2,
+          "perspective": "대응 의사결정 관점",
+          "question": "날씨·재고·운송 용량·내부 작업 중 확인된 근거는 무엇이며 재배차나 고객 안내를 누구에게 승인받아야 하는가?",
+          "fabric": {
+            "metric": "수하물 지연 문의 420건/주, SLA 준수율 78% (목표 95% 미달)",
+            "highlights": [
+              "고객 불만 지수 4.2점 도출",
+              "손해 배상 청구 가능성"
+            ]
+          },
+          "work": {
+            "evidenceTitle": "[Teams] '고객만족팀 대응 매뉴얼 및 지연 보상안 스레드'",
+            "owner": "이CS 팀장 (고객지원팀)",
+            "source": "Teams · 채널메시지",
+            "details": "수하물 지연 시 보상 쿠폰 발급 및 정기 알림 서비스 규정 검토"
+          },
+          "web": {
+            "citationTitle": "[교육용 fixture] [국제항공운송협회(IATA)] 수하물 추적 서비스 규정 v2.1",
+            "domain": "iata.org",
+            "observedAt": "2026-08-21",
+            "factStatus": "fixture-contract",
+            "limitations": "현재의 실제 경보·리콜·규제 변경·교통·기상·장애를 증명하지 않는 교육용 고정 샘플입니다."
+          },
+          "foundry": {
+            "briefingAnswer": "교육용 simulation에서는 SLA 수치, 보상 매뉴얼, WebIQ 규정 fixture를 수하물 지연 보상과 알림 일정 검토안에 연결합니다.",
+            "proposedAction": "[교육용 검토안 · 사람 승인 필요] SLA 지연 대상 고객 보상 쿠폰 자동 발급 시스템 승인",
+            "warningNotice": "수치·내부 근거·웹 인용은 모두 교육용 fixture이며 실제 조치에 사용할 수 없습니다. 보상 한도액 초과 건은 원무/고객팀 개별 심사를 거쳐야 합니다."
+          }
+        }
+      ],
+      "verificationQuestions": [
+        "정시배송률과 ETA 편차가 기준선에서 악화됐는가?",
+        "특정 노드·운송사·노선·상품·권역에 지연이 집중되는가?",
+        "재고·날씨·용량·변경 작업 중 어떤 요인이 시간적으로 겹치는가?",
+        "재배차, 대체 운송, 고객 안내 또는 보상 검토가 필요한가?"
+      ],
+      "iq": [
+        {
+          "id": "fabric",
+          "name": "FabricIQ",
+          "label": "정형 지표",
+          "inputScope": "주문·출고 노드·재고·운송사·노선·배송권역·ETA·분석 기간과 주문→출고→운송→배송 이벤트 Ontology 관계 경로.",
+          "processing": "정시배송률, ETA 편차, backlog를 계산하고 정상 기간 기준선과 비교합니다. 지연군에 속한 주문의 고객 영향 규모(건수·상품·구간)를 집계해 우선순위를 매깁니다.",
+          "output": "`structuredMetrics`(정시배송률·ETA 편차·backlog), `highlights`(가장 악화된 노드·운송사·권역), `sourceTrace`(사용한 테이블·관계 경로)를 WorkIQ 검색 범위와 FoundryIQ 대조 단계로 전달합니다.",
+          "limits": "지연 원인을 단정하지 않고 위험 신호와 영향 규모만 제시합니다. 재배차·보상 등 조치를 직접 제안하지 않습니다. 정형 데이터 접근 실패 시 `정형 수치 미검증` partial로 표시됩니다."
+        },
+        {
+          "id": "work",
+          "name": "WorkIQ",
+          "label": "ACL 근거",
+          "inputScope": "ACL이 적용된 M365 문서·대화 중 물류 회의록, 운송사 협의 기록, 재배차 승인, 고객 안내 초안, 담당자 처리 상태.",
+          "processing": "요청자 권한으로 필터링된 검색을 수행하고, FabricIQ가 표시한 지연 구간(노드·운송사·시점)에 맞춰 관련 문서를 좁힙니다. 승인 상태(초안/승인완료)와 담당자 배정 여부를 확인합니다.",
+          "output": "`evidenceLinks`(문서 제목·링크·작성자/승인자·시점), `sourceCoverage`(검색 범위 대비 커버리지), 필요 시 `sourceTrace`를 FoundryIQ로 전달합니다.",
+          "limits": "FabricIQ 수치를 문서 근거로 역산하지 않습니다. 요청자 권한 밖 문서는 조회하지 않습니다. 관련 문서가 없으면 `업무 문서 근거 없음` partial로 표시됩니다."
+        },
+        {
+          "id": "web",
+          "name": "WebIQ",
+          "label": "공개 웹 인용",
+          "inputScope": "내부 식별자·미공개 수치를 포함하지 않은 공개 웹 검색만 사용하며, 공식 기상·재난·항만·도로·운송사 공지 도메인을 대상으로 합니다.",
+          "processing": "공식 도메인 여부를 확인하고 관측 시각을 기록하며, 분석 기간·배송권역(scope)과 일치하는지 맞춥니다. simulation에서는 각 인용에 `factStatus: fixture-contract`와 현재 실제 사건을 증명하지 않는 한계(limitations)를 표기합니다.",
+          "output": "`webCitations` 목록(`title`, `url`, `domain`, `observedAt`, `scope`, `factStatus`, `limitations`)만 내부 식별자 없이 FoundryIQ로 전달합니다.",
+          "limits": "공개 정보만으로 내부 지연 원인을 확정하지 않습니다. 내부 주문번호·운송사 계약 조건 등 민감정보를 웹 질의에 넣지 않습니다. 관련 공지가 없거나 조회에 실패하면 `외부 최신 근거 없음` partial로 표시됩니다."
+        },
+        {
+          "id": "foundry",
+          "name": "FoundryIQ",
+          "label": "권위 대조 및 최종 문장화",
+          "inputScope": "FabricIQ `structuredMetrics`, WorkIQ `evidenceLinks`, WebIQ `webCitations`와 배송 SOP·보상 정책·에스컬레이션 기준(권위 지식).",
+          "processing": "질문 의도에 맞게 세 근거를 라우팅·결합하고 SOP·정책 기준과 대조합니다. 각 소스 호출 실패 시 5초→10초→20초 간격으로 최대 3회 재시도(총 최대 4회 시도)한 뒤 아래 fallback 표에 따라 판정합니다.",
+          "output": "재배차·대체 운송·고객 안내·보상 검토 후보와 미확인 사항을 분리한 브리핑을 문장화하고, `sourceTrace`에 `FabricIQ`, `WorkIQ`, `WebIQ`, `FoundryIQ`를 명시합니다.",
+          "limits": "근거 없는 수치나 링크를 생성하지 않습니다. 최종 결론이 아닌 후보만 제시하며, 재배차·가격·보상·대량 고객 안내는 운영 책임자의 명시적 승인 없이 진행되지 않습니다."
+        }
+      ],
+      "fallback": [
+        {
+          "condition": "FabricIQ만 실패",
+          "result": "partial: `정형 수치 미검증`"
+        },
+        {
+          "condition": "WorkIQ만 실패",
+          "result": "partial: `업무 문서 근거 없음`"
+        },
+        {
+          "condition": "WebIQ만 실패",
+          "result": "partial: `외부 최신 근거 없음`"
+        },
+        {
+          "condition": "FabricIQ + WorkIQ 동시 실패",
+          "result": "blocked — WebIQ 근거가 있어도 공개 웹만으로 결론을 내리지 않음"
+        }
+      ],
+      "diagram": "[FabricIQ]                    [WorkIQ]                        [WebIQ]\norder->fulfillment node       logistics meeting notes,          official weather/disaster\n->carrier->delivery event     carrier negotiation, redispatch    notice, port/road notice,\n(on-time rate, ETA gap,       approval, customer notice draft    carrier service notice\n backlog, impact cohort)      (ACL-scoped M365)                  (public web only)\n        |                             |                                |\n        v                             v                                v\n structuredMetrics             evidenceLinks                     webCitations\n highlights, sourceTrace        sourceCoverage                    title/url/domain/\n        |                       (sourceTrace optional)             observedAt/scope/\n        |                             |                             factStatus/limitations\n        +--------------+--------------+---------------+----------------+\n                       |\n                       v\n                 [FoundryIQ]\n     delivery SOP / compensation policy / escalation criteria match\n     route + combine + evaluate; retry 5s/10s/20s (up to 3, total 4 tries)\n     sourceTrace: FabricIQ, WorkIQ, WebIQ, FoundryIQ\n                       |\n                       v\n     briefing: candidate actions + unresolved items + approval needed\n                       |\n                       v\n        [Human approval: Operations Lead]\n   redispatch / alternate carrier / customer notice / compensation review",
+      "approval": "운영 책임자가 재배차, 가격·보상·대량 안내를 승인합니다. 위험 구간, 계산 기준, 내부 결정 근거, 외부 공지의 범위, 제안 조치와 승인자를 구분하면 완료입니다.",
+      "sourceDocument": {
+        "path": "industry_playground/scenarios/LOG-01-logistics-delay.md",
+        "url": "https://github.com/trentkim-ms-ats/microsoft-iq-workshop/blob/main/industry_playground/scenarios/LOG-01-logistics-delay.md"
+      }
+    },
+    {
+      "id": "MFG-01",
+      "industry": "제조",
+      "title": "품질 이상 조기 감지 및 원인 후보 검증",
+      "heading": "MFG-01 제조 — 품질 이상 조기 감지 및 원인 후보 검증",
+      "purpose": "제품군·생산라인·교대·작업지시·공정·설비·원자재 lot와 분석 기간을 정해 불량 신호가 기준선에서 벗어났는지 확인합니다. 목표는 원인을 단정하지 않고 생산·설비·자재·검사 관점의 원인 후보를 검증하는 것입니다.",
+      "exampleQuestions": [
+        {
+          "perspective": "품질 분석 관점",
+          "question": "최근 4주간 라인·교대·공정별 불량률과 first-pass yield를 이전 정상 기간과 비교하면 어떤 편차가 가장 큰가?"
+        },
+        {
+          "perspective": "원인 검증 관점",
+          "question": "불량 급증 시점과 설비 정지, 공정 변경, 원자재 lot 교체가 어떤 Ontology 관계 경로로 연결되는가?"
+        },
+        {
+          "perspective": "운영 승인 관점",
+          "question": "현재 근거만으로 추가 검사·lot 격리·출하 보류·CAPA 중 무엇을 제안할 수 있으며 품질 책임자의 승인이 필요한 것은 무엇인가?"
+        }
+      ],
+      "exampleQuestionFlows": [
+        {
+          "questionIndex": 0,
+          "perspective": "품질 분석 관점",
+          "question": "최근 4주간 라인·교대·공정별 불량률과 first-pass yield를 이전 정상 기간과 비교하면 어떤 편차가 가장 큰가?",
+          "fabric": {
+            "metric": "불량률 4.2% (기준선 1.5% 초과), 연관 생산 수량 12,000개, 손실 추정액 $85,000",
+            "highlights": [
+              "B3 생산 라인 결함 신호 12건 감지",
+              "전압 변동 오차율 3.8% 기록"
+            ]
+          },
+          "work": {
+            "evidenceTitle": "[SharePoint] '2026-Q3 B3 라인 설비 점검 일지.docx'",
+            "owner": "박품질 팀장 (품질관리팀)",
+            "source": "SharePoint · 품질점검문서",
+            "details": "센서 전압 불안정 및 측정 오작동 발생 기록 확인됨"
+          },
+          "web": {
+            "citationTitle": "[교육용 fixture] [공식 공지] A사 정밀 전압 센서 펌웨어 오류 및 리콜 안내",
+            "domain": "supplier-a.com",
+            "observedAt": "2026-08-25",
+            "factStatus": "fixture-contract",
+            "limitations": "현재의 실제 경보·리콜·규제 변경·교통·기상·장애를 증명하지 않는 교육용 고정 샘플입니다."
+          },
+          "foundry": {
+            "briefingAnswer": "교육용 simulation에서는 불량률 수치, 설비 일지, WebIQ fixture를 함께 검토해 B3 센서 결함을 원인 후보로 제시합니다. 실제 인과관계는 현장 점검과 원본 데이터로 확정해야 합니다.",
+            "proposedAction": "[교육용 검토안 · 사람 승인 필요] B3 라인 센서 정밀 점검 및 A사 대체 센서 모듈 임시 할당 승인 요청",
+            "warningNotice": "수치·내부 근거·웹 인용은 모두 교육용 fixture이며 실제 조치에 사용할 수 없습니다. 공개 웹 출처는 보조 인용이며, 내부 원인은 센서 현장 점검 후 최종 확정해야 함."
+          }
+        },
+        {
+          "questionIndex": 1,
+          "perspective": "원인 검증 관점",
+          "question": "불량 급증 시점과 설비 정지, 공정 변경, 원자재 lot 교체가 어떤 Ontology 관계 경로로 연결되는가?",
+          "fabric": {
+            "metric": "설비 ID #EQ-884 누적 가동시간 4,200시간 (권장 정비 주기 4,000시간 초과)",
+            "highlights": [
+              "정비 지연 횟수 3회 발생",
+              "가공 정밀도 측정 오차 +0.12mm"
+            ]
+          },
+          "work": {
+            "evidenceTitle": "[Teams] '생산기술팀 채널 대화 스레드'",
+            "owner": "김생산 수석 (생산기술팀)",
+            "source": "Teams · 채널메시지",
+            "details": "EQ-884 부품 수급 지연으로 이번 주 정기 점검 연기 요청 내용 존재"
+          },
+          "web": {
+            "citationTitle": "[교육용 fixture] [표준 규격] 산업용 가공 설비 안전 가이드라인 v3.2",
+            "domain": "iso-standards.org",
+            "observedAt": "2026-08-24",
+            "factStatus": "fixture-contract",
+            "limitations": "현재의 실제 경보·리콜·규제 변경·교통·기상·장애를 증명하지 않는 교육용 고정 샘플입니다."
+          },
+          "foundry": {
+            "briefingAnswer": "교육용 simulation에서는 가동시간 초과 수치, 작업팀 대화, WebIQ 표준 fixture를 정비 지연 위험의 검토 신호로 연결합니다. 실제 위험도는 설비 진단으로 다시 평가해야 합니다.",
+            "proposedAction": "[교육용 검토안 · 사람 승인 필요] EQ-884 라인 일시 중단 및 긴급 정비 수송 승인",
+            "warningNotice": "수치·내부 근거·웹 인용은 모두 교육용 fixture이며 실제 조치에 사용할 수 없습니다. 부품 수급 상황을 재확인하고 수동 교체 여부를 결정하세요."
+          }
+        },
+        {
+          "questionIndex": 2,
+          "perspective": "운영 승인 관점",
+          "question": "현재 근거만으로 추가 검사·lot 격리·출하 보류·CAPA 중 무엇을 제안할 수 있으며 품질 책임자의 승인이 필요한 것은 무엇인가?",
+          "fabric": {
+            "metric": "공급사 C 부품 입고 불합격률 8.5% (전월 대비 +5.2%p 급증)",
+            "highlights": [
+              "경도 측정 시험 미달 14건",
+              "입고 수량 5,000개 영향"
+            ]
+          },
+          "work": {
+            "evidenceTitle": "[Outlook] '공급사 C 품질 개선 요청 및 반품 경고 서신.eml'",
+            "owner": "이수석 (구매팀)",
+            "source": "Outlook · 메일",
+            "details": "공급사 C 담당자에게 경도 미달 건에 대한 원인 분석서 및 반품 요청 발송"
+          },
+          "web": {
+            "citationTitle": "[교육용 fixture] [정부 공시] 원자재 C 규격 안전성 재평가 및 검사 강화 발표",
+            "domain": "safety.gov",
+            "observedAt": "2026-08-26",
+            "factStatus": "fixture-contract",
+            "limitations": "현재의 실제 경보·리콜·규제 변경·교통·기상·장애를 증명하지 않는 교육용 고정 샘플입니다."
+          },
+          "foundry": {
+            "briefingAnswer": "교육용 simulation에서는 부품 불합격률, 구매팀 서신, WebIQ 공시 fixture를 공급사 C 검수 기준 격상 여부를 검토할 근거 후보로 제시합니다.",
+            "proposedAction": "[교육용 검토안 · 사람 승인 필요] 공급사 C 부품 입고 시 전수 검사 로직 적용 승인",
+            "warningNotice": "수치·내부 근거·웹 인용은 모두 교육용 fixture이며 실제 조치에 사용할 수 없습니다. 공급계약 조건 변경 시 법무팀 사전 검토가 필요합니다."
+          }
+        }
+      ],
+      "verificationQuestions": [
+        "불량률, first-pass yield, 재작업률 또는 결함 코드 분포가 기준선에서 벗어났는가?",
+        "공정·설비·교대·원자재 lot 변화가 신호와 시간적으로 겹치는가?",
+        "작업 SOP·검사 기준 편차를 뒷받침하는 내부 근거가 있는가?",
+        "추가 검사, lot 격리, 출하 보류 또는 CAPA 검토가 필요한가?"
+      ],
+      "iq": [
+        {
+          "id": "fabric",
+          "name": "FabricIQ",
+          "label": "정형 지표",
+          "inputScope": "제품군·생산라인·교대·작업지시·공정·설비·원자재 lot·분석 기간과 제품→작업지시→공정→설비→검사, 자재 lot→공급사 Ontology 관계 경로.",
+          "processing": "불량률, first-pass yield, 재작업률, 결함 코드 분포를 계산하고 정상 기간 기준선과 비교합니다. 설비 정지, 공정 변경, 원자재 lot 교체 이벤트가 불량 신호와 시간적으로 겹치는지 관계 경로를 따라 검증합니다.",
+          "output": "`structuredMetrics`(불량률·FPY·재작업률·편차폭), `highlights`(가장 벗어난 라인·교대·공정), `sourceTrace`(사용한 테이블·관계 경로)를 WorkIQ 검색 범위와 FoundryIQ 대조 단계로 전달합니다.",
+          "limits": "원인을 단정하지 않고 후보 신호만 제시합니다. CAPA·격리·출하 보류를 직접 제안하지 않습니다. 정형 데이터 접근 실패 시 이후 단계는 `정형 수치 미검증` partial로 표시됩니다."
+        },
+        {
+          "id": "work",
+          "name": "WorkIQ",
+          "label": "ACL 근거",
+          "inputScope": "ACL이 적용된 M365 문서·대화 중 인수인계 노트, 품질 회의록, CAPA 문서, 작업지침 개정 이력, 변경 승인, 보전 기록.",
+          "processing": "요청자 권한으로 필터링된 검색을 수행하고, FabricIQ가 표시한 이상 구간(라인·교대·시점)에 맞춰 관련 문서를 좁힙니다. 문서의 최신성과 승인 상태(초안/승인완료)를 확인합니다.",
+          "output": "`evidenceLinks`(문서 제목·링크·작성자/승인자·시점), `sourceCoverage`(검색 범위 대비 커버리지), 필요 시 `sourceTrace`를 FoundryIQ로 전달합니다.",
+          "limits": "FabricIQ 수치를 문서 근거로 역산하지 않습니다. 요청자 권한 밖 문서는 조회하지 않습니다. 관련 문서가 없으면 `업무 문서 근거 없음` partial로 표시됩니다."
+        },
+        {
+          "id": "web",
+          "name": "WebIQ",
+          "label": "공개 웹 인용",
+          "inputScope": "내부 식별자·미공개 수치를 포함하지 않은 공개 웹 검색만 사용하며, 규제기관 안전 공지, 공급사 품질 공지, 운송·기상 공지 도메인을 대상으로 합니다.",
+          "processing": "공식 도메인 여부를 확인하고 관측 시각을 기록하며, 분석 기간·지역 범위(scope)와 일치하는지 맞춥니다. simulation에서는 각 인용에 `factStatus: fixture-contract`와 현재 실제 사건을 증명하지 않는 한계(limitations)를 표기합니다.",
+          "output": "`webCitations` 목록(`title`, `url`, `domain`, `observedAt`, `scope`, `factStatus`, `limitations`)만 내부 식별자 없이 FoundryIQ로 전달합니다.",
+          "limits": "공개 정보만으로 내부 불량의 원인을 확정하지 않습니다. 내부 작업지시번호·lot 번호 등 민감정보를 웹 질의에 넣지 않습니다. 관련 공지가 없거나 조회에 실패하면 `외부 최신 근거 없음` partial로 표시됩니다."
+        },
+        {
+          "id": "foundry",
+          "name": "FoundryIQ",
+          "label": "권위 대조 및 최종 문장화",
+          "inputScope": "FabricIQ `structuredMetrics`, WorkIQ `evidenceLinks`, WebIQ `webCitations`와 현재 품질 SOP·검사 기준·출하 보류·CAPA 절차(권위 지식).",
+          "processing": "질문 의도에 맞게 세 근거를 라우팅·결합하고 SOP·검사 기준과 대조합니다. 각 소스 호출 실패 시 5초→10초→20초 간격으로 최대 3회 재시도(총 최대 4회 시도)한 뒤 아래 fallback 표에 따라 판정합니다.",
+          "output": "추가 검사·lot 격리·출하 보류·CAPA 후보와 미확인 사항을 분리한 브리핑을 문장화하고, `sourceTrace`에 `FabricIQ`, `WorkIQ`, `WebIQ`, `FoundryIQ`를 명시합니다.",
+          "limits": "근거 없는 수치나 링크를 생성하지 않습니다. 최종 결론이 아닌 후보만 제시하며, lot 격리·출하 보류·CAPA 실행은 품질 책임자의 명시적 승인 없이 진행되지 않습니다."
+        }
+      ],
+      "fallback": [
+        {
+          "condition": "FabricIQ만 실패",
+          "result": "partial: `정형 수치 미검증`"
+        },
+        {
+          "condition": "WorkIQ만 실패",
+          "result": "partial: `업무 문서 근거 없음`"
+        },
+        {
+          "condition": "WebIQ만 실패",
+          "result": "partial: `외부 최신 근거 없음`"
+        },
+        {
+          "condition": "FabricIQ + WorkIQ 동시 실패",
+          "result": "blocked — WebIQ 근거가 있어도 공개 웹만으로 결론을 내리지 않음"
+        }
+      ],
+      "diagram": "[FabricIQ]                    [WorkIQ]                        [WebIQ]\nproduct->WO->process          handoff notes, quality           regulator safety notice\n->equipment->inspection       minutes, CAPA, SOP revision,      supplier quality notice\nmaterial lot->supplier        change approval, maintenance      logistics/weather notice\n(structured KPI + baseline)   log (ACL-scoped M365)             (public web only)\n        |                             |                                |\n        v                             v                                v\n structuredMetrics             evidenceLinks                     webCitations\n highlights, sourceTrace        sourceCoverage                    title/url/domain/\n        |                       (sourceTrace optional)             observedAt/scope/\n        |                             |                             factStatus/limitations\n        +--------------+--------------+---------------+----------------+\n                       |\n                       v\n                 [FoundryIQ]\n     quality SOP / inspection criteria / hold / CAPA procedure match\n     route + combine + evaluate; retry 5s/10s/20s (up to 3, total 4 tries)\n     sourceTrace: FabricIQ, WorkIQ, WebIQ, FoundryIQ\n                       |\n                       v\n     briefing: candidate actions + unresolved items + approval needed\n                       |\n                       v\n        [Human approval: Quality Lead]\n   extra inspection / lot isolation / shipment hold / CAPA execution",
+      "approval": "품질 책임자가 lot 격리, 출하 보류, 추가 검사와 CAPA를 승인합니다. 브리핑에 분석 단위, 기준선, 근거 링크, 외부 근거의 범위, SOP 대조 결과와 승인 지점이 분리되어야 합니다.",
+      "sourceDocument": {
+        "path": "industry_playground/scenarios/MFG-01-manufacturing-quality.md",
+        "url": "https://github.com/trentkim-ms-ats/microsoft-iq-workshop/blob/main/industry_playground/scenarios/MFG-01-manufacturing-quality.md"
       }
     },
     {
       "id": "RTL-01",
-      "title": "리테일: 수요 변화 조기 감지 및 매장·상품 대응 최적화",
-      "sections": {
-        "업무 배경·범위": "MD, 매장 운영, 공급·재고 책임자는 SKU 또는 상품군, 매장·채널, 지역, 프로모션,\n가격, 재고, 분석 기간을 정합니다. 목표는 수요 변화의 신호를 조기에 확인하고,\n매장·상품 대응의 우선순위를 사람에게 제안하는 것입니다.",
-        "탐지 신호와 핵심 질문": "- 매출·수요 예측 편차, sell-through, 재고 가용성·품절, 마진, 취소·반품·문의,\n  채널 전환 중 어떤 신호가 기준선에서 벗어났는가?\n- 가격·프로모션·진열·보충·공급 제약 또는 지역별 수요 변화와 시점이 겹치는가?\n- 어떤 SKU·매장·채널을 우선 확인하고, 배분·보충·프로모션·안내 중 무엇을\n  승인 대상 조치로 제안할 것인가?",
-        "FabricIQ — 정형 신호": "| 설계 요소 | 내용 |\n| --- | --- |\n| 주요 데이터 | SKU·상품군, 매장·채널, 재고, 판매 주문, 가격, 프로모션, 반품, 취소, 집계 고객 문의 |\n| 핵심 KPI | 수요 예측 편차, sell-through, 재고 가용성·품절, 마진 지표, 취소·반품·문의, 채널 전환 |\n| 비교 기준 | 상품·매장·채널·지역·프로모션별 기준선과 유사 기간 |\n| 예시 관계 경로 | **Product/SKU → Store/Channel → Inventory → SalesOrder → Promotion/Price → Return/SupportCase** |",
-        "WorkIQ — 내부 업무 맥락": "점장 일일 보고, MD 협업, 프로모션 캘린더, 가격·마진 승인, 공급·보충 이슈,\n반품 분석, 매장 운영 공지를 확인합니다. WorkIQ는 현장 관찰, 이미 승인된 계획,\n실행 중인 조치와 담당자를 확인하며, 문서만으로 매출·마진 수치를 계산하지 않습니다.",
-        "WebIQ — 공개 확인": "공개 경쟁사 가격·재고는 이용 약관과 관찰 시각을 지키며 확인하고, 공식 트렌드,\n기상, 지역 행사 정보를 보조 근거로 수집합니다. 외부 동향은 내부 수요 변화의\n확정 원인이 아니며, 상품·지역·기간 범위가 맞을 때만 관련 가능성을 설명합니다.",
-        "FoundryIQ — 정책 대조와 승인 조치": "FoundryIQ는 가격·마진 가드레일, 재고 배분·보충 정책, 프로모션 승인 기준,\n고객 안내 정책과 세 근거를 대조합니다. 배분, 보충, 진열, 프로모션, 가격 변경,\n발주 또는 고객 안내는 책임자의 승인 후에만 실행하도록 제안합니다.",
-        "완료 기준": "수요 신호와 비교 기준, 현장·MD 근거, 공개 맥락의 한계, 가격·마진·재고 정책,\n사람 승인 조치가 분리된 브리핑으로 제공되면 완료입니다."
+      "industry": "리테일",
+      "title": "수요 변화 조기 감지 및 매장·상품 대응 최적화",
+      "heading": "RTL-01 리테일 — 수요 변화 조기 감지 및 매장·상품 대응 최적화",
+      "purpose": "상품·매장·채널·지역·재고·프로모션·분석 기간을 정해 수요 변화가 매출·재고·반품에 미치는 영향을 파악하고 매장·상품 대응의 우선순위를 정합니다.",
+      "exampleQuestions": [
+        {
+          "perspective": "매출·재고 관점",
+          "question": "상품·매장·채널별 판매량, 매출, 재고회전과 품절률이 정상 기간 또는 계획 대비 어떻게 달라졌는가?"
+        },
+        {
+          "perspective": "고객·상품 관점",
+          "question": "수요가 증가하거나 감소한 상품에서 반품률과 프로모션 성과는 어떤 패턴을 보이는가?"
+        },
+        {
+          "perspective": "실행 승인 관점",
+          "question": "공급 이슈·가격·프로모션·지역 이벤트 중 내부 근거와 공개 맥락이 각각 무엇이며 보충·재배치·프로모션 조정 중 무엇을 승인받아야 하는가?"
+        }
+      ],
+      "exampleQuestionFlows": [
+        {
+          "questionIndex": 0,
+          "perspective": "매출·재고 관점",
+          "question": "상품·매장·채널별 판매량, 매출, 재고회전과 품절률이 정상 기간 또는 계획 대비 어떻게 달라졌는가?",
+          "fabric": {
+            "metric": "신선식품 카테고리 주간 매출 +34% 급증, 재고 순환일수 1.2일로 감소 (품절 임계치 2.0일 미달)",
+            "highlights": [
+              "수도권 주요 매장 품절률 12.4%",
+              "일별 수요 예측량 상향 필요"
+            ]
+          },
+          "work": {
+            "evidenceTitle": "[SharePoint] '2026-Q3 수도권 물류센터 운영 계획.pptx'",
+            "owner": "최물류 팀장 (SCM운영팀)",
+            "source": "SharePoint · 프레젠테이션",
+            "details": "수도권 2센터 물동량 처리 용량 90% 소진 및 재고 한도 도달"
+          },
+          "web": {
+            "citationTitle": "[교육용 fixture] [기상청 공지] 주말 수도권 폭염 특보 및 신선식품 수요 폭증 예상",
+            "domain": "kma.go.kr",
+            "observedAt": "2026-08-26",
+            "factStatus": "fixture-contract",
+            "limitations": "현재의 실제 경보·리콜·규제 변경·교통·기상·장애를 증명하지 않는 교육용 고정 샘플입니다."
+          },
+          "foundry": {
+            "briefingAnswer": "교육용 simulation에서는 매출·재고 신호와 내부 요청, WebIQ 기상 fixture를 긴급 발주와 물동량 배정 검토에 필요한 가설로 제시합니다.",
+            "proposedAction": "[교육용 검토안 · 사람 승인 필요] 수도권 2센터 신선식품 긴급 재고 20% 증대 발주 승인",
+            "warningNotice": "수치·내부 근거·웹 인용은 모두 교육용 fixture이며 실제 조치에 사용할 수 없습니다. 센터별 보관 온도 한도를 확인 후 순차 입고를 진행해야 합니다."
+          }
+        },
+        {
+          "questionIndex": 1,
+          "perspective": "고객·상품 관점",
+          "question": "수요가 증가하거나 감소한 상품에서 반품률과 프로모션 성과는 어떤 패턴을 보이는가?",
+          "fabric": {
+            "metric": "강남점 재고 15개(품절 위기), 분당점 재고 240개(과다 보유, 이체 가능 수량)",
+            "highlights": [
+              "지점 간 재고 편차 16배",
+              "오늘 저녁 소진 예상시간 18:30"
+            ]
+          },
+          "work": {
+            "evidenceTitle": "[Teams] '영업점 재고 조정 요청 스레드'",
+            "owner": "강남점 점장 (영업 1팀)",
+            "source": "Teams · 채널메시지",
+            "details": "강남점 오늘 저녁 수량 소진 예정에 따라 분당점 긴급 수송 요청"
+          },
+          "web": {
+            "citationTitle": "[교육용 fixture] [도로교통공사] 경부고속도로 오후 차선 통제 및 우회도로 공지",
+            "domain": "utic.go.kr",
+            "observedAt": "2026-08-26",
+            "factStatus": "fixture-contract",
+            "limitations": "현재의 실제 경보·리콜·규제 변경·교통·기상·장애를 증명하지 않는 교육용 고정 샘플입니다."
+          },
+          "foundry": {
+            "briefingAnswer": "교육용 simulation에서는 재고 불균형 수치, 영업점 요청, WebIQ 교통 fixture를 대조해 우회 이체 경로 후보를 제시합니다. 실제 경로는 현재 교통 정보로 재확인해야 합니다.",
+            "proposedAction": "[교육용 검토안 · 사람 승인 필요] 분당점 -> 강남점 50개 재고 차량 이체 승인",
+            "warningNotice": "수치·내부 근거·웹 인용은 모두 교육용 fixture이며 실제 조치에 사용할 수 없습니다. 우회 도로 통행 시간을 고려해 15시 이전 출차해야 합니다."
+          }
+        },
+        {
+          "questionIndex": 2,
+          "perspective": "실행 승인 관점",
+          "question": "공급 이슈·가격·프로모션·지역 이벤트 중 내부 근거와 공개 맥락이 각각 무엇이며 보충·재배치·프로모션 조정 중 무엇을 승인받아야 하는가?",
+          "fabric": {
+            "metric": "여름 프로모션 의류 반품률 18.2% (평시 6.5%), 주요 반품 사유: 치수 표기 오차",
+            "highlights": [
+              "특정 품목 반품 건수 320건",
+              "손실 비용 약 1,200만원"
+            ]
+          },
+          "work": {
+            "evidenceTitle": "[OneDrive] 'CS센터 8월 고객 피드백 분석.xlsx'",
+            "owner": "한고객 팀장 (CS운영팀)",
+            "source": "OneDrive · 스프레드시트",
+            "details": "실제 사이즈가 표기보다 작음 관련 고객 불만 피드백 140건 집계"
+          },
+          "web": {
+            "citationTitle": "[교육용 fixture] [소비자원] 의류 치수 표시 표준 가이드라인 및 모니터링",
+            "domain": "kca.go.kr",
+            "observedAt": "2026-08-20",
+            "factStatus": "fixture-contract",
+            "limitations": "현재의 실제 경보·리콜·규제 변경·교통·기상·장애를 증명하지 않는 교육용 고정 샘플입니다."
+          },
+          "foundry": {
+            "briefingAnswer": "교육용 simulation에서는 반품률, CS 피드백, WebIQ 지침 fixture를 상품 페이지 표기 오차 가능성을 검토할 근거 후보로 연결합니다.",
+            "proposedAction": "[교육용 검토안 · 사람 승인 필요] 상품 상세페이지 사이즈 가이드 수정 및 CS 보상 쿠폰 발송 승인",
+            "warningNotice": "수치·내부 근거·웹 인용은 모두 교육용 fixture이며 실제 조치에 사용할 수 없습니다. 기존 구매 고객 대상 안내 문구 사전 승인이 필요합니다."
+          }
+        }
+      ],
+      "verificationQuestions": [
+        "판매량, 매출, 품절, 재고회전, 반품률 또는 프로모션 성과가 기준선과 다른가?",
+        "특정 상품·매장·채널·지역에 변화가 집중되는가?",
+        "공급·가격·프로모션·지역 이벤트와 변화가 시간적으로 겹치는가?",
+        "보충, 재배치, 프로모션 조정 또는 상품 대체를 승인할 것인가?"
+      ],
+      "iq": [
+        {
+          "id": "fabric",
+          "name": "FabricIQ",
+          "label": "정형 지표",
+          "inputScope": "상품·매장·채널·지역·재고·프로모션·분석 기간과 상품→매장→재고·판매·반품·프로모션 Ontology 관계 경로.",
+          "processing": "판매량, 매출, 재고회전, 품절률, 반품률, 프로모션 성과를 계산하고 정상 기간 또는 계획 대비 비교합니다. 변화가 특정 상품·매장·채널·지역에 집중되는지 관계 경로를 따라 확인합니다.",
+          "output": "`structuredMetrics`(판매량·매출·품절률·재고회전·반품률), `highlights`(가장 벗어난 상품·매장·채널·지역), `sourceTrace`(사용한 테이블·관계 경로)를 WorkIQ 검색 범위와 FoundryIQ 대조 단계로 전달합니다.",
+          "limits": "수요 변화의 원인을 단정하지 않고 신호와 편차만 제시합니다. 보충·재배치·프로모션 조정을 직접 제안하지 않습니다. 정형 데이터 접근 실패 시 `정형 수치 미검증` partial로 표시됩니다."
+        },
+        {
+          "id": "work",
+          "name": "WorkIQ",
+          "label": "ACL 근거",
+          "inputScope": "ACL이 적용된 M365 문서·대화 중 상품기획·재고·매장 운영 회의 기록, 가격 승인, 공급 이슈 보고, 고객 대응 결정.",
+          "processing": "요청자 권한으로 필터링된 검색을 수행하고, FabricIQ가 표시한 변화 구간(상품·매장·채널·시점)에 맞춰 관련 문서를 좁힙니다. 승인 상태와 후속 조치 여부를 확인합니다.",
+          "output": "`evidenceLinks`(문서 제목·링크·승인자·시점), `sourceCoverage`(검색 범위 대비 커버리지), 필요 시 `sourceTrace`를 FoundryIQ로 전달합니다.",
+          "limits": "FabricIQ 수치를 문서 근거로 역산하지 않습니다. 요청자 권한 밖 문서는 조회하지 않습니다. 관련 문서가 없으면 `업무 문서 근거 없음` partial로 표시됩니다."
+        },
+        {
+          "id": "web",
+          "name": "WebIQ",
+          "label": "공개 웹 인용",
+          "inputScope": "내부 식별자·미공개 수치를 포함하지 않은 공개 웹 검색만 사용하며, 공식 행사·기상·공급·규제 공지 도메인을 대상으로 합니다.",
+          "processing": "공식 도메인 여부를 확인하고 관측 시각을 기록하며, 분석 기간·지역(scope)과 일치하는지 맞춥니다. simulation에서는 각 인용에 `factStatus: fixture-contract`와 현재 실제 사건을 증명하지 않는 한계(limitations)를 표기합니다.",
+          "output": "`webCitations` 목록(`title`, `url`, `domain`, `observedAt`, `scope`, `factStatus`, `limitations`)만 내부 식별자 없이 FoundryIQ로 전달합니다.",
+          "limits": "공개 정보만으로 내부 수요 원인을 확정하지 않습니다. 내부 재고 수치·매장 매출을 웹 질의에 넣지 않습니다. 관련 공지가 없거나 조회에 실패하면 `외부 최신 근거 없음` partial로 표시됩니다."
+        },
+        {
+          "id": "foundry",
+          "name": "FoundryIQ",
+          "label": "권위 대조 및 최종 문장화",
+          "inputScope": "FabricIQ `structuredMetrics`, WorkIQ `evidenceLinks`, WebIQ `webCitations`와 재고·가격·프로모션 SOP(권위 지식).",
+          "processing": "질문 의도에 맞게 세 근거를 라우팅·결합하고 재고·가격· 프로모션 SOP와 대조합니다. 각 소스 호출 실패 시 5초→10초→20초 간격으로 최대 3회 재시도(총 최대 4회 시도)한 뒤 아래 fallback 표에 따라 판정합니다.",
+          "output": "보충·재배치·프로모션 조정·상품 대체 후보와 미확인 사항을 분리한 브리핑을 문장화하고, `sourceTrace`에 `FabricIQ`, `WorkIQ`, `WebIQ`, `FoundryIQ`를 명시합니다.",
+          "limits": "근거 없는 수치나 링크를 생성하지 않습니다. 최종 결론이 아닌 후보만 제시하며, 가격·프로모션·재배치·대량 고객 안내는 상품·영업 책임자의 명시적 승인 없이 진행되지 않습니다."
+        }
+      ],
+      "fallback": [
+        {
+          "condition": "FabricIQ만 실패",
+          "result": "partial: `정형 수치 미검증`"
+        },
+        {
+          "condition": "WorkIQ만 실패",
+          "result": "partial: `업무 문서 근거 없음`"
+        },
+        {
+          "condition": "WebIQ만 실패",
+          "result": "partial: `외부 최신 근거 없음`"
+        },
+        {
+          "condition": "FabricIQ + WorkIQ 동시 실패",
+          "result": "blocked — WebIQ 근거가 있어도 공개 웹만으로 결론을 내리지 않음"
+        }
+      ],
+      "diagram": "[FabricIQ]                    [WorkIQ]                        [WebIQ]\nproduct->store->channel        merchandising/inventory/store     official event/weather/\n->inventory/sales/returns/      ops meeting notes, price          supply/regulatory notice\n promotion relationship         approval, supply issue,\n(sales, revenue, stockout,      customer response decision\n inventory turn, return rate)   (ACL-scoped M365)                 (public web only)\n        |                             |                                |\n        v                             v                                v\n structuredMetrics             evidenceLinks                     webCitations\n highlights, sourceTrace        sourceCoverage                    title/url/domain/\n        |                       (sourceTrace optional)             observedAt/scope/\n        |                             |                             factStatus/limitations\n        +--------------+--------------+---------------+----------------+\n                       |\n                       v\n                 [FoundryIQ]\n     inventory / pricing / promotion SOP match\n     route + combine + evaluate; retry 5s/10s/20s (up to 3, total 4 tries)\n     sourceTrace: FabricIQ, WorkIQ, WebIQ, FoundryIQ\n                       |\n                       v\n     briefing: candidate actions + unresolved items + approval needed\n                       |\n                       v\n        [Human approval: Merchandising/Sales Lead]\n   replenishment / reallocation / promotion adjustment / product substitution",
+      "approval": "상품·영업 책임자가 가격, 프로모션, 재배치와 대량 고객 안내를 승인합니다. 상품 범위, 기준선, 내부 결정 근거, 외부 맥락과 승인 지점을 브리핑에 명시하면 완료입니다.",
+      "sourceDocument": {
+        "path": "industry_playground/scenarios/RTL-01-retail-demand.md",
+        "url": "https://github.com/trentkim-ms-ats/microsoft-iq-workshop/blob/main/industry_playground/scenarios/RTL-01-retail-demand.md"
+      }
+    },
+    {
+      "id": "TEL-01",
+      "industry": "통신",
+      "title": "네트워크 장애 예측 및 고객 영향 최소화",
+      "heading": "TEL-01 통신 — 네트워크 장애 예측 및 고객 영향 최소화",
+      "purpose": "권역·사이트/셀·네트워크 요소·서비스·변경창·분석 기간을 정해 장애 징후와 집계 고객 영향을 우선순위화하고 검증·복구·커뮤니케이션을 준비합니다.",
+      "exampleQuestions": [
+        {
+          "perspective": "성능 분석 관점",
+          "question": "최근 가용성·지연·패킷 손실·alarm burst가 지역·사이트·셀별 기준선에서 얼마나 벗어났는가?"
+        },
+        {
+          "perspective": "원인 후보 관점",
+          "question": "장애 징후가 계획된 변경, 현장 작업, 특정 네트워크 요소 또는 지역 이벤트와 어떤 시간적 관계를 보이는가?"
+        },
+        {
+          "perspective": "고객 대응 관점",
+          "question": "집계 고객 영향이 큰 구간에 대해 runbook상 검증·완화·현장 출동·대외 공지 중 무엇을 승인 요청해야 하는가?"
+        }
+      ],
+      "exampleQuestionFlows": [
+        {
+          "questionIndex": 0,
+          "perspective": "성능 분석 관점",
+          "question": "최근 가용성·지연·패킷 손실·alarm burst가 지역·사이트·셀별 기준선에서 얼마나 벗어났는가?",
+          "fabric": {
+            "metric": "서울 B구 기지국 패킷 손실률 5.8% (정상 <0.5%), 음성 통화 성공률 91.2%로 저하",
+            "highlights": [
+              "접속 집중 트래픽 평시 대비 450% 증가",
+              "품질 경보 발생"
+            ]
+          },
+          "work": {
+            "evidenceTitle": "[SharePoint] '네트워크 운용센터(NOC) 8월 장애 보고서.pdf'",
+            "owner": "강네트워크 팀장 (NOC운영팀)",
+            "source": "SharePoint · 보고서",
+            "details": "서울 B구 행사지역 트래픽 폭주로 인한 기지국 자원 부족 기록"
+          },
+          "web": {
+            "citationTitle": "[교육용 fixture] [공공 데이터] B구 대형 야외 음악 페스티벌 개최 공지",
+            "domain": "seoul.go.kr",
+            "observedAt": "2026-08-26",
+            "factStatus": "fixture-contract",
+            "limitations": "현재의 실제 경보·리콜·규제 변경·교통·기상·장애를 증명하지 않는 교육용 고정 샘플입니다."
+          },
+          "foundry": {
+            "briefingAnswer": "교육용 simulation에서는 패킷 손실 수치, NOC 보고서, WebIQ 행사 공지 fixture를 트래픽 증가의 원인 후보로 검토하고 이동기지국 배치안을 비교합니다.",
+            "proposedAction": "[교육용 검토안 · 사람 승인 필요] B구 행사장에 이동기지국 차량 2대 긴급 출동 승인",
+            "warningNotice": "수치·내부 근거·웹 인용은 모두 교육용 fixture이며 실제 조치에 사용할 수 없습니다. 행사장 주변 전력 공급 상태 및 주차 공간 확보를 사전에 확인하세요."
+          }
+        },
+        {
+          "questionIndex": 1,
+          "perspective": "원인 후보 관점",
+          "question": "장애 징후가 계획된 변경, 현장 작업, 특정 네트워크 요소 또는 지역 이벤트와 어떤 시간적 관계를 보이는가?",
+          "fabric": {
+            "metric": "광케이블 구간 L-3 단선 감지, 정전/통신 장애 고객 4,200가구, 예상 복구시간 3시간",
+            "highlights": [
+              "광회로 절단 신호 감지",
+              "자동 경보 발령"
+            ]
+          },
+          "work": {
+            "evidenceTitle": "[Teams] '현장 복구반 긴급 채널'",
+            "owner": "임복구 반장 (선로유지보수팀)",
+            "source": "Teams · 채널메시지",
+            "details": "타사 굴착 공사 작업 중 케이블 파손 현장 도착 및 우회 회로 절체 요청"
+          },
+          "web": {
+            "citationTitle": "[교육용 fixture] [지자체 도로과] 도시가스 배관 굴착 공사 도로 점용 승인 내역",
+            "domain": "city.go.kr",
+            "observedAt": "2026-08-26",
+            "factStatus": "fixture-contract",
+            "limitations": "현재의 실제 경보·리콜·규제 변경·교통·기상·장애를 증명하지 않는 교육용 고정 샘플입니다."
+          },
+          "foundry": {
+            "briefingAnswer": "교육용 simulation에서는 단선 신호, 현장 보고, WebIQ 공사 내역 fixture를 손상 원인 후보로 연결하고 우회 회로 전환 검토안을 제시합니다.",
+            "proposedAction": "[교육용 검토안 · 사람 승인 필요] 백본 우회 회로 절체 및 긴급 복구반 작업 승인",
+            "warningNotice": "수치·내부 근거·웹 인용은 모두 교육용 fixture이며 실제 조치에 사용할 수 없습니다. 우회 회로 전환 시 인근 기지국 대역폭 여유분을 모니터링하세요."
+          }
+        },
+        {
+          "questionIndex": 2,
+          "perspective": "고객 대응 관점",
+          "question": "집계 고객 영향이 큰 구간에 대해 runbook상 검증·완화·현장 출동·대외 공지 중 무엇을 승인 요청해야 하는가?",
+          "fabric": {
+            "metric": "장애 관련 VOC 접수 850건/시간, 평시 대비 12배 폭증",
+            "highlights": [
+              "고객센터 상담원 연결 대기시간 12분",
+              "SNS 불만 확산"
+            ]
+          },
+          "work": {
+            "evidenceTitle": "[Outlook] '고객보호팀 장애 발생에 따른 보상 가이드라인 공유.eml'",
+            "owner": "윤고객 팀장 (고객케어팀)",
+            "source": "Outlook · 메일",
+            "details": "3시간 이상 장애 지속 시 요금 감면 및 보상 SMS 발송 가이드 공유"
+          },
+          "web": {
+            "citationTitle": "[교육용 fixture] [방송통신위원회] 통신서비스 장애 발생 시 이용자 피해보상 기준 약관",
+            "domain": "kcc.go.kr",
+            "observedAt": "2026-08-22",
+            "factStatus": "fixture-contract",
+            "limitations": "현재의 실제 경보·리콜·규제 변경·교통·기상·장애를 증명하지 않는 교육용 고정 샘플입니다."
+          },
+          "foundry": {
+            "briefingAnswer": "교육용 simulation에서는 VOC 수치, 고객보호팀 회의록, WebIQ 보상 약관 fixture를 장애 알림과 보상안 검토에 연결합니다.",
+            "proposedAction": "[교육용 검토안 · 사람 승인 필요] 장애 지역 영향 고객 대상 사과 SMS 및 요금 감면 승인",
+            "warningNotice": "수치·내부 근거·웹 인용은 모두 교육용 fixture이며 실제 조치에 사용할 수 없습니다. 중복 발송 방지를 위해 고객 수신 목록을 일괄 검증하세요."
+          }
+        }
+      ],
+      "verificationQuestions": [
+        "가용성, 혼잡, 지연, 패킷 손실, handover·통화절단, alarm burst가 기준선에서 벗어났는가?",
+        "계획된 변경·현장 작업·네트워크 요소·지역 이벤트와 시간적으로 겹치는가?",
+        "현장 출동, 완화 변경 또는 고객 안내를 누구에게 승인 요청할 것인가?"
+      ],
+      "iq": [
+        {
+          "id": "fabric",
+          "name": "FabricIQ",
+          "label": "정형 지표",
+          "inputScope": "권역·사이트/셀·네트워크 요소·서비스·변경창·분석 기간과 권역→사이트/셀→네트워크 요소→성능·경보, 변경→작업→서비스 영향 Ontology 관계 경로.",
+          "processing": "가용성, 혼잡, 지연, 패킷 손실, handover·통화절단, alarm burst를 계산하고 지역·사이트·셀별 기준선과 비교합니다. 계획된 변경·현장 작업·네트워크 요소·지역 이벤트와 시간적으로 겹치는지 관계 경로를 따라 검증합니다.",
+          "output": "`structuredMetrics`(가용성·지연·패킷손실·alarm burst), `highlights`(가장 벗어난 권역·사이트·셀), `sourceTrace`(사용한 테이블·관계 경로)를 WorkIQ 검색 범위와 FoundryIQ 대조 단계로 전달합니다.",
+          "limits": "장애 원인을 단정하지 않고 후보 신호만 제시합니다. 현장 출동·완화 변경·대외 공지를 직접 제안하지 않습니다. 정형 데이터 접근 실패 시 `정형 수치 미검증` partial로 표시됩니다."
+        },
+        {
+          "id": "work",
+          "name": "WorkIQ",
+          "label": "ACL 근거",
+          "inputScope": "ACL이 적용된 M365 문서·대화 중 NOC bridge 기록, 변경 승인, 현장 보고, runbook, 장애 커뮤니케이션 승인 기록.",
+          "processing": "요청자 권한으로 필터링된 검색을 수행하고, FabricIQ가 표시한 이상 구간(권역·사이트·시점)에 맞춰 관련 문서를 좁힙니다. 변경 승인·현장 보고의 시점과 승인 상태를 확인합니다.",
+          "output": "`evidenceLinks`(문서 제목·링크·작성자/승인자·시점), `sourceCoverage`(검색 범위 대비 커버리지), 필요 시 `sourceTrace`를 FoundryIQ로 전달합니다.",
+          "limits": "FabricIQ 수치를 문서 근거로 역산하지 않습니다. 요청자 권한 밖 문서는 조회하지 않습니다. 관련 문서가 없으면 `업무 문서 근거 없음` partial로 표시됩니다."
+        },
+        {
+          "id": "web",
+          "name": "WebIQ",
+          "label": "공개 웹 인용",
+          "inputScope": "내부 식별자·미공개 수치를 포함하지 않은 공개 웹 검색만 사용하며, 공식 기상·재난·전력·규제 공지 도메인을 대상으로 합니다.",
+          "processing": "공식 도메인 여부를 확인하고 관측 시각을 기록하며, 분석 기간·권역(scope)과 일치하는지 맞춥니다. simulation에서는 각 인용에 `factStatus: fixture-contract`와 현재 실제 사건을 증명하지 않는 한계(limitations)를 표기합니다.",
+          "output": "`webCitations` 목록(`title`, `url`, `domain`, `observedAt`, `scope`, `factStatus`, `limitations`)만 내부 식별자 없이 FoundryIQ로 전달합니다.",
+          "limits": "공개 정보만으로 자사 장애 원인을 단정하지 않습니다. 내부 사이트/셀 식별자·경보 내용을 웹 질의에 넣지 않습니다. 관련 공지가 없거나 조회에 실패하면 `외부 최신 근거 없음` partial로 표시됩니다."
+        },
+        {
+          "id": "foundry",
+          "name": "FoundryIQ",
+          "label": "권위 대조 및 최종 문장화",
+          "inputScope": "FabricIQ `structuredMetrics`, WorkIQ `evidenceLinks`, WebIQ `webCitations`와 장애 runbook·변경 정책·공지 기준(권위 지식).",
+          "processing": "질문 의도에 맞게 세 근거를 라우팅·결합하고 runbook· 변경 정책·공지 기준과 대조합니다. 각 소스 호출 실패 시 5초→10초→20초 간격으로 최대 3회 재시도(총 최대 4회 시도)한 뒤 아래 fallback 표에 따라 판정합니다.",
+          "output": "검증·완화·현장 출동·대외 공지 후보와 미확인 사항을 분리한 브리핑을 문장화하고, `sourceTrace`에 `FabricIQ`, `WorkIQ`, `WebIQ`, `FoundryIQ`를 명시합니다.",
+          "limits": "근거 없는 수치나 링크를 생성하지 않습니다. 최종 결론이 아닌 후보만 제시하며, 네트워크 설정 변경·현장 출동·대외 공지는 NOC·서비스 책임자의 명시적 승인 없이 진행되지 않습니다."
+        }
+      ],
+      "fallback": [
+        {
+          "condition": "FabricIQ만 실패",
+          "result": "partial: `정형 수치 미검증`"
+        },
+        {
+          "condition": "WorkIQ만 실패",
+          "result": "partial: `업무 문서 근거 없음`"
+        },
+        {
+          "condition": "WebIQ만 실패",
+          "result": "partial: `외부 최신 근거 없음`"
+        },
+        {
+          "condition": "FabricIQ + WorkIQ 동시 실패",
+          "result": "blocked — WebIQ 근거가 있어도 공개 웹만으로 결론을 내리지 않음"
+        }
+      ],
+      "diagram": "[FabricIQ]                    [WorkIQ]                        [WebIQ]\nregion->site/cell              NOC bridge notes, change          official weather/disaster/\n->network element               approval, field report, runbook,  power/regulatory notice\n->performance/alarm             incident comms approval\nchange->work->service impact   (ACL-scoped M365)                  (public web only)\n(availability, latency,\n packet loss, alarm burst)\n        |                             |                                |\n        v                             v                                v\n structuredMetrics             evidenceLinks                     webCitations\n highlights, sourceTrace        sourceCoverage                    title/url/domain/\n        |                       (sourceTrace optional)             observedAt/scope/\n        |                             |                             factStatus/limitations\n        +--------------+--------------+---------------+----------------+\n                       |\n                       v\n                 [FoundryIQ]\n     incident runbook / change policy / notice criteria match\n     route + combine + evaluate; retry 5s/10s/20s (up to 3, total 4 tries)\n     sourceTrace: FabricIQ, WorkIQ, WebIQ, FoundryIQ\n                       |\n                       v\n     briefing: candidate actions + unresolved items + approval needed\n                       |\n                       v\n        [Human approval: NOC/Service Lead]\n   verification / mitigation change / field dispatch / external notice",
+      "approval": "NOC·서비스 책임자가 네트워크 설정 변경, 현장 출동과 대외 공지를 승인합니다. 영향 범위, 복구 근거, 외부 공지의 한계와 승인자를 분리하면 완료입니다.",
+      "sourceDocument": {
+        "path": "industry_playground/scenarios/TEL-01-telecom-outage.md",
+        "url": "https://github.com/trentkim-ms-ats/microsoft-iq-workshop/blob/main/industry_playground/scenarios/TEL-01-telecom-outage.md"
       }
     }
   ]

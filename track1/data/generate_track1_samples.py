@@ -103,6 +103,12 @@ for i in range(1, N_PROD + 1):
 # ---- campaigns (1000) : fail_propensity 잠재변수 (Q1 신호원)
 N_CAMP = 1000
 CAMP_TYPES = ["Seasonal", "Acquisition", "Retention", "Flash"]
+CORE_CAMPAIGN_NAMES = {
+    "CA00001": "SummerPush",
+    "CA00002": "BackToSchool",
+    "CA00003": "VIPRetention",
+    "CA00004": "FlashWeek",
+}
 campaigns = []
 camp_fail = {}          # campaign_id -> 결제 실패 성향(0.10~0.60)
 for i in range(1, N_CAMP + 1):
@@ -113,7 +119,8 @@ for i in range(1, N_CAMP + 1):
     end = start + timedelta(days=30)
     # 캠페인별 결제 실패 성향을 넓게 분산 → Q1에서 캠페인 간 전환율 격차 발생
     camp_fail[caid] = round(rng.uniform(0.10, 0.60), 3)
-    campaigns.append([caid, f"Campaign {i:05d} {ctype}", ctype, ch, d(start), d(end)])
+    campaign_name = CORE_CAMPAIGN_NAMES.get(caid, f"Campaign {i:05d} {ctype}")
+    campaigns.append([caid, campaign_name, ctype, ch, d(start), d(end)])
 camp_ids = [c[0] for c in campaigns]
 
 # ---- promotions (1000) : 유형 250씩. 유형별 할인율(마진) 차등 (Q3 신호원)

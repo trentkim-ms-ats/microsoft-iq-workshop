@@ -2,6 +2,7 @@ import { Minus, Plus, RotateCcw } from "lucide-react"
 import {
   graphEdges,
   graphNodes,
+  iqDefinitions,
   type FallbackDefinition,
   type IqId,
 } from "@/data/model"
@@ -54,13 +55,17 @@ export function FlowGraph({
   return (
     <section className="graph-stage" aria-label="Microsoft IQ 근거 흐름 그래프">
       <div className="graph-canvas">
+        <div className="graph-hint">
+          <strong>그래프 읽는 법</strong>
+          <span>왼쪽 소스에서 시작해 IQ별 책임을 거쳐 근거 기반 브리핑을 만듭니다. 노드를 선택해 역할을 확인하세요.</span>
+        </div>
         <svg
           viewBox="0 0 920 520"
           role="img"
           aria-labelledby="graph-title graph-description"
           preserveAspectRatio="xMidYMid meet"
         >
-          <title id="graph-title">Microsoft IQ evidence flow</title>
+          <title id="graph-title">Microsoft IQ 근거 흐름</title>
           <desc id="graph-description">
             FabricIQ, WorkIQ, WebIQ가 FoundryIQ로 연결되고 근거 있는 브리핑을
             만드는 흐름입니다.
@@ -152,7 +157,7 @@ export function FlowGraph({
                       textAnchor="end"
                       className="graph-node-status"
                     >
-                      unavailable
+                      사용 불가
                     </text>
                   )}
                 </g>
@@ -160,6 +165,36 @@ export function FlowGraph({
             })}
           </g>
         </svg>
+
+        <ol className="mobile-flow-list" aria-label="모바일 Microsoft IQ 근거 흐름">
+          {iqDefinitions.map((iq, index) => {
+            const isUnavailable = unavailable.has(iq.id)
+            return (
+              <li key={iq.id}>
+                <button
+                  type="button"
+                  className={[
+                    selectedIq === iq.id ? "is-selected" : "",
+                    isUnavailable ? "is-unavailable" : "",
+                  ].join(" ")}
+                  onClick={() => onSelectIq(iq.id)}
+                >
+                  <span className="mobile-flow-step">{index + 1}</span>
+                  <span>
+                    <strong>{iq.name}</strong>
+                    <small>{iq.shortName} · {iq.source}</small>
+                  </span>
+                  <em>{isUnavailable ? "사용 불가" : "역할 보기"}</em>
+                </button>
+              </li>
+            )
+          })}
+          <li className="mobile-flow-output">
+            <span>결과</span>
+            <strong>근거 기반 브리핑</strong>
+            <small>답변 · 제안 조치 · 경고 · sourceTrace</small>
+          </li>
+        </ol>
 
         <div className="graph-legend" aria-label="그래프 범례">
           <span><i className="legend-swatch source" />데이터 소스</span>

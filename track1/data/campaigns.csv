@@ -1,8 +1,8 @@
 campaign_id,campaign_name,campaign_type,channel_id,start_date,end_date
-CA00001,Campaign 00001 Seasonal,Seasonal,CH0001,2026-04-02,2026-05-02
-CA00002,Campaign 00002 Acquisition,Acquisition,CH0002,2026-04-03,2026-05-03
-CA00003,Campaign 00003 Retention,Retention,CH0003,2026-04-04,2026-05-04
-CA00004,Campaign 00004 Flash,Flash,CH0004,2026-04-05,2026-05-05
+CA00001,SummerPush,Seasonal,CH0001,2026-04-02,2026-05-02
+CA00002,BackToSchool,Acquisition,CH0002,2026-04-03,2026-05-03
+CA00003,VIPRetention,Retention,CH0003,2026-04-04,2026-05-04
+CA00004,FlashWeek,Flash,CH0004,2026-04-05,2026-05-05
 CA00005,Campaign 00005 Seasonal,Seasonal,CH0001,2026-04-06,2026-05-06
 CA00006,Campaign 00006 Acquisition,Acquisition,CH0002,2026-04-07,2026-05-07
 CA00007,Campaign 00007 Retention,Retention,CH0003,2026-04-08,2026-05-08

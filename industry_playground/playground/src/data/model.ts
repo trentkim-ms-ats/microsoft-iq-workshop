@@ -1,5 +1,5 @@
 export type IqId = "fabric" | "work" | "web" | "foundry"
-export type ExplorerTab = "inspector" | "scenario" | "fallback" | "industry"
+export type ExplorerTab = "inspector" | "scenario" | "fallback"
 export type FallbackMode =
   | "normal"
   | "fabric-down"
@@ -95,6 +95,7 @@ export const iqDefinitions: IqDefinition[] = [
 
 export interface Quest {
   id: string
+  category: "representative" | "industry"
   title: string
   level: "입문" | "중급" | "고급"
   summary: string
@@ -103,12 +104,14 @@ export interface Quest {
   focus: IqId
   tab: ExplorerTab
   scenarioId?: "Q1" | "Q2" | "Q3"
+  industryScenarioId?: string
   mode?: FallbackMode
 }
 
-export const quests: Quest[] = [
+export const representativeQuests: Quest[] = [
   {
     id: "meet-iq",
+    category: "representative",
     title: "Microsoft IQ 만나기",
     level: "입문",
     summary: "각 IQ 노드를 선택해 소스, 책임, 금지 경계를 비교합니다.",
@@ -119,7 +122,8 @@ export const quests: Quest[] = [
   },
   {
     id: "evidence-trail",
-    title: "배송 지연 근거 추적",
+    category: "representative",
+    title: "배송 지연 근거 추적 (Q2)",
     level: "중급",
     summary: "Q2를 따라 정형 지표, 내부 문서, 외부 확인 질문을 연결합니다.",
     reward: "근거 추적자",
@@ -130,7 +134,8 @@ export const quests: Quest[] = [
   },
   {
     id: "citation-guard",
-    title: "Citation 경계 지키기",
+    category: "representative",
+    title: "Citation 경계 지키기 (Q1)",
     level: "중급",
     summary: "WebIQ fixture의 fact status와 limitation을 확인합니다.",
     reward: "출처 수호자",
@@ -141,6 +146,7 @@ export const quests: Quest[] = [
   },
   {
     id: "fallback-lab",
+    category: "representative",
     title: "Fallback 실험실",
     level: "고급",
     summary: "소스 실패 모드를 바꿔 partial과 blocked의 차이를 확인합니다.",
@@ -153,7 +159,8 @@ export const quests: Quest[] = [
   },
   {
     id: "trace-auditor",
-    title: "SourceTrace 감사",
+    category: "representative",
+    title: "SourceTrace 감사 (Q3)",
     level: "고급",
     summary: "Q3 응답에서 Microsoft IQ 구성요소의 역할과 출처가 분리되는지 검토합니다.",
     reward: "트레이스 감사자",
@@ -163,6 +170,83 @@ export const quests: Quest[] = [
     scenarioId: "Q3",
   },
 ]
+
+export const industryQuests: Quest[] = [
+  {
+    id: "ind-mfg",
+    category: "industry",
+    title: "제조 품질 시나리오 (MFG-01)",
+    level: "중급",
+    summary: "불량률 정형 수치, 설비 점검 일지, 센서 리콜 공지 연계 흐름 탐색",
+    reward: "제조 IQ 마스터",
+    points: 250,
+    focus: "foundry",
+    tab: "inspector",
+    industryScenarioId: "MFG-01",
+  },
+  {
+    id: "ind-rtl",
+    category: "industry",
+    title: "유통 수요 시나리오 (RTL-01)",
+    level: "중급",
+    summary: "신선식품 매출 급증, 물류센터 소진율, 폭염 특보 인용 연계 탐색",
+    reward: "유통 IQ 마스터",
+    points: 250,
+    focus: "foundry",
+    tab: "inspector",
+    industryScenarioId: "RTL-01",
+  },
+  {
+    id: "ind-log",
+    category: "industry",
+    title: "물류 지연 시나리오 (LOG-01)",
+    level: "중급",
+    summary: "항만 체류시간, 물류 대응 회의록, 터미널 점검 공지 연계 탐색",
+    reward: "물류 IQ 마스터",
+    points: 250,
+    focus: "foundry",
+    tab: "inspector",
+    industryScenarioId: "LOG-01",
+  },
+  {
+    id: "ind-fin",
+    category: "industry",
+    title: "금융 AML/KYC 시나리오 (FIN-01)",
+    level: "고급",
+    summary: "분할 입출금 패턴, AML 검토 보고서, FIU 지침 연계 탐색",
+    reward: "금융 IQ 마스터",
+    points: 300,
+    focus: "foundry",
+    tab: "inspector",
+    industryScenarioId: "FIN-01",
+  },
+  {
+    id: "ind-hc",
+    category: "industry",
+    title: "의료 운영 시나리오 (HC-01)",
+    level: "고급",
+    summary: "응급실 가동률, 간호 인계장, 감염병 유행 주의보 연계 탐색",
+    reward: "의료 IQ 마스터",
+    points: 300,
+    focus: "foundry",
+    tab: "inspector",
+    industryScenarioId: "HC-01",
+  },
+  {
+    id: "ind-tel",
+    category: "industry",
+    title: "통신 장애 시나리오 (TEL-01)",
+    level: "고급",
+    summary: "기지국 패킷 손실률, NOC 보고서, 페스티벌 공시 연계 탐색",
+    reward: "통신 IQ 마스터",
+    points: 300,
+    focus: "foundry",
+    tab: "inspector",
+    industryScenarioId: "TEL-01",
+  },
+]
+
+export const quests: Quest[] = [...representativeQuests, ...industryQuests]
 
 export interface FallbackDefinition {
   id: FallbackMode
@@ -177,7 +261,7 @@ export interface FallbackDefinition {
 export const fallbackDefinitions: FallbackDefinition[] = [
   {
     id: "normal",
-    label: "Normal",
+    label: "정상",
     status: "pass",
     unavailable: [],
     attempts: 1,
@@ -186,7 +270,7 @@ export const fallbackDefinitions: FallbackDefinition[] = [
   },
   {
     id: "fabric-down",
-    label: "Fabric ↓",
+    label: "FabricIQ 장애",
     status: "partial",
     unavailable: ["fabric"],
     attempts: 4,
@@ -195,7 +279,7 @@ export const fallbackDefinitions: FallbackDefinition[] = [
   },
   {
     id: "work-down",
-    label: "Work ↓",
+    label: "WorkIQ 장애",
     status: "partial",
     unavailable: ["work"],
     attempts: 4,
@@ -204,7 +288,7 @@ export const fallbackDefinitions: FallbackDefinition[] = [
   },
   {
     id: "web-down",
-    label: "Web ↓",
+    label: "WebIQ 장애",
     status: "partial",
     unavailable: ["web"],
     attempts: 4,
@@ -213,7 +297,7 @@ export const fallbackDefinitions: FallbackDefinition[] = [
   },
   {
     id: "internal-down",
-    label: "Internal ↓",
+    label: "내부 근거 장애",
     status: "blocked",
     unavailable: ["fabric", "work"],
     attempts: 4,
@@ -222,7 +306,7 @@ export const fallbackDefinitions: FallbackDefinition[] = [
   },
   {
     id: "all-down",
-    label: "All ↓",
+    label: "전체 장애",
     status: "blocked",
     unavailable: ["fabric", "work", "web"],
     attempts: 4,
@@ -243,15 +327,15 @@ export interface GraphNodeDefinition {
 }
 
 export const graphNodes: GraphNodeDefinition[] = [
-  { id: "lakehouse", label: "Lakehouse", subtitle: "14 tables", kind: "source", x: 100, y: 92, width: 142, inspectId: "fabric" },
-  { id: "fabric", label: "FabricIQ", subtitle: "structured facts", kind: "iq", x: 310, y: 92, width: 154, inspectId: "fabric" },
-  { id: "m365", label: "Microsoft 365", subtitle: "60 work items", kind: "source", x: 100, y: 258, width: 142, inspectId: "work" },
-  { id: "work", label: "WorkIQ", subtitle: "ACL evidence", kind: "iq", x: 310, y: 258, width: 154, inspectId: "work" },
-  { id: "public-web", label: "Public web", subtitle: "official sources", kind: "source", x: 100, y: 424, width: 142, inspectId: "web" },
-  { id: "web", label: "WebIQ", subtitle: "URL citations", kind: "iq", x: 310, y: 424, width: 154, inspectId: "web" },
-  { id: "knowledge", label: "Authority", subtitle: "policies · knowledge", kind: "source", x: 586, y: 92, width: 154, inspectId: "foundry" },
-  { id: "foundry", label: "FoundryIQ", subtitle: "route · combine · evaluate", kind: "iq", x: 586, y: 258, width: 178, inspectId: "foundry" },
-  { id: "briefing", label: "Grounded briefing", subtitle: "answer · actions · warnings", kind: "output", x: 826, y: 258, width: 178, inspectId: "foundry" },
+  { id: "lakehouse", label: "Lakehouse", subtitle: "샘플 테이블 14개", kind: "source", x: 100, y: 92, width: 142, inspectId: "fabric" },
+  { id: "fabric", label: "FabricIQ", subtitle: "정형 수치", kind: "iq", x: 310, y: 92, width: 154, inspectId: "fabric" },
+  { id: "m365", label: "Microsoft 365", subtitle: "업무 근거 60건", kind: "source", x: 100, y: 258, width: 142, inspectId: "work" },
+  { id: "work", label: "WorkIQ", subtitle: "ACL 적용 내부 근거", kind: "iq", x: 310, y: 258, width: 154, inspectId: "work" },
+  { id: "public-web", label: "Public web", subtitle: "공식 공개 출처", kind: "source", x: 100, y: 424, width: 142, inspectId: "web" },
+  { id: "web", label: "WebIQ", subtitle: "URL 인용", kind: "iq", x: 310, y: 424, width: 154, inspectId: "web" },
+  { id: "knowledge", label: "Authority", subtitle: "정책 · 권위 지식", kind: "source", x: 586, y: 92, width: 154, inspectId: "foundry" },
+  { id: "foundry", label: "FoundryIQ", subtitle: "결합 · 평가 · fallback", kind: "iq", x: 586, y: 258, width: 178, inspectId: "foundry" },
+  { id: "briefing", label: "근거 기반 브리핑", subtitle: "답변 · 조치 · 경고", kind: "output", x: 826, y: 258, width: 178, inspectId: "foundry" },
 ]
 
 export const graphEdges = [

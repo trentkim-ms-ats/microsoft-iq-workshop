@@ -38,6 +38,9 @@ Q1~Q5 분석 신호가 실습의 중심이며, 데이터 품질 개념을 설명
 
 - 통화: 모든 금액은 **KRW** 가정 (`currency` 컬럼 명시).
 - 채널: `channels.csv`는 실제 의미 있는 **4개 채널**로만 구성됩니다 — `CH0001`(OnlineMall), `CH0002`(MobileApp), `CH0003`(Social), `CH0004`(OfflineStore). `orders.channel_id`와 `campaigns.channel_id`는 모두 이 4개 채널 중 하나를 참조합니다(고아 참조 없음).
+- Q1 호환 캠페인: `CA00001`~`CA00004`는 각각 `SummerPush`, `BackToSchool`,
+  `VIPRetention`, `FlashWeek`로 고정해 Track4 Q1과 Playground의 캠페인별
+  결제 전환율 비교가 빈 결과가 되지 않도록 합니다.
 - 타임스탬프: `approved_at`, `delivered_at`, `created_at`는 `YYYY-MM-DDThh:mm:ss+09:00`(KST).
 - 날짜: `order_date`, `return_date`, `*_date`는 `YYYY-MM-DD`.
   - 날짜(Date)와 타임스탬프(DateTime) 표기가 혼재하는 것은 **미션 3 표준화 대상**입니다.
