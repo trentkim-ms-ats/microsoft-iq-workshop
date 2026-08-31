@@ -42,6 +42,54 @@ import {
 } from "@/data/model"
 
 const COMPLETED_QUESTS_KEY = "microsoft-iq-playground-quests"
+const PANEL_GUIDE_AUTO_KEY = "microsoft-iq-playground-panel-guide-auto"
+
+const PANEL_GUIDE_STEPS = [
+  {
+    selector: "#missions",
+    eyebrow: "PANEL 1 · 학습 선택",
+    title: "학습 미션 패널",
+    description:
+      "권장 학습 순서 또는 산업별 실습을 선택하고, 현재 미션의 목표와 완료 기준을 확인하는 공간입니다.",
+    details: [
+      "미션 카드를 선택하면 관련 시나리오, IQ 포커스, 학습 탭이 함께 이동합니다.",
+      "난이도·역할·점수를 확인하고 해볼 일과 완료 확인을 수행하세요.",
+      "완료 표시는 선택한 미션에서만 활성화되며, 선택 전에는 흐림 상태로 유지됩니다.",
+    ],
+  },
+  {
+    selector: "#flow",
+    eyebrow: "PANEL 2 · 근거 흐름",
+    title: "근거 흐름 패널",
+    description:
+      "한 질문이 FabricIQ, WorkIQ, WebIQ, FoundryIQ를 거쳐 근거 기반 브리핑이 되는 순서를 시각화합니다.",
+    details: [
+      "상단에서 대표 Q1~Q3 또는 여섯 산업 시나리오를 선택할 수 있습니다.",
+      "IQ 노드를 선택하면 해당 경로가 강조되고 오른쪽 상세 학습도 같은 IQ로 이동합니다.",
+      "하단 sourceTrace에서 각 IQ의 사용 가능 여부와 PASS·PARTIAL·BLOCKED 상태를 확인하세요.",
+    ],
+  },
+  {
+    selector: "#explorer",
+    eyebrow: "PANEL 3 · 상세 검증",
+    title: "IQ 상세 학습 패널",
+    description:
+      "선택한 IQ의 책임과 금지 경계, 시나리오별 근거, 장애 시 안전 동작을 자세히 확인하는 공간입니다.",
+    details: [
+      "IQ 역할에서 입력·출력 계약과 금지 경계를 먼저 확인하세요.",
+      "근거 보기에서 정형 수치, ACL 적용 내부 근거, 교육용 WebIQ citation을 비교하세요.",
+      "장애 대응에서 정상 결론이 언제 부분응답으로 제한되거나 완전히 차단되는지 실험하세요.",
+    ],
+  },
+] as const
+
+interface PanelGuideTarget {
+  top: number
+  left: number
+  width: number
+  height: number
+  right: number
+}
 
 function getInitialParam(name: string) {
   return new URLSearchParams(window.location.search).get(name)
@@ -110,6 +158,16 @@ function getCompletedQuests() {
     window.localStorage.removeItem(COMPLETED_QUESTS_KEY)
     return new Set<string>()
   }
+}
+
+function getPanelGuideAutoShow() {
+  const stored = window.localStorage.getItem(PANEL_GUIDE_AUTO_KEY)
+  if (stored === null || stored === "true") return true
+  if (stored === "false") return false
+
+  console.warn("Microsoft IQ Playground panel guide preference was reset.")
+  window.localStorage.removeItem(PANEL_GUIDE_AUTO_KEY)
+  return true
 }
 
 function statusLabel(status: "pass" | "partial" | "blocked") {
@@ -385,14 +443,46 @@ function QuestPanel({
                     <em data-level={quest.level}>{quest.level}</em>
                   </span>
                   <span className="quest-summary">{quest.summary}</span>
-                  <span className="quest-reward">
-                    <Award aria-hidden="true" />
-                    {quest.reward}
-                    <b>+{quest.points}점</b>
-                  </span>
                 </span>
                 <ChevronRight aria-hidden="true" className="quest-chevron" />
               </button>
+
+              <div className="quest-action-row">
+                <span className="quest-reward">
+                  <Award aria-hidden="true" />
+                  <span className="quest-reward-label" title={quest.reward}>
+                    {quest.reward}
+                  </span>
+                  <b>+{quest.points}점</b>
+                </span>
+                <button
+                  type="button"
+                  className={[
+                    "quest-complete-button",
+                    completed ? "is-complete" : "",
+                    !active && !completed ? "is-inactive" : "",
+                  ].join(" ")}
+                  onClick={() => onComplete(quest)}
+                  disabled={!active || completed}
+                  aria-label={`${quest.title}: ${
+                    completed
+                      ? "학습 완료"
+                      : active
+                        ? "이해했어요 · 완료 표시"
+                        : "미션을 먼저 선택하면 완료 표시가 활성화됩니다"
+                  }`}
+                  title={!active && !completed ? "미션을 먼저 선택하세요." : undefined}
+                >
+                  {completed ? (
+                    <CheckCircle2 aria-hidden="true" />
+                  ) : active ? (
+                    <BadgeCheck aria-hidden="true" />
+                  ) : (
+                    <LockKeyhole aria-hidden="true" />
+                  )}
+                  {completed ? "완료됨" : "완료 표시"}
+                </button>
+              </div>
 
               {active && (
                 <div className="quest-guide">
@@ -400,15 +490,6 @@ function QuestPanel({
                   <p>{guidance.task}</p>
                   <strong>완료 확인</strong>
                   <p>{guidance.check}</p>
-                  <button
-                    type="button"
-                    className={`quest-complete-button ${completed ? "is-complete" : ""}`}
-                    onClick={() => onComplete(quest)}
-                    disabled={completed}
-                  >
-                    {completed ? <CheckCircle2 aria-hidden="true" /> : <BadgeCheck aria-hidden="true" />}
-                    {completed ? "학습 완료" : "이해했어요 · 완료 표시"}
-                  </button>
                 </div>
               )}
             </article>
@@ -1131,31 +1212,30 @@ function FallbackContent({
   )
 }
 
-function SummaryDialog({
-  completed,
-  onClose,
-  returnFocusRef,
-}: {
-  completed: number
-  onClose: () => void
-  returnFocusRef: RefObject<HTMLButtonElement | null>
-}) {
-  const dialogRef = useRef<HTMLElement>(null)
-  const closeButtonRef = useRef<HTMLButtonElement>(null)
-
+function useDialogFocusTrap<
+  TDialog extends HTMLElement,
+  TInitial extends HTMLElement,
+  TReturn extends HTMLElement,
+>(
+  dialogRef: RefObject<TDialog | null>,
+  initialFocusRef: RefObject<TInitial | null>,
+  onClose: () => void,
+  returnFocusRef: RefObject<TReturn | null>,
+) {
   useEffect(() => {
     const previouslyFocused =
       document.activeElement instanceof HTMLElement ? document.activeElement : null
     const fallbackFocusTarget = returnFocusRef.current
     const backgroundElements = [
       document.querySelector<HTMLElement>(".app-header"),
+      document.querySelector<HTMLElement>(".quick-navigation"),
       document.querySelector<HTMLElement>(".app-shell"),
     ].filter((element): element is HTMLElement => element !== null)
 
     backgroundElements.forEach((element) => {
       element.inert = true
     })
-    closeButtonRef.current?.focus()
+    initialFocusRef.current?.focus()
 
     function handleKeyDown(event: KeyboardEvent) {
       if (event.key === "Escape") {
@@ -1197,7 +1277,202 @@ function SummaryDialog({
           : fallbackFocusTarget
       focusTarget?.focus()
     }
-  }, [onClose, returnFocusRef])
+  }, [dialogRef, initialFocusRef, onClose, returnFocusRef])
+}
+
+function getPanelGuideCardPosition(target: PanelGuideTarget, stepIndex: number) {
+  const cardWidth = 380
+  const edge = 16
+  const gap = 16
+  const maximumLeft = Math.max(edge, window.innerWidth - cardWidth - edge)
+  const preferredLeft =
+    stepIndex === 0
+      ? target.right + gap
+      : stepIndex === PANEL_GUIDE_STEPS.length - 1
+        ? target.left - cardWidth - gap
+        : target.left + (target.width - cardWidth) / 2
+
+  return {
+    left: Math.min(Math.max(preferredLeft, edge), maximumLeft),
+    top: Math.min(
+      Math.max(target.top + 24, 88),
+      Math.max(88, window.innerHeight - 480),
+    ),
+  }
+}
+
+function PanelGuide({
+  autoShow,
+  onAutoShowChange,
+  onClose,
+  returnFocusRef,
+}: {
+  autoShow: boolean
+  onAutoShowChange: (next: boolean) => void
+  onClose: () => void
+  returnFocusRef: RefObject<HTMLButtonElement | null>
+}) {
+  const [stepIndex, setStepIndex] = useState(0)
+  const [target, setTarget] = useState<PanelGuideTarget | null>(null)
+  const dialogRef = useRef<HTMLElement>(null)
+  const closeButtonRef = useRef<HTMLButtonElement>(null)
+  const step = PANEL_GUIDE_STEPS[stepIndex]
+  const isLastStep = stepIndex === PANEL_GUIDE_STEPS.length - 1
+
+  useDialogFocusTrap(dialogRef, closeButtonRef, onClose, returnFocusRef)
+
+  useEffect(() => {
+    const targetElement = document.querySelector<HTMLElement>(step.selector)
+    if (!targetElement) {
+      console.error(`Panel guide target was not found: ${step.selector}`)
+      onClose()
+      return
+    }
+    const guideTarget = targetElement
+
+    if (window.matchMedia("(max-width: 1120px)").matches) {
+      guideTarget.scrollIntoView({ block: "start" })
+    }
+
+    function updateTarget() {
+      const rect = guideTarget.getBoundingClientRect()
+      const top = Math.max(rect.top, 8)
+      const bottom = Math.min(rect.bottom, window.innerHeight - 8)
+      setTarget({
+        top,
+        left: Math.max(rect.left, 8),
+        width: Math.max(0, Math.min(rect.right, window.innerWidth - 8) - Math.max(rect.left, 8)),
+        height: Math.max(0, bottom - top),
+        right: Math.min(rect.right, window.innerWidth - 8),
+      })
+    }
+
+    updateTarget()
+    const observer = new ResizeObserver(updateTarget)
+    observer.observe(guideTarget)
+    window.addEventListener("resize", updateTarget)
+    window.addEventListener("scroll", updateTarget, true)
+
+    return () => {
+      observer.disconnect()
+      window.removeEventListener("resize", updateTarget)
+      window.removeEventListener("scroll", updateTarget, true)
+    }
+  }, [onClose, step.selector])
+
+  const cardPosition = target
+    ? getPanelGuideCardPosition(target, stepIndex)
+    : { left: 16, top: 88 }
+
+  return (
+    <div className="panel-guide-layer">
+      {target && (
+        <div
+          className="panel-guide-spotlight"
+          aria-hidden="true"
+          style={{
+            top: target.top,
+            left: target.left,
+            width: target.width,
+            height: target.height,
+          }}
+        />
+      )}
+      <section
+        ref={dialogRef}
+        className="panel-guide-dialog"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="panel-guide-title"
+        style={cardPosition}
+      >
+        <button
+          ref={closeButtonRef}
+          type="button"
+          className="icon-button modal-close"
+          onClick={onClose}
+          aria-label="패널 안내 닫기"
+        >
+          <X aria-hidden="true" />
+        </button>
+
+        <div className="panel-guide-progress" aria-label={`패널 안내 ${stepIndex + 1}/${PANEL_GUIDE_STEPS.length}`}>
+          <span>{step.eyebrow}</span>
+          <strong>{stepIndex + 1} / {PANEL_GUIDE_STEPS.length}</strong>
+        </div>
+        <div className="panel-guide-content" aria-live="polite">
+          <h2 id="panel-guide-title">{step.title}</h2>
+          <p>{step.description}</p>
+          <ul>
+            {step.details.map((detail) => <li key={detail}>{detail}</li>)}
+          </ul>
+        </div>
+
+        <label className="panel-guide-autoshow">
+          <input
+            type="checkbox"
+            checked={autoShow}
+            onChange={(event) => onAutoShowChange(event.target.checked)}
+          />
+          <span>
+            <strong>새로 로드할 때 자동 표시</strong>
+            <small>체크를 끄면 다음 방문부터 자동으로 열리지 않습니다.</small>
+          </span>
+        </label>
+
+        <div className="panel-guide-actions">
+          <button
+            type="button"
+            className="text-button"
+            onClick={() => {
+              onAutoShowChange(false)
+              onClose()
+            }}
+          >
+            다시 표시하지 않기
+          </button>
+          <span>
+            <button
+              type="button"
+              className="secondary-button"
+              onClick={() => setStepIndex((current) => Math.max(0, current - 1))}
+              disabled={stepIndex === 0}
+            >
+              이전
+            </button>
+            <button
+              type="button"
+              className="primary-button"
+              onClick={() => {
+                if (isLastStep) {
+                  onClose()
+                } else {
+                  setStepIndex((current) => current + 1)
+                }
+              }}
+            >
+              {isLastStep ? "안내 완료" : "다음 패널"}
+            </button>
+          </span>
+        </div>
+      </section>
+    </div>
+  )
+}
+
+function SummaryDialog({
+  completed,
+  onClose,
+  returnFocusRef,
+}: {
+  completed: number
+  onClose: () => void
+  returnFocusRef: RefObject<HTMLButtonElement | null>
+}) {
+  const dialogRef = useRef<HTMLElement>(null)
+  const closeButtonRef = useRef<HTMLButtonElement>(null)
+
+  useDialogFocusTrap(dialogRef, closeButtonRef, onClose, returnFocusRef)
 
   return (
     <div className="modal-backdrop" role="presentation" onMouseDown={onClose}>
@@ -1287,9 +1562,12 @@ function App() {
   const [theme, setTheme] = useState(
     document.documentElement.getAttribute("data-theme") ?? "light",
   )
+  const [panelGuideAutoShow, setPanelGuideAutoShow] = useState(getPanelGuideAutoShow)
+  const [showPanelGuide, setShowPanelGuide] = useState(panelGuideAutoShow)
   const [showSummary, setShowSummary] = useState(false)
   const [toast, setToast] = useState("")
   const summaryButtonRef = useRef<HTMLButtonElement>(null)
+  const closePanelGuide = useCallback(() => setShowPanelGuide(false), [])
   const closeSummary = useCallback(() => setShowSummary(false), [])
 
   const selectedDefinition =
@@ -1375,6 +1653,16 @@ function App() {
     setCompletedQuests(next)
     window.localStorage.setItem(COMPLETED_QUESTS_KEY, JSON.stringify([...next]))
     setToast(`${quest.title} 미션을 완료했습니다. +${quest.points}점`)
+  }
+
+  function updatePanelGuideAutoShow(next: boolean) {
+    setPanelGuideAutoShow(next)
+    try {
+      window.localStorage.setItem(PANEL_GUIDE_AUTO_KEY, String(next))
+    } catch (error) {
+      console.error("Failed to save the panel guide preference.", error)
+      setToast("패널 안내 표시 설정을 저장하지 못했습니다.")
+    }
   }
 
   function handleNodeSelect(id: IqId) {
@@ -1485,7 +1773,7 @@ function App() {
         theme={theme}
         onThemeToggle={toggleTheme}
         onShare={handleShare}
-        onSummary={() => setShowSummary(true)}
+        onSummary={() => setShowPanelGuide(true)}
         summaryButtonRef={summaryButtonRef}
       />
       <QuickNavigation />
@@ -1669,6 +1957,14 @@ function App() {
         <SummaryDialog
           completed={completedQuests.size}
           onClose={closeSummary}
+          returnFocusRef={summaryButtonRef}
+        />
+      )}
+      {showPanelGuide && (
+        <PanelGuide
+          autoShow={panelGuideAutoShow}
+          onAutoShowChange={updatePanelGuideAutoShow}
+          onClose={closePanelGuide}
           returnFocusRef={summaryButtonRef}
         />
       )}

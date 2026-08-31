@@ -129,7 +129,8 @@ Fallback 탭과 그래프 fallback 강조는 `src/data/model.ts`의
   권장 학습 순서를 먼저 보여줍니다.
 - 미션을 열면 `해볼 일`과 `완료 확인`이 표시되며, 사용자가
   `이해했어요 · 완료 표시`를 선택해야 완료됩니다. 화면을 열기만 해서는
-  점수가 올라가지 않습니다.
+  점수가 올라가지 않습니다. 선택하지 않은 미션에도 `완료 표시`가 흐림 상태로
+  보이지만 비활성화되어 있어 먼저 미션을 선택해야 합니다.
 - 완료 표시는 브라우저 `localStorage` 키 `microsoft-iq-playground-quests`에
   문자열 배열(JSON)로 저장됩니다. 저장된 값이 배열이 아니거나 파싱에
   실패하면 자동으로 초기화되고 콘솔 경고만 출력합니다.
@@ -141,8 +142,11 @@ Fallback 탭과 그래프 fallback 강조는 `src/data/model.ts`의
   제조·물류·금융·헬스케어·통신·리테일과 산업 시나리오 ID를 입력하면 관련
   학습 화면으로 이동합니다. AI 호출이나 live 검색이 아닌 로컬 키워드
   매칭입니다.
-- **처음 시작**: 헤더와 작업 영역의 시작 가이드에서 4단계 권장 흐름과 기준선,
-  ACL, citation, fixture, 권위 SOP, sourceTrace, fallback 용어를 설명합니다.
+- **처음 시작**: 헤더 버튼은 학습 미션 → 근거 흐름 → IQ 상세 학습을 차례로
+  강조하는 3단계 layered 패널 안내를 엽니다. 안내에서 `새로 로드할 때 자동
+  표시`를 선택하거나 `다시 표시하지 않기`로 이후 자동 실행을 끌 수 있습니다.
+  작업 영역의 `용어와 시작 방법 보기`는 4단계 권장 흐름과 기준선, ACL,
+  citation, fixture, 권위 SOP, sourceTrace, fallback 용어를 설명합니다.
 - **공유**: `공유` 버튼은 현재 URL(아래 쿼리 파라미터 포함)을
   `navigator.clipboard`로 복사합니다. 클립보드 권한이 없으면 실패 토스트를
   보여줍니다.
@@ -175,10 +179,12 @@ Fallback 탭과 그래프 fallback 강조는 `src/data/model.ts`의
 └───────────────┴─────────────────────────────┴─────────────────────┘
 ```
 
-`처음 시작` 버튼은 포커스 트랩이 적용된 모달(`SummaryDialog`)을 열어 권장
-4단계, 초보자 핵심 용어, Ontology 엔터티 수, M365 근거 수, Web citation 수,
-strict gate 수, 미션 진행률, fixture 고지문을 보여줍니다. 완료/실패 알림은
-화면 하단 토스트로 표시됩니다.
+`처음 시작` 버튼은 포커스 트랩이 적용된 layered 안내(`PanelGuide`)를 열고,
+현재 설명 중인 패널만 spotlight로 강조합니다. 자동 표시 설정은 브라우저
+`localStorage` 키 `microsoft-iq-playground-panel-guide-auto`에 저장됩니다.
+별도의 `SummaryDialog`는 권장 4단계, 초보자 핵심 용어, Ontology 엔터티 수,
+M365 근거 수, Web citation 수, strict gate 수, 미션 진행률, fixture 고지문을
+보여줍니다. 완료/실패 알림은 화면 하단 토스트로 표시됩니다.
 
 ## 사전 준비
 
@@ -295,9 +301,9 @@ https://<owner>.github.io/microsoft-iq-workshop/industry_playground/playground/?
 - fallback 모드 전환은 클라이언트 상태(`mode`)만 바꿀 뿐, 실제 근거 재계산이
   나 재시도를 실행하지 않습니다. 화면에 표시되는 재시도 타임라인은 정책을
   설명하기 위한 시각 자료입니다.
-- 유지되는 브라우저 상태는 두 가지뿐입니다: URL 쿼리 파라미터(탐색 상태,
-  새로고침·공유 시 복원)와 `localStorage`의 완료 미션 목록(브라우저별로
-  누적, 서버로 전송되지 않음).
+- 유지되는 브라우저 상태는 URL 쿼리 파라미터(탐색 상태), `localStorage`의 완료
+  미션 목록, layered 패널 안내 자동 표시 설정입니다. 모두 브라우저별로 저장되며
+  서버로 전송되지 않습니다.
 
 ## Fallback 정책
 
