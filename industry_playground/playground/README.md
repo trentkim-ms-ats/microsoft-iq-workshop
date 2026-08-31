@@ -356,8 +356,9 @@ dist/assets/index-*.js
   - `.github/workflows/playground-pages.yml`
 
 `build` job은 Node 20 + Corepack + `pnpm install --frozen-lockfile` +
-`pnpm build`로 `industry_playground/playground/dist`를 Pages artifact로
-업로드하고, `deploy` job이 GitHub Pages에 배포합니다.
+`pnpm build`로 `industry_playground/playground/dist`를 만든 뒤,
+`pages-artifact/industry_playground/playground/` 하위에 배치해 Vite의 중첩
+`base` 경로와 일치시킵니다. 이후 `deploy` job이 GitHub Pages에 배포합니다.
 
 ## 실행 경계와 보안
 
