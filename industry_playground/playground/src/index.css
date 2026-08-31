@@ -807,9 +807,9 @@ input {
 
 .trace-item {
   flex: 1 1 0;
-  gap: 7px;
-  min-width: 108px;
-  padding: 9px 10px;
+  gap: 5px;
+  min-width: 92px;
+  padding: 7px 6px;
   border: 1px solid var(--cp-border);
   border-radius: 0.625rem;
   background: var(--cp-surface);
