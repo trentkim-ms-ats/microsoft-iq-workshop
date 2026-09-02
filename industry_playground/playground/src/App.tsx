@@ -787,8 +787,15 @@ function StructuredMetricDetails({
   if (scenario.id === "Q1") {
     return (
       <div className="metric-table-wrap">
-        <table className="metric-table">
+        <table className="metric-table metric-table--campaigns">
           <caption>캠페인별 결제 전환율 비교</caption>
+          <colgroup>
+            <col className="campaign-column" />
+            <col className="order-column" />
+            <col className="success-column" />
+            <col className="failure-column" />
+            <col className="conversion-column" />
+          </colgroup>
           <thead>
             <tr>
               <th>캠페인</th>

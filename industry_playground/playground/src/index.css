@@ -3122,6 +3122,40 @@ input {
   text-align: left;
 }
 
+.metric-table--campaigns {
+  min-width: 0;
+  table-layout: fixed;
+}
+
+.metric-table--campaigns .campaign-column {
+  width: 28%;
+}
+
+.metric-table--campaigns .order-column,
+.metric-table--campaigns .success-column {
+  width: 12%;
+}
+
+.metric-table--campaigns .failure-column {
+  width: 28%;
+}
+
+.metric-table--campaigns .conversion-column {
+  width: 20%;
+}
+
+.metric-table--campaigns th,
+.metric-table--campaigns td {
+  padding-right: 4px;
+  padding-left: 4px;
+}
+
+.metric-table--campaigns th:first-child,
+.metric-table--campaigns td:first-child {
+  overflow-wrap: anywhere;
+  white-space: normal;
+}
+
 .metric-summary-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
