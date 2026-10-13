@@ -114,8 +114,9 @@ entities:
 #   from_entity : 부모(1측, 참조 대상)
 #   to_entity   : 자식(N측, FK 보유 테이블)
 #   binding_table : 조인 근거가 되는 Delta 테이블
-#   from_key    : binding_table 안에서 from_entity(부모)를 가리키는 컬럼(FK)
-#   to_key      : binding_table 안에서 to_entity(자식)를 식별하는 컬럼
+#   from_key    : binding_table 안에서 from_entity를 식별하는 PK 컬럼(단일값/목록)
+#   to_key      : binding_table 안에서 to_entity를 식별하는 PK 컬럼(단일값/목록)
+#                 복합키 Entity는 entityIdParts 순서와 같은 전체 PK 목록을 사용
 #   cardinality : 카디널리티 표기(문서/검증용)
 #   display_name: 실습지 정규 목록의 관계 표기(동사형)
 # -----------------------------------------------------------------------------
@@ -163,7 +164,7 @@ relationships:
     to_entity: OrderItem
     binding_table: order_items
     from_key: order_id
-    to_key: order_id
+    to_key: [order_id, product_id]
     cardinality: "1:N"
 
   - name: OrderItem_references_Product
@@ -172,7 +173,7 @@ relationships:
     to_entity: OrderItem
     binding_table: order_items
     from_key: product_id
-    to_key: order_id
+    to_key: [order_id, product_id]
     cardinality: "1:N"
 
   - name: Order_has_Return
@@ -235,7 +236,7 @@ relationships:
     to_entity: OrderPromotion
     binding_table: order_promotions
     from_key: order_id
-    to_key: promotion_id
+    to_key: [order_id, promotion_id]
     cardinality: "1:N"
 
   - name: OrderPromotion_points_to_Promotion
@@ -244,7 +245,7 @@ relationships:
     to_entity: OrderPromotion
     binding_table: order_promotions
     from_key: promotion_id
-    to_key: order_id
+    to_key: [order_id, promotion_id]
     cardinality: "1:N"
 
   - name: Campaign_drives_CampaignAttribution
@@ -253,7 +254,7 @@ relationships:
     to_entity: CampaignAttribution
     binding_table: campaign_attribution
     from_key: campaign_id
-    to_key: order_id
+    to_key: [campaign_id, order_id]
     cardinality: "1:N"
 
   - name: CampaignAttribution_points_to_Order
@@ -262,7 +263,7 @@ relationships:
     to_entity: CampaignAttribution
     binding_table: campaign_attribution
     from_key: order_id
-    to_key: campaign_id
+    to_key: [campaign_id, order_id]
     cardinality: "1:N"
 
   - name: CampaignAttribution_points_to_Customer
@@ -271,7 +272,7 @@ relationships:
     to_entity: CampaignAttribution
     binding_table: campaign_attribution
     from_key: customer_id
-    to_key: campaign_id
+    to_key: [campaign_id, order_id]
     cardinality: "1:N"
 
 # -----------------------------------------------------------------------------

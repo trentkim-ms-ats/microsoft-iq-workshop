@@ -19,6 +19,10 @@
     {
       "sourceColumnName": "order_id",
       "targetPropertyId": "86f05d10-7817-5744-8b30-d90aeb7026d8"
+    },
+    {
+      "sourceColumnName": "product_id",
+      "targetPropertyId": "8e07f4f5-3bf6-51fc-aa2d-c1072c50f788"
     }
   ]
 }

@@ -30,16 +30,18 @@ print("PARTS_ROOT     :", PARTS_ROOT)
 
 
 # ======== CELL 2 : 인증 토큰 ========
-from notebookutils.authentication import AzureStorageCredentialsManager
+# 일부 Fabric 런타임에는 레거시 authentication 하위 모듈이 없습니다.
+# 공식 notebookutils.credentials API에서 Power BI/Fabric 리소스용 토큰을 가져옵니다.
 
 try:
-    token = AzureStorageCredentialsManager().get_notebookutils_aad_token()
+    token = notebookutils.credentials.getToken("pbi")
     headers = {"Authorization": "Bearer " + token, "Content-Type": "application/json"}
-    print("✅ 인증 토큰 획득 완료")
+    print("✅ 인증 토큰 획득 완료 (pbi scope)")
 except Exception as exc:  # noqa: BLE001
     token = None
+    headers = {}
     print("❌ 토큰 획득 실패:", exc)
-    print("   → Fabric 권한/capacity 연결을 확인하세요.")
+    print("   → Fabric 권한/capacity 연결 및 notebookutils.credentials 사용 가능 여부를 확인하세요.")
 
 
 # ======== CELL 3 : definition_parts 읽어 definition.parts[] 조립 ========
@@ -68,11 +70,18 @@ def _inject_binding_identifiers(part_path: str, payload_obj: dict, workspace_id:
 
 
 def build_definition_from_folder(parts_root: str, workspace_id: str, lakehouse_id: str) -> dict:
+    lakehouse_root = "/lakehouse/default"
+    if not os.path.isdir(lakehouse_root):
+        raise FileNotFoundError(
+            f"default Lakehouse 경로를 찾을 수 없습니다: {lakehouse_root}\n"
+            "Notebook Explorer에서 Add lakehouse로 Lakehouse를 연결하고 Set as default로 지정한 뒤, "
+            "세션을 Restart하거나 Stop session 후 Start session을 실행하세요."
+        )
     if not os.path.isdir(parts_root):
         raise FileNotFoundError(
             f"경로를 찾을 수 없습니다: {parts_root}\n"
-            "definition_parts 폴더를 Lakehouse Files 에 업로드했는지, "
-            "이 Notebook 에 default Lakehouse 가 연결되었는지 확인하세요."
+            "definition_parts 폴더가 default Lakehouse의 Files/ontology_bundle 아래에 있는지, "
+            "연결한 Lakehouse가 LAKEHOUSE_ID와 같은지 확인하세요."
         )
 
     parts = []

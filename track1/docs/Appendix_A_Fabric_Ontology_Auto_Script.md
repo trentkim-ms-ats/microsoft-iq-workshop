@@ -58,7 +58,6 @@
 # 아래 스크립트 최상단에 추가
 
 import requests
-from notebookutils.authentication import AzureStorageCredentialsManager
 
 # 현재 Workspace/Item ID 자동 감지 (일부 환경)
 # 또는 수동 기입 후 테스트
@@ -78,7 +77,6 @@ print(f"✓ Ontology ID: {ONTOLOGY_ID}")
 
 import requests
 import json
-from notebookutils.authentication import AzureStorageCredentialsManager
 
 # ============ 설정 ============
 FABRIC_API_BASE = "https://api.fabric.microsoft.com/v1"
@@ -87,16 +85,17 @@ ONTOLOGY_ID = "your-ontology-id"      # 위 조회 방법으로 기입
 
 # ============ 인증 토큰 (Fabric 자동 제공) ============
 try:
-    token = AzureStorageCredentialsManager().get_notebookutils_aad_token()
+    token = notebookutils.credentials.getToken("pbi")
     headers = {
         "Authorization": f"Bearer {token}",
         "Content-Type": "application/json"
     }
-    print("✅ 인증 토큰 획득 완료")
+    print("✅ 인증 토큰 획득 완료 (pbi scope)")
 except Exception as e:
     print(f"❌ 토큰 획득 실패: {str(e)}")
-    print("   → Fabric 권한 재확인 또는 UI 수동 생성으로 진행하세요.")
+    print("   → Fabric 권한/capacity 연결 및 notebookutils.credentials 사용 가능 여부를 확인하세요.")
     token = None
+    headers = {}
 
 # ============ 14개 엔터티 정의 ============
 entities_config = [
@@ -252,13 +251,12 @@ import base64
 import json
 import requests
 import uuid
-from notebookutils.authentication import AzureStorageCredentialsManager
 
 FABRIC_API_BASE = "https://api.fabric.microsoft.com/v1"
 WORKSPACE_ID = "your-workspace-id"
 ONTOLOGY_ID = "your-ontology-id"
 
-token = AzureStorageCredentialsManager().get_notebookutils_aad_token()
+token = notebookutils.credentials.getToken("pbi")
 headers = {"Authorization": f"Bearer {token}", "Content-Type": "application/json"}
 
 print("📌 단계 3: 엔터티 속성 추가 (Definition 업데이트 방식)")
@@ -443,17 +441,17 @@ Ontology 항목 → [엔터티 선택] → [매핑] 탭 → [+ 테이블 추가]
 ```python
 # 단계 5: 물리 관계(FK 기반) 생성
 import requests
-from notebookutils.authentication import AzureStorageCredentialsManager
 
 FABRIC_API_BASE = "https://api.fabric.microsoft.com/v1"
 WORKSPACE_ID = "your-workspace-id"
 ONTOLOGY_ID = "your-ontology-id"
 
 try:
-    token = AzureStorageCredentialsManager().get_notebookutils_aad_token()
+    token = notebookutils.credentials.getToken("pbi")
     headers = {"Authorization": f"Bearer {token}", "Content-Type": "application/json"}
-except:
+except Exception:
     token = None
+    headers = {}
 
 print("📌 단계 5: 물리 관계 (FK 기반) 추가\n")
 

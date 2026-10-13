@@ -79,6 +79,18 @@ def infer_value_type(column: str) -> str:
     return "String"
 
 
+def normalize_columns(value: str | list[str], *, field_name: str, owner_name: str) -> list[str]:
+    """단일/복합키 계약 값을 비어 있지 않은 컬럼 목록으로 정규화한다."""
+    columns = [value] if isinstance(value, str) else value
+    if not isinstance(columns, list) or not columns:
+        raise ValueError(f"{owner_name}.{field_name} must be a non-empty string or list.")
+    if not all(isinstance(column, str) and column for column in columns):
+        raise ValueError(f"{owner_name}.{field_name} contains an invalid column name: {columns}")
+    if len(columns) != len(set(columns)):
+        raise ValueError(f"{owner_name}.{field_name} contains duplicate columns: {columns}")
+    return columns
+
+
 def build_entities(contract: dict, binding_workspace_id: str, binding_item_id: str, binding_source_schema: str) -> tuple[dict, dict, list]:
     """엔터티 정의/데이터바인딩 parts 와, 관계 생성에 필요한 인덱스를 만든다."""
     entity_ids: dict[str, str] = {}
@@ -104,9 +116,11 @@ def build_entities(contract: dict, binding_workspace_id: str, binding_item_id: s
                 }
             )
 
-        pk_cols = spec["primary_key"]
-        if isinstance(pk_cols, str):
-            pk_cols = [pk_cols]
+        pk_cols = normalize_columns(
+            spec["primary_key"],
+            field_name="primary_key",
+            owner_name=entity_name,
+        )
         entity_id_parts = [property_ids[entity_name][c] for c in pk_cols]
         display_col = spec.get("display", pk_cols[0])
         display_property_id = property_ids[entity_name][display_col]
@@ -182,6 +196,36 @@ def build_relationships(
     for rel in contract.get("relationships", []):
         rel_id = det_uuid("relationship", rel["name"])
         from_e, to_e = rel["from_entity"], rel["to_entity"]
+        from_keys = normalize_columns(
+            rel["from_key"],
+            field_name="from_key",
+            owner_name=rel["name"],
+        )
+        to_keys = normalize_columns(
+            rel["to_key"],
+            field_name="to_key",
+            owner_name=rel["name"],
+        )
+        expected_from_keys = normalize_columns(
+            contract["entities"][from_e]["primary_key"],
+            field_name="primary_key",
+            owner_name=from_e,
+        )
+        expected_to_keys = normalize_columns(
+            contract["entities"][to_e]["primary_key"],
+            field_name="primary_key",
+            owner_name=to_e,
+        )
+        if from_keys != expected_from_keys:
+            raise ValueError(
+                f"{rel['name']}.from_key must bind every {from_e} entityIdPart "
+                f"in primary-key order: expected {expected_from_keys}, got {from_keys}"
+            )
+        if to_keys != expected_to_keys:
+            raise ValueError(
+                f"{rel['name']}.to_key must bind every {to_e} entityIdPart "
+                f"in primary-key order: expected {expected_to_keys}, got {to_keys}"
+            )
 
         relationship_definition = {
             "$schema": SCHEMA_RELATIONSHIP,
@@ -215,15 +259,17 @@ def build_relationships(
             },
             "sourceKeyRefBindings": [
                 {
-                    "sourceColumnName": rel["from_key"],
-                    "targetPropertyId": property_ids[from_e].get(rel["from_key"]),
+                    "sourceColumnName": column,
+                    "targetPropertyId": property_ids[from_e][column],
                 }
+                for column in from_keys
             ],
             "targetKeyRefBindings": [
                 {
-                    "sourceColumnName": rel["to_key"],
-                    "targetPropertyId": property_ids[to_e].get(rel["to_key"]),
+                    "sourceColumnName": column,
+                    "targetPropertyId": property_ids[to_e][column],
                 }
+                for column in to_keys
             ],
         }
         parts.append(

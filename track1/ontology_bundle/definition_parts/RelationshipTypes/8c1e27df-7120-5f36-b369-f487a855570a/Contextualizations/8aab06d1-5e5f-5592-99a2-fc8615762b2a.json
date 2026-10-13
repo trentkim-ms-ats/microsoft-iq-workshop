@@ -17,6 +17,10 @@
   ],
   "targetKeyRefBindings": [
     {
+      "sourceColumnName": "order_id",
+      "targetPropertyId": "982f0657-1dc6-55b3-88bf-78062f6a8c81"
+    },
+    {
       "sourceColumnName": "promotion_id",
       "targetPropertyId": "450ad398-dab0-59aa-9c09-5ac94cc2422c"
     }

@@ -30,6 +30,7 @@ Track2 완료 뒤에는 Track3 WebIQ를 거쳐 Track4 FoundryIQ로 이동합니�
 ### Fabric에서 만드는 방법 (단계별)
 1. **Fabric 포털 접속**
    - https://app.fabric.microsoft.com 접속 후 워크숍 계정으로 로그인
+   - Microsoft 임직원은 https://msit.powerbi.com 으로 접속 후 워크숍 계정으로 로그인
 2. **Workspace 생성(또는 기존 Workspace 사용)**
    - 좌측 `Workspaces` > `+ New workspace`
    - 이름 예시: `workshop-track1-teamA`

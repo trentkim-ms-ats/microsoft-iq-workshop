@@ -130,7 +130,6 @@ Level A(경로와 SQL baseline)는 기본 제출이며, GraphModel을 사용하�
 
 import requests
 import json
-from notebookutils.authentication import AzureStorageCredentialsManager
 
 # Fabric API 기본 설정
 FABRIC_API_BASE = "https://api.fabric.microsoft.com/v1"
@@ -139,7 +138,7 @@ ONTOLOGY_ID = "your-ontology-id"      # URL: ?itemId={ID} 또는 ?viewModel={ID}
 
 # Fabric 인증 토큰 (Notebook 자동 제공)
 try:
-    token = AzureStorageCredentialsManager().get_notebookutils_aad_token()
+    token = notebookutils.credentials.getToken("pbi")
     headers = {
         "Authorization": f"Bearer {token}",
         "Content-Type": "application/json"
@@ -147,6 +146,7 @@ try:
 except:
     print("⚠️ 토큰 획득 실패. Fabric 권한을 확인하세요.")
     token = None
+    headers = {}
 
 # 14개 엔터티 정의 (이름, 설명, 핵심 속성)
 entities_config = [

@@ -10,6 +10,7 @@
 |---|---|
 | `ontology_contract.yaml` | 선언적 계약(단일 진실 원천). 엔터티/속성/관계를 사람이 읽는 형태로 선언 |
 | `generate_definition.py` / `generate_definition.ipynb` | 계약을 읽어 Fabric Ontology `definition parts`(JSON) 로 변환하는 생성기 (스크립트 / 노트북) |
+| `validate_definition_parts.py` | 모든 JSON과 `.platform`, manifest, ID, 참조, 복합키 Contextualization을 전수 검증 |
 | `definition_parts/` | 생성기가 만든 실제 정의 파트(업로드 대상). 재실행하면 재생성됨 |
 | `definition_parts/_manifest.json` | parts 목록/엔터티 ID 요약(참고용, 배포에는 제외) |
 | `deploy_ontology_notebook.py` / `deploy_ontology_notebook.ipynb` | Fabric Notebook 에 붙여넣어 실행하는 배포 코드(셀 단위 / 노트북) |
@@ -28,8 +29,13 @@
 ```bash
 cd track1/ontology_bundle
 python3 generate_definition.py
+python3 validate_definition_parts.py
 # → definition_parts/ 재생성 (67 parts + _manifest.json)
 ```
+검증기는 각 Contextualization의 `sourceKeyRefBindings`와 `targetKeyRefBindings`가
+연결된 Entity의 `entityIdParts` 전체와 개수·순서까지 일치하는지 확인합니다.
+`OrderItem`, `OrderPromotion`, `CampaignAttribution` 같은 복합키 Entity는 모든 PK
+컬럼이 바인딩되어야 합니다.
 필요하면 생성 시점에 Lakehouse 바인딩 기본값을 지정할 수 있습니다:
 ```bash
 python3 generate_definition.py \
@@ -67,7 +73,8 @@ app.fabric.microsoft.com → 대상 Workspace 진입
 
 Import 후 확인/설정:
 - 워크스페이스 목록에 `deploy_ontology_notebook` 이 보이면 성공 → 클릭해 엽니다.
-- 노트북 상단에서 **Lakehouse 를 연결**합니다: `Add lakehouse` (또는 왼쪽 Explorer의 `Lakehouses` → `Add`) → 2)에서 업로드한 Lakehouse 선택 → **default 로 설정**. 이래야 `/lakehouse/default/Files/...` 경로가 동작합니다.
+- 노트북 상단에서 **Lakehouse 를 연결**합니다: `Add lakehouse` (또는 왼쪽 Explorer의 `Lakehouses` → `Add`) → 2)에서 업로드한 Lakehouse 선택 → **default 로 설정**. 연결한 Lakehouse는 CELL 1의 `LAKEHOUSE_ID`와 같아야 합니다.
+- 연결 또는 default 변경 후 **Restart session** 또는 **Stop session → Start session**을 실행합니다. 세션을 다시 시작해야 `/lakehouse/default/Files/...` 마운트가 갱신됩니다.
 - 커널/언어가 **PySpark (Python)** 인지 확인합니다.
 
 > 참고: `generate_definition.ipynb` 는 보통 로컬에서 실행합니다. 워크스페이스 안에서 파트를 만들고 싶다면 같은 방식으로 import 하되, `ontology_contract.yaml` 도 Lakehouse `Files/ontology_bundle/` 에 함께 업로드하고 노트북의 `CONTRACT`/`OUT_DIR` 경로를 `/lakehouse/default/Files/...` 로 맞추세요.
@@ -76,7 +83,7 @@ Import 후 확인/설정:
 가져온 노트북의 셀을 위에서부터 순서대로 실행합니다.
 (또는 `deploy_ontology_notebook.py` 의 각 `# ======== CELL n ========` 블록을 새 노트북 셀에 붙여넣어 실행)
 - CELL 1: `WORKSPACE_ID`, `LAKEHOUSE_ID`, `ONTOLOGY_NAME`, `PARTS_ROOT` 설정
-- CELL 2: 인증 토큰
+- CELL 2: `notebookutils.credentials.getToken("pbi")`로 Fabric REST API 인증 토큰 획득
 - CELL 3: 업로드한 파트를 읽어 `definition.parts[]` 조립(InlineBase64) + 바인딩 ID 주입
 - CELL 4: `POST /ontologies`(신규) 또는 `updateDefinition`(기존) — **full(67 parts) 우선**, 실패 시 core(36 parts) 자동 재시도
 - CELL 5: `getDefinition` 으로 검증(엔터티/관계 + DataBindings/Contextualizations 개수 확인)
@@ -103,9 +110,12 @@ Import 후 확인/설정:
    - Notebook에서:
      ```python
      import os
-     print(os.path.exists("/lakehouse/default/Files/ontology_bundle/definition_parts"))
+     print(os.path.isdir("/lakehouse/default"))
+     print(os.path.isdir("/lakehouse/default/Files"))
+     print(os.path.isdir("/lakehouse/default/Files/ontology_bundle"))
+     print(os.path.isdir("/lakehouse/default/Files/ontology_bundle/definition_parts"))
      ```
-   - `True`가 아니면 default Lakehouse 연결 또는 업로드 경로를 점검하세요.
+   - 모두 `True`여야 합니다. 첫 번째부터 실패하면 default Lakehouse 연결 후 세션을 재시작하고, 마지막만 실패하면 업로드 경로와 `PARTS_ROOT`를 점검하세요.
 
 4. **배포 결과 확인**
    - CELL 5 결과에서 최소 다음을 확인:

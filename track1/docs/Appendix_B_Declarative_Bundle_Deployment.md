@@ -181,6 +181,7 @@ app.fabric.microsoft.com → 대상 Workspace → Import(또는 + New item) → 
 ```
 
 Import 후: 노트북을 열고 상단에서 **Add lakehouse** 로 ②의 Lakehouse 를 연결(**default 설정**)해야 `/lakehouse/default/Files/...` 경로가 동작합니다. 커널은 **PySpark (Python)** 을 사용합니다.
+연결한 Lakehouse가 `LAKEHOUSE_ID`와 같은지 확인하고, 연결 또는 default 변경 후에는 **Restart session** 또는 **Stop session → Start session**으로 마운트를 갱신합니다.
 
 이어서 아래 셀을 순서대로 실행합니다(전체 코드는 [`deploy_ontology_notebook.ipynb`](../ontology_bundle/deploy_ontology_notebook.ipynb) / [`.py`](../ontology_bundle/deploy_ontology_notebook.py)):
 
@@ -193,10 +194,16 @@ LAKEHOUSE_ID  = "your-lakehouse-item-id"            # /workspaces/{ws}/lakehouse
 ONTOLOGY_NAME = "retail_track1_ontology_v1"
 PARTS_ROOT    = "/lakehouse/default/Files/ontology_bundle/definition_parts"
 
-# CELL 2 : 인증 토큰 (Fabric 자동 제공)
-from notebookutils.authentication import AzureStorageCredentialsManager
-token = AzureStorageCredentialsManager().get_notebookutils_aad_token()
-headers = {"Authorization": f"Bearer {token}", "Content-Type": "application/json"}
+# CELL 2 : 인증 토큰 (Fabric notebookutils 공식 API)
+try:
+    token = notebookutils.credentials.getToken("pbi")
+    headers = {"Authorization": f"Bearer {token}", "Content-Type": "application/json"}
+    print("✅ 인증 토큰 획득 완료 (pbi scope)")
+except Exception as exc:  # noqa: BLE001
+    token = None
+    headers = {}
+    print("❌ 토큰 획득 실패:", exc)
+    print("   → Fabric 권한/capacity 연결 및 notebookutils.credentials 사용 가능 여부를 확인하세요.")
 
 # CELL 3 : 업로드한 파트를 읽어 definition.parts[] 조립 (InlineBase64)
 def build_definition_from_folder(parts_root):
