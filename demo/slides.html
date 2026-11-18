@@ -1,0 +1,368 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Microsoft IQ | 스피커 데모</title>
+  <script>
+    (() => {
+      const param = new URLSearchParams(window.location.search).get("scoutTheme");
+      const theme =
+        param || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+      document.documentElement.setAttribute("data-theme", theme);
+    })();
+  </script>
+  <style>
+    :root {
+      color-scheme: light;
+      --cp-bg: #f7f4ef;
+      --cp-bg-elevated: #fcfbf8;
+      --cp-surface: #ffffff;
+      --cp-surface-soft: #f5f5f5;
+      --cp-border: #dedede;
+      --cp-border-strong: #919191;
+      --cp-text: #242424;
+      --cp-text-muted: #5c5c5c;
+      --cp-text-soft: #6f6f6f;
+      --cp-accent: #b11f4b;
+      --cp-accent-hover: #9a1a41;
+      --cp-accent-soft: rgba(177, 31, 75, 0.08);
+      --cp-accent-fg: #ffffff;
+      --cp-success: #16a34a;
+      --cp-danger: #dc2626;
+      --cp-warning: #f59e0b;
+      --cp-link: #0078d4;
+      --cp-shadow: 0 18px 48px rgba(0, 0, 0, 0.12);
+      --cp-overlay: rgba(255, 255, 255, 0.8);
+      --cp-panel: rgba(255, 255, 255, 0.86);
+      --cp-panel-strong: rgba(255, 255, 255, 0.96);
+      --cp-sheen: rgba(255, 255, 255, 0.55);
+      --cp-highlight: rgba(177, 31, 75, 0.12);
+    }
+    html[data-theme="dark"] {
+      color-scheme: dark;
+      --cp-bg: #3d3b3a;
+      --cp-bg-elevated: #343231;
+      --cp-surface: #292929;
+      --cp-surface-soft: #2e2e2e;
+      --cp-border: #474747;
+      --cp-border-strong: #5f5f5f;
+      --cp-text: #dedede;
+      --cp-text-muted: #919191;
+      --cp-text-soft: #b0b0b0;
+      --cp-accent: #fd8ea1;
+      --cp-accent-hover: #fb7b91;
+      --cp-accent-soft: rgba(253, 142, 161, 0.14);
+      --cp-accent-fg: #1a1a1a;
+      --cp-success: #4ade80;
+      --cp-danger: #f87171;
+      --cp-warning: #fbbf24;
+      --cp-link: #4da6ff;
+      --cp-shadow: 0 18px 48px rgba(0, 0, 0, 0.32);
+      --cp-overlay: rgba(41, 41, 41, 0.88);
+      --cp-panel: rgba(41, 41, 41, 0.72);
+      --cp-panel-strong: rgba(41, 41, 41, 0.96);
+      --cp-sheen: rgba(255, 255, 255, 0.04);
+      --cp-highlight: rgba(253, 142, 161, 0.12);
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--cp-bg); color: var(--cp-text); font-family: "Segoe UI", Aptos, Calibri, -apple-system, BlinkMacSystemFont, sans-serif; line-height: 1.55; }
+    a { color: var(--cp-link); overflow-wrap: anywhere; }
+    code, pre { font-family: Consolas, "Courier New", Courier, monospace; overflow-wrap: anywhere; }
+    button { font: inherit; }
+    button:focus-visible, a:focus-visible, summary:focus-visible { outline: 3px solid var(--cp-accent); outline-offset: 3px; }
+    header { display: flex; justify-content: space-between; gap: 16px; padding: 14px clamp(18px, 4vw, 56px); background: var(--cp-bg-elevated); border-bottom: 1px solid var(--cp-border); }
+    .brand, .eyebrow { font-size: 12px; font-weight: 700; letter-spacing: .13em; text-transform: uppercase; }
+    .brand::before { content: "◆"; color: var(--cp-accent); margin-right: 10px; }
+    .muted, .eyebrow { color: var(--cp-text-muted); }
+    main { max-width: 1440px; margin: auto; padding: 20px clamp(16px, 3vw, 40px) 28px; }
+    .slide { min-height: min(720px, calc(100vh - 190px)); padding: clamp(24px, 4.5vw, 64px); border: 1px solid var(--cp-border); border-radius: 16px; background: var(--cp-surface); display: flex; flex-direction: column; justify-content: center; gap: 22px; }
+    .slide + .slide { margin-top: 20px; }
+    .js .slide[hidden] { display: none; }
+    .hero { background: var(--cp-bg-elevated); }
+    h1, h2, h3, p { margin: 0; }
+    h1 { font-size: clamp(40px, 5.7vw, 76px); line-height: 1.12; letter-spacing: -.04em; }
+    h2 { font-size: clamp(28px, 3.4vw, 48px); line-height: 1.2; letter-spacing: -.035em; }
+    h3 { font-size: clamp(17px, 1.5vw, 21px); line-height: 1.3; }
+    .lead { font-size: clamp(17px, 1.7vw, 23px); color: var(--cp-text-muted); max-width: 1100px; word-break: keep-all; }
+    .accent { color: var(--cp-accent); }
+    .grid { display: grid; gap: 14px; }
+    .two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .three { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .four { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    .card { padding: 18px; border: 1px solid var(--cp-border); background: var(--cp-bg-elevated); border-radius: 16px; min-width: 0; }
+    .card h3 { margin: 6px 0 8px; }
+    .card p, .card li { font-size: clamp(14px, 1.12vw, 17px); color: var(--cp-text-muted); word-break: keep-all; }
+    .card strong { color: var(--cp-text); }
+    .card.focus { background: var(--cp-accent-soft); border-color: var(--cp-accent); }
+    .tag { color: var(--cp-accent); font-weight: 700; font-size: 12px; letter-spacing: .1em; }
+    .note { border-left: 4px solid var(--cp-accent); background: var(--cp-accent-soft); padding: 12px 16px; border-radius: 0 10px 10px 0; font-size: 15px; word-break: keep-all; }
+    .flow { display: flex; gap: 8px; flex-wrap: wrap; align-items: stretch; }
+    .node { flex: 1 1 145px; min-width: 0; padding: 14px; border: 1px solid var(--cp-border); border-radius: 10px; background: var(--cp-bg-elevated); }
+    .node strong { display: block; font-size: clamp(15px, 1.35vw, 20px); }
+    .node span { display: block; margin-top: 4px; font-size: 13px; color: var(--cp-text-muted); word-break: keep-all; }
+    .arrow { align-self: center; color: var(--cp-accent); font-weight: bold; font-size: 20px; }
+    .stack { display: grid; gap: 7px; }
+    .layer { display: grid; grid-template-columns: minmax(130px, .7fr) 2fr; gap: 12px; align-items: center; padding: 11px 15px; border: 1px solid var(--cp-border); border-radius: 10px; background: var(--cp-bg-elevated); }
+    .layer strong { color: var(--cp-accent); }
+    .layer span { font-size: 15px; }
+    ul { margin: 0; padding-left: 20px; }
+    li + li { margin-top: 5px; }
+    .small { font-size: 13px; }
+    details { border: 1px solid var(--cp-border); border-radius: 10px; padding: 10px 14px; background: var(--cp-surface-soft); font-size: 14px; }
+    summary { cursor: pointer; font-weight: 700; }
+    details p { margin-top: 8px; }
+    nav { display: flex; align-items: center; gap: 12px; padding: 16px 2px 0; }
+    nav button { background: var(--cp-surface); color: var(--cp-text); border: 1px solid var(--cp-border); padding: 9px 16px; border-radius: 10px; cursor: pointer; }
+    nav button:hover:not(:disabled) { color: var(--cp-accent); border-color: var(--cp-accent); }
+    nav button:disabled { opacity: .45; cursor: not-allowed; }
+    #counter { min-width: 70px; text-align: center; color: var(--cp-text-muted); font-size: 14px; font-variant-numeric: tabular-nums; }
+    .progress { flex: 1; background: var(--cp-border); border-radius: 10px; height: 4px; overflow: hidden; }
+    .progress span { display: block; height: 100%; background: var(--cp-accent); }
+    @media (max-width: 760px) {
+      header .muted, .hint { display: none; }
+      .slide { min-height: auto; padding: 28px 20px; }
+      .two, .three, .four { grid-template-columns: 1fr; }
+      .flow { display: grid; grid-template-columns: 1fr; }
+      .arrow { transform: rotate(90deg); justify-self: center; line-height: 1; }
+      .layer { grid-template-columns: 1fr; gap: 3px; }
+      nav { flex-wrap: wrap; }
+    }
+    @media print {
+      @page { size: landscape; margin: 8mm; }
+      header, nav { display: none; }
+      body { background: var(--cp-surface); }
+      main { max-width: none; padding: 0; }
+      .slide, .js .slide[hidden] { display: flex; min-height: 0; height: 190mm; padding: 9mm; border: 0; border-radius: 0; break-after: page; gap: 12px; }
+      .slide + .slide { margin: 0; }
+      .slide:last-child { break-after: auto; }
+      h1 { font-size: 42pt; } h2 { font-size: 26pt; }
+      .lead { font-size: 15pt; }
+      .card p, .card li, .note { font-size: 10pt; }
+      details { display: none; }
+      a { color: inherit; }
+    }
+  </style>
+</head>
+<body>
+  <header><span class="brand">Microsoft IQ · Speaker demo</span><span class="muted small">FabricIQ → WorkIQ → WebIQ → FoundryIQ</span></header>
+  <main>
+    <div id="deck">
+      <section class="slide hero" aria-labelledby="s1">
+        <div class="eyebrow">Speaker-led cloud demonstration</div>
+        <h1 id="s1">하나의 질문,<br><span class="accent">네 가지 근거의 역할</span></h1>
+        <p class="lead">FabricIQ · WorkIQ · WebIQ · FoundryIQ를 연결해 데이터에서 설명 가능한 브리핑까지</p>
+        <div class="flow">
+          <div class="node"><strong>정형 사실</strong><span>무슨 일이 있었나</span></div><div class="arrow" aria-hidden="true">→</div>
+          <div class="node"><strong>업무 맥락</strong><span>내부에서 무엇을 논의했나</span></div><div class="arrow" aria-hidden="true">→</div>
+          <div class="node"><strong>공개 근거</strong><span>외부에서 무엇을 확인했나</span></div><div class="arrow" aria-hidden="true">→</div>
+          <div class="node"><strong>근거 결합</strong><span>무엇을 말할 수 있나</span></div>
+        </div>
+        <details><summary>스피커 노트</summary><p>참석자는 직접 조작하지 않습니다. 스피커가 승인된 클라우드 환경을 보여주며 각 결과의 출처와 실행 모드를 명시합니다.</p></details>
+      </section>
+
+      <section class="slide" aria-labelledby="s2">
+        <div class="eyebrow">01 / Business question</div>
+        <h2 id="s2">질문 하나를 <span class="accent">서로 다른 증거</span>로 나눕니다</h2>
+        <p class="lead">“배송 지연은 반품률과 고객 불만 티켓에 어떤 영향을 미치는가?”</p>
+        <div class="grid four">
+          <div class="card"><div class="tag">FABRICIQ</div><h3>수치</h3><p>배송·반품·티켓 관계와 지표를 정형 데이터로 계산</p></div>
+          <div class="card"><div class="tag">WORKIQ</div><h3>내부 맥락</h3><p>권한이 허용된 문서와 업무 대화에서 관련 논의 확인</p></div>
+          <div class="card"><div class="tag">WEBIQ</div><h3>외부 사실</h3><p>공개 웹에서 확인 가능한 외부 정보와 출처 확보</p></div>
+          <div class="card"><div class="tag">FOUNDRYIQ</div><h3>통합 판단</h3><p>출처·시각·한계와 경고를 유지해 브리핑 구성</p></div>
+        </div>
+        <div class="note">상관관계와 업무 문서의 진술은 인과관계 증명이 아닙니다. 외부 웹만으로 내부 원인을 단정하지 않습니다.</div>
+        <details><summary>스피커 노트</summary><p>같은 질문에도 지표, 내부 문서, 외부 확인의 출처가 다릅니다. 각 소스가 대답할 수 있는 범위를 먼저 나누세요.</p></details>
+      </section>
+
+      <section class="slide" aria-labelledby="s3">
+        <div class="eyebrow">02 / Architecture</div>
+        <h2 id="s3">연결은 <span class="accent">책임과 계약</span>으로 이뤄집니다</h2>
+        <div class="stack">
+          <div class="layer"><strong>FabricIQ</strong><span>Lakehouse · Ontology → 내부 정형 지표</span></div>
+          <div class="layer"><strong>WorkIQ</strong><span>M365 샘플 테넌트 → 권한이 적용된 내부 문서 근거</span></div>
+          <div class="layer"><strong>WebIQ</strong><span>공개 웹 → URL · 관찰 시각 · 범위가 있는 citation</span></div>
+          <div class="layer"><strong>Foundry IQ</strong><span>권위 지식 · 정책 · 재사용 지식 기반</span></div>
+          <div class="layer"><strong>Agent Service</strong><span>도구 라우팅 · 근거 결합 · 평가 · fallback → 최종 브리핑</span></div>
+        </div>
+        <div class="note">이 다이어그램은 책임과 흐름입니다. 제품 간 자동 연결이나 현재 라이브 구성 완료를 의미하지 않습니다.</div>
+        <details><summary>스피커 노트</summary><p>Foundry IQ의 권위 지식과 Foundry Agent Service의 도구 오케스트레이션을 구분합니다. 각 소스의 권한 및 실행 모드는 독립적으로 확인합니다.</p></details>
+      </section>
+
+      <section class="slide" aria-labelledby="s4">
+        <div class="eyebrow">03 / Operational boundary</div>
+        <h2 id="s4">시연 결과의 <span class="accent">출처와 모드</span>를 밝힙니다</h2>
+        <div class="grid three">
+          <div class="card"><div class="tag">DRY-RUN</div><h3>계획만 확인</h3><p>예정된 작업을 보여줄 뿐 M365 배포·메일 배송을 증명하지 않습니다.</p></div>
+          <div class="card"><div class="tag">SIMULATION</div><h3>재현 가능한 fixture</h3><p>Track1 CSV, Track2 manifest, Track3 fixture로 결합과 실패 정책을 확인합니다.</p></div>
+          <div class="card focus"><div class="tag">LIVE</div><h3>승인된 실제 호출</h3><p>샘플 환경의 adapter, 권한, Web Search, Foundry 모델을 별도 승인 후 검증합니다.</p></div>
+        </div>
+        <div class="note">저장소에 완성된 라이브 FabricIQ/WorkIQ adapter 서버는 없습니다. 미구성 시 개별 클라우드 화면과 simulation을 분리해 시연합니다.</div>
+        <details><summary>스피커 노트</summary><p>로컬 manifest는 실시간 WorkIQ 검색이나 ACL 증명이 아닙니다. fixture는 현재 웹의 실제 장애·경보·리콜을 증명하지 않습니다.</p></details>
+      </section>
+
+      <section class="slide" aria-labelledby="s5">
+        <div class="eyebrow">04 / Track 1 · FabricIQ</div>
+        <h2 id="s5">정형 데이터에 <span class="accent">업무 의미</span>를 연결</h2>
+        <div class="flow">
+          <div class="node"><strong>CSV 14종</strong><span>주문·배송·반품 등</span></div><div class="arrow" aria-hidden="true">→</div>
+          <div class="node"><strong>Lakehouse</strong><span>테이블로 준비</span></div><div class="arrow" aria-hidden="true">→</div>
+          <div class="node"><strong>Ontology</strong><span>엔터티·관계·바인딩</span></div><div class="arrow" aria-hidden="true">→</div>
+          <div class="node"><strong>SQL 검증</strong><span>정형 경로와 기준값</span></div>
+        </div>
+        <div class="grid two">
+          <div class="card"><h3>화면에서 보여줄 것</h3><p>Lakehouse 테이블 → Ontology 모델 → 질문의 SQL 결과 → Track2 인계 패키지</p></div>
+          <div class="card"><h3>초보자를 위한 설명</h3><p>Ontology는 테이블을 대체하지 않고 <strong>무엇이 무엇과 어떤 관계인지</strong> 설명합니다. FK 제약을 자동 강제하지 않습니다.</p></div>
+        </div>
+        <details><summary>스피커 노트</summary><p>Track1의 P1 데이터 품질 사례는 개념과 영향만 설명합니다. 탐지·수정이나 별도의 게이트로 바꾸지 않습니다. <a href="./01-fabriciq.md">Track1 데모 상세</a></p></details>
+      </section>
+
+      <section class="slide" aria-labelledby="s6">
+        <div class="eyebrow">05 / Track 1 · multi-hop</div>
+        <h2 id="s6">“고객이 상품을 구매했다”의 <span class="accent">실제 경로</span></h2>
+        <div class="flow">
+          <div class="node"><strong>Customer</strong><span>고객</span></div><div class="arrow" aria-hidden="true">→</div>
+          <div class="node"><strong>Order</strong><span>주문</span></div><div class="arrow" aria-hidden="true">→</div>
+          <div class="node"><strong>OrderItem</strong><span>주문 상품</span></div><div class="arrow" aria-hidden="true">→</div>
+          <div class="node"><strong>Product</strong><span>상품</span></div>
+        </div>
+        <div class="grid two">
+          <div class="card"><h3>업무 관점: N:M</h3><p>한 고객은 여러 상품을, 한 상품은 여러 고객이 구매할 수 있습니다. 중간 주문은 시점·수량과 반복 구매를 보존합니다.</p></div>
+          <div class="card focus"><h3>랩의 구현 경계</h3><p><code>Customer_purchases_Product</code>는 논리 관계 타입입니다. <code>derived_via</code>는 설명이며 자동 JOIN이나 관계 인스턴스를 만들지 않습니다.</p></div>
+        </div>
+        <details><summary>스피커 노트</summary><p>다중 홉 경로는 실제 테이블에 대한 별도 SQL 등으로 검증합니다. 주문에 포함된 상품이라는 사실과 결제 완료·반품 여부는 구분하세요.</p></details>
+      </section>
+
+      <section class="slide" aria-labelledby="s7">
+        <div class="eyebrow">06 / Track 2 · WorkIQ</div>
+        <h2 id="s7">내부 문서는 <span class="accent">권한 안에서</span> 검색</h2>
+        <div class="grid four">
+          <div class="card"><div class="tag">SHAREPOINT</div><h3>문서</h3><p>캠페인·운영 보고서</p></div>
+          <div class="card"><div class="tag">OUTLOOK</div><h3>메일</h3><p>이슈 공유와 의사결정</p></div>
+          <div class="card"><div class="tag">TEAMS</div><h3>대화</h3><p>현장 이슈와 대응</p></div>
+          <div class="card"><div class="tag">ONEDRIVE</div><h3>회의록</h3><p>고객·운영 논의</p></div>
+        </div>
+        <div class="note">보여줄 것: 4개 소스 검색, 엔터티–문서 매핑, 원본 링크, 권한 허용·차단, 품질 8개 중 6개 이상 75점 이상.</div>
+        <details><summary>스피커 노트</summary><p>검증기는 수동 ACL 관찰 결과를 판정할 뿐 권한을 집행하지 않습니다. 라이브 시연 전 승인된 격리 테넌트에서 별도 계정으로 확인하세요. <a href="./02-workiq.md">Track2 데모 상세</a></p></details>
+      </section>
+
+      <section class="slide" aria-labelledby="s8">
+        <div class="eyebrow">07 / Track 3 · WebIQ</div>
+        <h2 id="s8">공개 웹은 <span class="accent">외부 확인</span>에 사용</h2>
+        <div class="flow">
+          <div class="node"><strong>공개 질문</strong><span>내부 식별자·수치 제거</span></div><div class="arrow" aria-hidden="true">→</div>
+          <div class="node"><strong>출처 확인</strong><span>공식 도메인 · 신뢰성</span></div><div class="arrow" aria-hidden="true">→</div>
+          <div class="node"><strong>Citation</strong><span>URL · 시각 · 범위 · 한계</span></div><div class="arrow" aria-hidden="true">→</div>
+          <div class="node"><strong>인계</strong><span>내부 근거와 별도 유지</span></div>
+        </div>
+        <div class="grid two">
+          <div class="card"><h3>보여줄 것</h3><p>안전한 공개 질문과 원본 페이지를 대조하고 지역·관찰 시각·근거 한계를 읽습니다.</p></div>
+          <div class="card focus"><h3>넘지 말아야 할 선</h3><p>외부 자료를 내부 KPI나 내부 원인의 증거로 바꾸지 않습니다. fixture를 현재 사건으로 소개하지 않습니다.</p></div>
+        </div>
+        <details><summary>스피커 노트</summary><p>Q1~Q3 각각 citation 2개와 출처 품질 6개 중 5개 이상이 인계 기준입니다. <a href="./03-webiq.md">Track3 데모 상세</a></p></details>
+      </section>
+
+      <section class="slide" aria-labelledby="s9">
+        <div class="eyebrow">08 / Track 4 · FoundryIQ</div>
+        <h2 id="s9">근거를 합쳐도 <span class="accent">출처는 분리</span>합니다</h2>
+        <div class="grid three">
+          <div class="card"><div class="tag">INPUT</div><h3>질문 + 네 책임</h3><p>정형 지표, 내부 문서, 외부 citation, 권위 지식을 구분합니다.</p></div>
+          <div class="card"><div class="tag">ORCHESTRATE</div><h3>라우팅 + 검증</h3><p>adapter 응답 및 출처 상태를 확인하고 필요한 경우 경고합니다.</p></div>
+          <div class="card"><div class="tag">OUTPUT</div><h3>응답 + trace</h3><p>근거 링크, citation, 한계, 조치와 IQ별 sourceTrace를 확인합니다.</p></div>
+        </div>
+        <div class="note">라이브 adapter는 <code>scenarioId</code>, <code>question</code>, <code>semanticKeys</code>를 받는 workshop POST JSON 계약입니다. 원시 제품 URL이 아닙니다.</div>
+        <details><summary>스피커 노트</summary><p>먼저 Q2 응답과 <code>tool_a_metrics.json</code>을 함께 보여줍니다. Q1·Q2의 Track1 SQL과 simulation은 산식 또는 모집단이 다르므로 같은 baseline으로 단정하지 않습니다. simulation 브리핑은 사람이 지표·경고·citation 한계를 보완해야 하는 초안이며 실제 모델 호출이 아닙니다. <a href="./04-foundryiq.md">Track4 데모 상세</a></p></details>
+      </section>
+
+      <section class="slide" aria-labelledby="s10">
+        <div class="eyebrow">09 / Failure policy</div>
+        <h2 id="s10">실패했을 때도 <span class="accent">정직하게</span> 답합니다</h2>
+        <div class="grid three">
+          <div class="card"><div class="tag">WEB DOWN</div><h3>부분응답</h3><p>내부 근거는 유지하고 <strong>외부 최신 근거 없음</strong>을 표시합니다.</p></div>
+          <div class="card"><div class="tag">WORK DOWN</div><h3>부분응답</h3><p><strong>업무 문서 근거 없음</strong>을 표시하고 공개 웹으로 내부 근거를 대체하지 않습니다.</p></div>
+          <div class="card focus"><div class="tag">INTERNAL DOWN</div><h3>분석 차단</h3><p>FabricIQ와 WorkIQ가 모두 실패하면 웹 결과가 있어도 <strong>blocked</strong>입니다.</p></div>
+        </div>
+        <div class="note">재시도: 5초 → 10초 → 20초, 최대 3회 재시도 = 최초 호출 포함 최대 4회 시도. Fabric 단독 실패와 전체 실패도 별도로 시연합니다.</div>
+        <details><summary>스피커 노트</summary><p>normal Q1~Q3와 fabric-down, work-down, web-down, internal-down, all-down의 평가 결과를 확인합니다. simulation 실패 주입은 실제 장애가 아닙니다.</p></details>
+      </section>
+
+      <section class="slide" aria-labelledby="s11">
+        <div class="eyebrow">10 / Demo handoff</div>
+        <h2 id="s11">각 트랙의 산출물이 <span class="accent">다음 화면</span>으로</h2>
+        <div class="stack">
+          <div class="layer"><strong>Track1 → 2</strong><span>Ontology 식별·모델·매핑·제한·검색 키·경로</span></div>
+          <div class="layer"><strong>Track2 → 3</strong><span>내부 근거 5건 이상 · 재현 질의 3개 · 품질 6/8 이상</span></div>
+          <div class="layer"><strong>Track3 → 4</strong><span>Q1~Q3 각각 citation 2개 · 출처 품질 5/6 이상 · 개인정보 점검</span></div>
+          <div class="layer"><strong>Track4 → 결과</strong><span>IQ별 sourceTrace · 정상 및 fallback 평가 · 브리핑</span></div>
+        </div>
+        <div class="note">Track1 → Track2 → Track3 → Track4 순서를 지키며, 각 인계가 실제 관찰인지 fixture인지 함께 기록합니다.</div>
+        <details><summary>스피커 노트</summary><p>인계 패키지는 다음 트랙이 무엇을 신뢰하고 무엇을 제한으로 알아야 하는지 전달합니다. 성공 표시만으로 실측 근거를 대체하지 않습니다.</p></details>
+      </section>
+
+      <section class="slide" aria-labelledby="s12">
+        <div class="eyebrow">11 / Cloud readiness</div>
+        <h2 id="s12">클라우드 데모는 <span class="accent">준비와 승인</span>이 먼저</h2>
+        <div class="grid two">
+          <div class="card"><h3>사전 구성</h3><ul><li>Fabric workspace·Lakehouse·Ontology 및 샘플 CSV</li><li>격리 M365 테넌트·검색 계정·ACL 테스트 계정</li><li>승인된 Web Search, Foundry 프로젝트와 모델</li><li>별도 구현·승인된 내부 adapter와 테스트 데이터</li></ul></div>
+          <div class="card focus"><h3>안전한 운영</h3><ul><li>테넌트 쓰기·라이브 호출은 별도 승인</li><li>토큰·개인정보·내부 URL을 화면·로그에서 제외</li><li>네트워크 실패 시 사전 화면 또는 simulation 표시</li><li>종료 후 승인된 운영자가 임시 권한·리소스 정리</li></ul></div>
+        </div>
+        <details><summary>스피커 노트</summary><p>비용, 라이선스, 리전, 데이터 경계와 관리자 정책을 사전에 확인합니다. 데모 문서나 dry-run은 실행 승인으로 간주하지 않습니다.</p></details>
+      </section>
+
+      <section class="slide hero" aria-labelledby="s13">
+        <div class="eyebrow">12 / Takeaway</div>
+        <h2 id="s13">좋은 브리핑은<br><span class="accent">출처와 한계를 함께 보여줍니다</span></h2>
+        <div class="grid three">
+          <div class="card"><div class="tag">SEPARATE</div><h3>근거를 구분</h3><p>내부 수치·내부 문서·공개 웹의 책임을 섞지 않습니다.</p></div>
+          <div class="card"><div class="tag">TRACE</div><h3>원본을 추적</h3><p>sourceTrace, 문서 링크, URL, 시각과 범위를 보존합니다.</p></div>
+          <div class="card"><div class="tag">VERIFY</div><h3>실패도 검증</h3><p>부분응답과 blocked, simulation/live 차이를 설명합니다.</p></div>
+        </div>
+        <p><a href="./README.md">스피커 데모 가이드</a> · <a href="../common/docs/Microsoft_IQ_Workshop_Integrated_Plan.md">워크숍 통합 계획</a> · <a href="../track4/data/README.md">실행 계약</a></p>
+        <p class="small muted">Track1 → Track2 → Track3 → Track4 · Microsoft IQ Workshop</p>
+      </section>
+    </div>
+    <nav aria-label="슬라이드 탐색">
+      <button id="prev" type="button" aria-label="이전 슬라이드">← 이전</button>
+      <span id="counter" aria-live="polite"></span>
+      <button id="next" type="button" aria-label="다음 슬라이드">다음 →</button>
+      <div class="progress" aria-hidden="true"><span id="progress"></span></div>
+      <span class="hint small muted">방향키 · Home / End · 인쇄 시 전체</span>
+    </nav>
+  </main>
+  <script>
+    (() => {
+      const slides = Array.from(document.querySelectorAll(".slide"));
+      const prev = document.getElementById("prev");
+      const next = document.getElementById("next");
+      const counter = document.getElementById("counter");
+      const progress = document.getElementById("progress");
+      const initial = Number.parseInt(location.hash.slice(1), 10);
+      let index = Number.isFinite(initial) ? Math.min(slides.length - 1, Math.max(0, initial - 1)) : 0;
+      document.documentElement.classList.add("js");
+      function showSlide(target) {
+        index = Math.min(slides.length - 1, Math.max(0, target));
+        slides.forEach((slide, i) => { slide.hidden = i !== index; });
+        prev.disabled = index === 0;
+        next.disabled = index === slides.length - 1;
+        counter.textContent = `${String(index + 1).padStart(2, "0")} / ${String(slides.length).padStart(2, "0")}`;
+        progress.style.width = `${(index + 1) / slides.length * 100}%`;
+        history.replaceState(null, "", `#${index + 1}`);
+      }
+      prev.addEventListener("click", () => showSlide(index - 1));
+      next.addEventListener("click", () => showSlide(index + 1));
+      document.addEventListener("keydown", (event) => {
+        if (event.altKey || event.ctrlKey || event.metaKey || event.target.closest("input, textarea, select, [contenteditable]")) return;
+        if (event.key === "ArrowRight" || event.key === "PageDown") { event.preventDefault(); showSlide(index + 1); }
+        if (event.key === "ArrowLeft" || event.key === "PageUp") { event.preventDefault(); showSlide(index - 1); }
+        if (event.key === "Home") { event.preventDefault(); showSlide(0); }
+        if (event.key === "End") { event.preventDefault(); showSlide(slides.length - 1); }
+      });
+      window.addEventListener("hashchange", () => {
+        const target = Number.parseInt(location.hash.slice(1), 10);
+        if (Number.isFinite(target)) showSlide(target - 1);
+      });
+      showSlide(index);
+    })();
+  </script>
+</body>
+</html>

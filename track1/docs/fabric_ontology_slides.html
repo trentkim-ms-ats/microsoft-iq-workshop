@@ -1,0 +1,414 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Fabric Ontology | Track 1</title>
+  <script>
+    (() => {
+      const param = new URLSearchParams(window.location.search).get("scoutTheme");
+      const theme =
+        param || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+      document.documentElement.setAttribute("data-theme", theme);
+    })();
+  </script>
+  <style>
+    :root {
+      color-scheme: light;
+      --cp-bg: #f7f4ef;
+      --cp-bg-elevated: #fcfbf8;
+      --cp-surface: #ffffff;
+      --cp-surface-soft: #f5f5f5;
+      --cp-border: #dedede;
+      --cp-border-strong: #919191;
+      --cp-text: #242424;
+      --cp-text-muted: #5c5c5c;
+      --cp-text-soft: #6f6f6f;
+      --cp-accent: #b11f4b;
+      --cp-accent-hover: #9a1a41;
+      --cp-accent-soft: rgba(177, 31, 75, 0.08);
+      --cp-accent-fg: #ffffff;
+      --cp-success: #16a34a;
+      --cp-danger: #dc2626;
+      --cp-warning: #f59e0b;
+      --cp-link: #0078d4;
+      --cp-shadow: 0 18px 48px rgba(0, 0, 0, 0.12);
+      --cp-overlay: rgba(255, 255, 255, 0.8);
+      --cp-panel: rgba(255, 255, 255, 0.86);
+      --cp-panel-strong: rgba(255, 255, 255, 0.96);
+      --cp-sheen: rgba(255, 255, 255, 0.55);
+      --cp-highlight: rgba(177, 31, 75, 0.12);
+    }
+    html[data-theme="dark"] {
+      color-scheme: dark;
+      --cp-bg: #3d3b3a;
+      --cp-bg-elevated: #343231;
+      --cp-surface: #292929;
+      --cp-surface-soft: #2e2e2e;
+      --cp-border: #474747;
+      --cp-border-strong: #5f5f5f;
+      --cp-text: #dedede;
+      --cp-text-muted: #919191;
+      --cp-text-soft: #b0b0b0;
+      --cp-accent: #fd8ea1;
+      --cp-accent-hover: #fb7b91;
+      --cp-accent-soft: rgba(253, 142, 161, 0.14);
+      --cp-accent-fg: #1a1a1a;
+      --cp-success: #4ade80;
+      --cp-danger: #f87171;
+      --cp-warning: #fbbf24;
+      --cp-link: #4da6ff;
+      --cp-shadow: 0 18px 48px rgba(0, 0, 0, 0.32);
+      --cp-overlay: rgba(41, 41, 41, 0.88);
+      --cp-panel: rgba(41, 41, 41, 0.72);
+      --cp-panel-strong: rgba(41, 41, 41, 0.96);
+      --cp-sheen: rgba(255, 255, 255, 0.04);
+      --cp-highlight: rgba(253, 142, 161, 0.12);
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background: var(--cp-bg);
+      color: var(--cp-text);
+      font-family: "Segoe UI", Aptos, Calibri, -apple-system, BlinkMacSystemFont, sans-serif;
+      line-height: 1.55;
+    }
+    a { color: var(--cp-link); overflow-wrap: anywhere; }
+    button { font: inherit; }
+    button:focus-visible, a:focus-visible { outline: 3px solid var(--cp-accent); outline-offset: 3px; }
+    code, pre { font-family: Consolas, "Courier New", Courier, monospace; }
+    code { overflow-wrap: anywhere; }
+    .topbar {
+      min-height: 60px; display: flex; align-items: center; justify-content: space-between;
+      gap: 16px; padding: 12px clamp(20px, 4vw, 56px); border-bottom: 1px solid var(--cp-border);
+      background: var(--cp-bg-elevated);
+    }
+    .brand { display: flex; align-items: center; gap: 12px; font-size: 13px; font-weight: 700; letter-spacing: .08em; }
+    .brand-mark { width: 10px; height: 10px; background: var(--cp-accent); transform: rotate(45deg); }
+    .top-label, .eyebrow, .small-label { color: var(--cp-text-muted); text-transform: uppercase; letter-spacing: .13em; font-weight: 700; font-size: 12px; }
+    .shell { max-width: 1440px; margin: 0 auto; padding: 20px clamp(16px, 3vw, 40px) 28px; }
+    .slide {
+      position: relative; min-height: min(720px, calc(100vh - 190px)); padding: clamp(28px, 5vw, 68px);
+      background: var(--cp-surface); border: 1px solid var(--cp-border); border-radius: 16px;
+      display: flex; flex-direction: column; justify-content: center; gap: 24px; overflow: hidden;
+    }
+    .slide + .slide { margin-top: 20px; }
+    .js .slide[hidden] { display: none; }
+    .slide::after { content: ""; position: absolute; right: -44px; top: -44px; width: 144px; height: 144px;
+      border: 1px solid var(--cp-border); border-radius: 50%; pointer-events: none; }
+    .hero { background: var(--cp-bg-elevated); }
+    .hero h1 { font-size: clamp(42px, 6vw, 80px); max-width: 900px; line-height: 1.12; letter-spacing: -.045em; }
+    h1, h2, h3, p { margin: 0; }
+    h2 { font-size: clamp(30px, 3.5vw, 48px); line-height: 1.2; letter-spacing: -.035em; max-width: 1100px; }
+    h3 { font-size: clamp(17px, 1.5vw, 20px); line-height: 1.35; }
+    .lead { font-size: clamp(18px, 1.8vw, 25px); max-width: 1000px; color: var(--cp-text-muted); word-break: keep-all; }
+    .accent { color: var(--cp-accent); }
+    .kicker { display: flex; align-items: center; gap: 10px; }
+    .kicker::before { content: ""; display: block; width: 25px; height: 3px; background: var(--cp-accent); }
+    .grid { display: grid; gap: 16px; }
+    .two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .three { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .four { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    .card { padding: 20px; border: 1px solid var(--cp-border); background: var(--cp-bg-elevated); border-radius: 16px; min-width: 0; }
+    .card h3 { margin-bottom: 8px; }
+    .card p, .card li { color: var(--cp-text-muted); font-size: clamp(15px, 1.12vw, 17px); word-break: keep-all; }
+    .card strong { color: var(--cp-text); }
+    .card.accent-card { background: var(--cp-accent-soft); border-color: var(--cp-accent); }
+    .step-num { color: var(--cp-accent); font-weight: 700; font-size: 13px; letter-spacing: .12em; margin-bottom: 10px; }
+    .note { border-left: 4px solid var(--cp-accent); background: var(--cp-accent-soft); padding: 14px 18px; border-radius: 0 10px 10px 0; font-size: 16px; word-break: keep-all; }
+    .muted { color: var(--cp-text-muted); }
+    .small { font-size: 14px; }
+    .flow { display: flex; flex-wrap: wrap; align-items: stretch; gap: 10px; }
+    .node { flex: 1 1 145px; min-width: 0; padding: 16px; border: 1px solid var(--cp-border); border-radius: 10px; background: var(--cp-bg-elevated); }
+    .node strong { display: block; font-size: clamp(16px, 1.5vw, 21px); overflow-wrap: anywhere; }
+    .node span { display: block; color: var(--cp-text-muted); font-size: 13px; margin-top: 4px; }
+    .arrow { color: var(--cp-accent); font-size: 22px; align-self: center; font-weight: 700; }
+    .stack { display: grid; gap: 8px; }
+    .layer { padding: 14px 18px; border: 1px solid var(--cp-border); border-radius: 10px; background: var(--cp-bg-elevated); display: grid; grid-template-columns: 150px 1fr; gap: 16px; align-items: center; }
+    .layer strong { color: var(--cp-accent); }
+    .layer span { font-size: 15px; }
+    .table-wrap { overflow-x: auto; }
+    table { border-collapse: collapse; width: 100%; font-size: clamp(14px, 1.1vw, 16px); text-align: left; }
+    th, td { padding: 11px 12px; border-bottom: 1px solid var(--cp-border); vertical-align: top; }
+    th { color: var(--cp-text-muted); font-weight: 700; }
+    td:first-child { font-weight: 700; }
+    pre { margin: 0; padding: 18px; background: var(--cp-surface-soft); border: 1px solid var(--cp-border); border-radius: 10px; overflow: auto; font-size: clamp(12px, 1.05vw, 15px); line-height: 1.55; }
+    pre code { overflow-wrap: normal; }
+    ul { margin: 0; padding-left: 20px; }
+    li + li { margin-top: 6px; }
+    .controls { display: flex; gap: 12px; align-items: center; padding: 16px 2px 0; }
+    .controls button { border: 1px solid var(--cp-border); background: var(--cp-surface); color: var(--cp-text); border-radius: 10px; padding: 9px 16px; cursor: pointer; }
+    .controls button:hover:not(:disabled) { border-color: var(--cp-accent); color: var(--cp-accent); }
+    .controls button:disabled { opacity: .45; cursor: not-allowed; }
+    .counter { font-variant-numeric: tabular-nums; min-width: 72px; text-align: center; font-size: 14px; color: var(--cp-text-muted); }
+    .progress { flex: 1; height: 4px; background: var(--cp-border); border-radius: 10px; overflow: hidden; }
+    .progress > span { display: block; height: 100%; width: 0; background: var(--cp-accent); transition: width .2s; }
+    .hint { margin-left: auto; color: var(--cp-text-muted); font-size: 12px; }
+    .source-links { display: grid; gap: 10px; font-size: 16px; }
+    @media (max-width: 760px) {
+      .top-label, .hint { display: none; }
+      .slide { min-height: auto; padding: 30px 22px; }
+      .two, .three, .four { grid-template-columns: 1fr; }
+      .layer { grid-template-columns: 1fr; gap: 3px; }
+      .flow { display: grid; grid-template-columns: 1fr; }
+      .arrow { transform: rotate(90deg); justify-self: center; line-height: 1; }
+      .controls { flex-wrap: wrap; }
+      .progress { min-width: 80px; }
+    }
+    @media print {
+      @page { size: landscape; margin: 8mm; }
+      body { background: var(--cp-surface); }
+      .topbar, .controls { display: none; }
+      .shell { padding: 0; max-width: none; }
+      .slide, .js .slide[hidden] { display: flex; min-height: 0; height: 190mm; padding: 12mm; break-after: page; border: 0; border-radius: 0; overflow: visible; }
+      .slide + .slide { margin: 0; }
+      .slide:last-child { break-after: auto; }
+      .slide::after { display: none; }
+      h2 { font-size: 28pt; }
+      .hero h1 { font-size: 46pt; }
+      .lead { font-size: 16pt; }
+      .card p, .card li, table, .note { font-size: 11pt; }
+      pre { font-size: 9pt; white-space: pre-wrap; overflow: visible; }
+      a { color: inherit; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand"><span class="brand-mark" aria-hidden="true"></span> MICROSOFT IQ <span class="muted">/</span> TRACK 1</div>
+    <div class="top-label">FabricIQ · Ontology design</div>
+  </header>
+  <main class="shell">
+    <div id="deck">
+      <section class="slide hero" aria-labelledby="s1">
+        <div class="eyebrow kicker">Track 1 · FabricIQ</div>
+        <h1 id="s1">데이터를 넘어<br><span class="accent">업무의 의미</span>로</h1>
+        <p class="lead">Fabric Ontology의 정의와 표현 방식, 그리고 <strong>Customer purchases Product</strong>로 살펴보는 다중 홉 관계</p>
+        <div class="flow">
+          <div class="node"><strong>의미</strong><span>엔터티와 관계</span></div><div class="arrow" aria-hidden="true">→</div>
+          <div class="node"><strong>연결</strong><span>Lakehouse 데이터 바인딩</span></div><div class="arrow" aria-hidden="true">→</div>
+          <div class="node"><strong>해석</strong><span>업무 질문과 검증</span></div>
+        </div>
+        <p class="small muted">발표 및 자율 학습용 · 방향키 또는 하단 버튼으로 이동</p>
+      </section>
+
+      <section class="slide" aria-labelledby="s2">
+        <div class="eyebrow kicker">01 / Concept</div>
+        <h2 id="s2">Ontology는 <span class="accent">업무의 공통 언어</span>입니다</h2>
+        <p class="lead">분리된 테이블을 업무 개념과 관계로 설명하고, 그 정의를 원천 데이터에 연결합니다.</p>
+        <div class="grid three">
+          <div class="card"><div class="step-num">ENTITY TYPE</div><h3>무엇인가?</h3><p><strong>Customer · Order · Product</strong><br>업무에서 중요한 객체의 유형을 정의합니다.</p></div>
+          <div class="card"><div class="step-num">PROPERTY</div><h3>어떤 특징이 있나?</h3><p><strong>customer_id · product_name</strong><br>엔터티를 식별하고 설명하는 속성입니다.</p></div>
+          <div class="card"><div class="step-num">RELATIONSHIP</div><h3>어떻게 연결되나?</h3><p><strong>Customer places Order</strong><br>객체 사이의 업무상 관계를 이름으로 표현합니다.</p></div>
+        </div>
+        <div class="note">엔터티 유형은 설계도이고, 실제 데이터의 각 고객·주문·상품은 그 유형에 대응하는 인스턴스입니다.</div>
+      </section>
+
+      <section class="slide" aria-labelledby="s3">
+        <div class="eyebrow kicker">02 / Architecture</div>
+        <h2 id="s3">데이터 위에 <span class="accent">의미 계층</span>을 얹습니다</h2>
+        <div class="stack">
+          <div class="layer"><strong>업무 질문</strong><span>“어떤 고객이 어떤 상품을 구매했는가?”</span></div>
+          <div class="layer"><strong>Ontology 정의</strong><span>Customer · Order · OrderItem · Product와 이들 사이의 관계</span></div>
+          <div class="layer"><strong>데이터 바인딩</strong><span>엔터티 속성과 관계 키를 원천 테이블·컬럼에 매핑</span></div>
+          <div class="layer"><strong>원천 데이터</strong><span>Lakehouse의 customers · orders · order_items · products</span></div>
+        </div>
+        <div class="note">데이터를 모두 Ontology로 복사하는 것이 아닙니다. Ontology는 정의와 바인딩을 제공하며, 실제 질의는 소비 경험과 원천의 실행 경로가 담당합니다.</div>
+      </section>
+
+      <section class="slide" aria-labelledby="s4">
+        <div class="eyebrow kicker">03 / Comparison</div>
+        <h2 id="s4">Foreign Key와 <span class="accent">같은 연결, 다른 목적</span></h2>
+        <div class="grid two">
+          <div class="card">
+            <div class="step-num">DATABASE</div><h3>Foreign Key</h3>
+            <p><code>orders.customer_id</code>가 <code>customers.customer_id</code>를 참조한다는 데이터 구조상의 제약입니다.</p>
+            <p>DB에서 제약을 실제로 적용하면 없는 고객을 참조하는 주문을 차단할 수 있습니다.</p>
+          </div>
+          <div class="card accent-card">
+            <div class="step-num">ONTOLOGY</div><h3>Customer places Order</h3>
+            <p>동일한 연결에 <strong>“고객이 주문을 생성한다”</strong>는 이름과 업무 맥락을 부여합니다.</p>
+            <p>관계 자체가 DB의 FK 제약을 생성하거나 참조 무결성을 강제하지는 않습니다.</p>
+          </div>
+        </div>
+        <div class="note">PK/FK처럼 보이는 컬럼이 존재하는 것과 DB에 실제 제약이 활성화된 것은 다릅니다. 단순한 모델에서는 둘의 구조가 상당히 유사할 수 있습니다.</div>
+      </section>
+
+      <section class="slide" aria-labelledby="s5">
+        <div class="eyebrow kicker">04 / Representation</div>
+        <h2 id="s5">랩은 <span class="accent">JSON 정의 파트</span>로 배포합니다</h2>
+        <div class="flow">
+          <div class="node"><strong>YAML 계약</strong><span>랩에서 사람이 관리</span></div><div class="arrow" aria-hidden="true">→</div>
+          <div class="node"><strong>생성기</strong><span>계약 → JSON 변환</span></div><div class="arrow" aria-hidden="true">→</div>
+          <div class="node"><strong>Definition parts</strong><span>엔터티·관계·바인딩</span></div><div class="arrow" aria-hidden="true">→</div>
+          <div class="node"><strong>Fabric API</strong><span>Ontology item 배포</span></div>
+        </div>
+        <div class="grid two">
+          <div class="card"><h3>무엇이 정의되는가?</h3><p><code>EntityTypes</code>와 <code>RelationshipTypes</code>에 개념과 관계를, <code>DataBindings</code>와 <code>Contextualizations</code>에 원천 매핑을 표현합니다.</p></div>
+          <div class="card"><h3>무엇을 단정하면 안 되나?</h3><p>YAML은 랩 전용 입력입니다. JSON은 공개 정의·전송 표현이며, Microsoft 서비스 내부의 물리 저장 형식을 의미하지 않습니다.</p></div>
+        </div>
+        <p class="small muted">InlineBase64는 API 전송 인코딩이며 암호화나 별도의 의미 모델이 아닙니다.</p>
+      </section>
+
+      <section class="slide" aria-labelledby="s6">
+        <div class="eyebrow kicker">05 / Standards</div>
+        <h2 id="s6">RDF·OWL과는 <span class="accent">표현 모델이 다릅니다</span></h2>
+        <div class="grid three">
+          <div class="card"><div class="step-num">RDF</div><h3>그래프 데이터 모델</h3><p>주어–술어–목적어 형태의 <strong>triple</strong>로 데이터를 표현하는 표준입니다.</p></div>
+          <div class="card"><div class="step-num">OWL</div><h3>온톨로지 언어</h3><p>클래스, 속성, 논리 공리 등을 표현하는 표준 언어입니다.</p></div>
+          <div class="card accent-card"><div class="step-num">THIS LAB</div><h3>Fabric 정의</h3><p>Fabric 스키마의 <strong>JSON 정의와 바인딩</strong>으로 업무 개념을 원천 데이터에 연결합니다.</p></div>
+        </div>
+        <div class="note">JSON 관계 정의만으로 OWL 추론이나 SPARQL 지원이 자동 보장되지는 않습니다. 공개 정의 형식만으로 서비스 내부 저장 방식도 단정할 수 없습니다.</div>
+      </section>
+
+      <section class="slide" aria-labelledby="s7">
+        <div class="eyebrow kicker">06 / Multi-hop</div>
+        <h2 id="s7">단순한 질문 뒤에는 <span class="accent">여러 홉</span>이 있습니다</h2>
+        <p class="lead">“어떤 고객이 어떤 상품을 구매했는가?”라는 업무 질문을 실제 테이블 경로로 펼칩니다.</p>
+        <div class="flow">
+          <div class="node"><strong>Customer</strong><span>고객</span></div><div class="arrow" aria-hidden="true">→</div>
+          <div class="node"><strong>Order</strong><span>고객이 생성한 주문</span></div><div class="arrow" aria-hidden="true">→</div>
+          <div class="node"><strong>OrderItem</strong><span>주문에 포함된 상품 행</span></div><div class="arrow" aria-hidden="true">→</div>
+          <div class="node"><strong>Product</strong><span>주문 항목이 참조한 상품</span></div>
+        </div>
+        <div class="table-wrap">
+          <table><thead><tr><th>경로</th><th>연결 컬럼</th><th>관계명</th></tr></thead><tbody>
+            <tr><td>Customer → Order</td><td><code>customer_id</code></td><td>Customer places Order</td></tr>
+            <tr><td>Order → OrderItem</td><td><code>order_id</code></td><td>Order includes OrderItem</td></tr>
+            <tr><td>OrderItem → Product</td><td><code>product_id</code></td><td>OrderItem references Product</td></tr>
+          </tbody></table>
+        </div>
+        <p class="small muted">화살표는 이해를 위한 탐색 방향입니다. 원천 관계의 실제 선언 방향은 계약을 확인합니다.</p>
+      </section>
+
+      <section class="slide" aria-labelledby="s8">
+        <div class="eyebrow kicker">07 / Cardinality</div>
+        <h2 id="s8">Customer ↔ Product는 <span class="accent">N:M</span>입니다</h2>
+        <div class="grid two">
+          <div class="card accent-card"><div class="step-num">BUSINESS VIEW</div><h3>Customer purchases Product</h3><p>한 고객은 여러 상품을, 한 상품은 여러 고객이 구매할 수 있습니다. 같은 고객의 반복 구매도 가능합니다.</p></div>
+          <div class="card"><div class="step-num">DATA VIEW · 가상의 예</div><h3>중간 주문이 연결을 설명</h3><pre><code>C01 → O01 → P01
+          → P02
+
+C02 → O02 → P01</code></pre></div>
+        </div>
+        <div class="note">고객–상품 쌍만 남기면 주문 시점·수량·반복 구매 이력이 사라집니다. 실제 분석에서는 Order와 OrderItem을 유지해 집계 단위를 정합니다.</div>
+      </section>
+
+      <section class="slide" aria-labelledby="s9">
+        <div class="eyebrow kicker">08 / Lab contract</div>
+        <h2 id="s9">논리 관계는 <span class="accent">계약에 선언</span>됩니다</h2>
+        <div class="grid two">
+          <pre><code>logical_relationships:
+  - name: Customer_purchases_Product
+    display_name: "Customer purchases Product (logical)"
+    from_entity: Customer
+    to_entity: Product
+    cardinality: "N:M"
+    derived_via: "orders + order_items"</code></pre>
+          <div class="card">
+            <div class="step-num">WHAT IT SAYS</div><h3>업무 의미와 근거 경로</h3>
+            <ul><li><code>from_entity</code> / <code>to_entity</code>: 시작과 끝</li><li><code>cardinality</code>: N:M이라는 설계상 설명</li><li><code>derived_via</code>: 근거가 되는 중간 테이블 설명</li></ul>
+            <p style="margin-top: 16px"><a href="../ontology_bundle/ontology_contract.yaml">ontology_contract.yaml 열기 ↗</a></p>
+          </div>
+        </div>
+        <p class="small muted">관계 계약은 업무 의미를 설명합니다. 실행 가능한 질의 계획을 선언한 것은 아닙니다.</p>
+      </section>
+
+      <section class="slide" aria-labelledby="s10">
+        <div class="eyebrow kicker">09 / Implementation boundary</div>
+        <h2 id="s10">관계 선언 ≠ <span class="accent">자동 JOIN</span></h2>
+        <div class="grid two">
+          <div class="card"><div class="step-num">생성하는 것</div><h3>논리 관계 타입</h3><p>생성기는 Customer와 Product 사이의 관계 정의를 만들고 <code>derived_via</code>를 <strong>설명 문자열</strong>에 반영합니다.</p></div>
+          <div class="card accent-card"><div class="step-num">이 랩에서 생성하지 않는 것</div><h3>실행 가능한 다중 홉 연결</h3><p>이 논리 관계를 위한 Contextualization이나 실행 가능한 JOIN은 생성하지 않습니다. 관계 인스턴스가 자동 생성·탐색된다고 보장할 수 없습니다.</p></div>
+        </div>
+        <div class="note">실제 연결은 원천 테이블 질의 또는 해당 환경에서 지원되는 실행 경로로 검증합니다. 이는 이 랩 생성기의 범위이며, 모든 Fabric 버전의 기능 한계를 뜻하지 않습니다.</div>
+      </section>
+
+      <section class="slide" aria-labelledby="s11">
+        <div class="eyebrow kicker">10 / Verification</div>
+        <h2 id="s11">실제 연결은 <span class="accent">원천 데이터로 확인</span>합니다</h2>
+        <div class="grid two">
+          <pre><code>SELECT DISTINCT
+    c.customer_id, p.product_id, p.product_name
+FROM customers AS c
+JOIN orders AS o
+    ON o.customer_id = c.customer_id
+JOIN order_items AS oi
+    ON oi.order_id = o.order_id
+JOIN products AS p
+    ON p.product_id = oi.product_id;</code></pre>
+          <div class="card">
+            <div class="step-num">INTERPRETATION</div><h3>이 쿼리가 보여 주는 것</h3>
+            <ul><li>주문에 포함된 <strong>고객–상품 쌍</strong>을 확인합니다.</li><li><code>DISTINCT</code>는 반복 주문을 하나의 쌍으로 합칩니다.</li><li>주문별 이력과 수량은 별도 집계 단위가 필요합니다.</li><li>“구매 완료”라면 결제·취소·반품 기준을 추가로 정의해야 합니다.</li></ul>
+          </div>
+        </div>
+        <p class="small muted">예시 SQL은 논리 경로 검증용이며 완결된 구매 판정 규칙이 아닙니다.</p>
+      </section>
+
+      <section class="slide hero" aria-labelledby="s12">
+        <div class="eyebrow kicker">11 / Takeaway</div>
+        <h2 id="s12">의미를 정의하고,<br><span class="accent">실제 연결은 검증합니다.</span></h2>
+        <div class="grid three">
+          <div class="card"><div class="step-num">01</div><h3>Ontology</h3><p>업무 개념·관계와 원천 매핑을 공유하는 의미 계층</p></div>
+          <div class="card"><div class="step-num">02</div><h3>다중 홉</h3><p>Customer → Order → OrderItem → Product를 업무 관계로 설명</p></div>
+          <div class="card"><div class="step-num">03</div><h3>구현 경계</h3><p>이 랩의 논리 관계 선언은 실행 가능한 JOIN과 다름</p></div>
+        </div>
+        <div class="source-links small">
+          <span class="small-label">참고 자료</span>
+          <a href="https://learn.microsoft.com/en-us/fabric/iq/ontology/overview">Microsoft Learn · Ontology 개요 ↗</a>
+          <a href="https://learn.microsoft.com/en-us/fabric/iq/ontology/how-to-bind-data">Microsoft Learn · 데이터 바인딩 ↗</a>
+          <a href="../ontology_bundle/ontology_contract.yaml">랩 · Ontology 계약 ↗</a>
+          <a href="../ontology_bundle/generate_definition.py">랩 · 정의 생성기 ↗</a>
+          <a href="../WORKBOOK.md">랩 · Track1 Workbook ↗</a>
+        </div>
+        <p class="small muted">Fabric Ontology는 프리뷰이며 제품 경험과 정의 형식은 변경될 수 있습니다.</p>
+      </section>
+    </div>
+    <nav class="controls" aria-label="슬라이드 탐색">
+      <button id="prev" type="button" aria-label="이전 슬라이드">← 이전</button>
+      <div id="counter" class="counter" aria-live="polite"></div>
+      <button id="next" type="button" aria-label="다음 슬라이드">다음 →</button>
+      <div class="progress" aria-hidden="true"><span id="progress"></span></div>
+      <span class="hint">← → 방향키 · Home / End · 인쇄 시 전체 슬라이드</span>
+    </nav>
+  </main>
+  <script>
+    (() => {
+      const slides = Array.from(document.querySelectorAll(".slide"));
+      const prev = document.getElementById("prev");
+      const next = document.getElementById("next");
+      const counter = document.getElementById("counter");
+      const progress = document.getElementById("progress");
+      const initial = Number.parseInt(window.location.hash.slice(1), 10);
+      let index = Number.isFinite(initial) ? Math.min(slides.length - 1, Math.max(0, initial - 1)) : 0;
+      document.documentElement.classList.add("js");
+
+      function showSlide(nextIndex) {
+        index = Math.min(slides.length - 1, Math.max(0, nextIndex));
+        slides.forEach((slide, i) => { slide.hidden = i !== index; });
+        prev.disabled = index === 0;
+        next.disabled = index === slides.length - 1;
+        counter.textContent = `${String(index + 1).padStart(2, "0")} / ${String(slides.length).padStart(2, "0")}`;
+        progress.style.width = `${(index + 1) / slides.length * 100}%`;
+        history.replaceState(null, "", `#${index + 1}`);
+      }
+
+      prev.addEventListener("click", () => showSlide(index - 1));
+      next.addEventListener("click", () => showSlide(index + 1));
+      document.addEventListener("keydown", (event) => {
+        if (event.altKey || event.ctrlKey || event.metaKey || event.target.closest("input, textarea, select, [contenteditable]")) return;
+        if (event.key === "ArrowRight" || event.key === "PageDown") { event.preventDefault(); showSlide(index + 1); }
+        if (event.key === "ArrowLeft" || event.key === "PageUp") { event.preventDefault(); showSlide(index - 1); }
+        if (event.key === "Home") { event.preventDefault(); showSlide(0); }
+        if (event.key === "End") { event.preventDefault(); showSlide(slides.length - 1); }
+      });
+      window.addEventListener("hashchange", () => {
+        const target = Number.parseInt(window.location.hash.slice(1), 10);
+        if (Number.isFinite(target)) showSlide(target - 1);
+      });
+      showSlide(index);
+    })();
+  </script>
+</body>
+</html>

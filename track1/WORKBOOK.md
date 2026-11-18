@@ -14,6 +14,7 @@
 - End-to-End 실습 노트북: [Track1_EndToEnd_Learner_Notebook.ipynb](./Track1_EndToEnd_Learner_Notebook.ipynb)
 - 데이터 구조 상세 설명: [Track1_Data_Structure_Detailed_Guide.md](./docs/Track1_Data_Structure_Detailed_Guide.md)
 - 온톨로지 개념/그래프 가이드: [Track1_Ontology_Concepts_and_Graph_Design_Guide.md](./docs/Track1_Ontology_Concepts_and_Graph_Design_Guide.md)
+- 온톨로지 표현 및 다중 홉 예제 슬라이드: [Fabric Ontology HTML 슬라이드](./docs/fabric_ontology_slides.html)
 - Track2 시작 인계 체크: [PREREQUISITES.md](../track2/PREREQUISITES.md)
 - 공통 설계 의도: [데이터 구조 설계 의도](./docs/Track1_Data_Structure_Detailed_Guide.md#design-intent)
 - 고급 기준 시나리오: [End-to-End 복합 관계 시나리오](./docs/Track1_Data_Structure_Detailed_Guide.md#advanced-scenario)

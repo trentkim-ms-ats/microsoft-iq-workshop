@@ -38,6 +38,10 @@ Track1 FabricIQ → Track2 WorkIQ → Track3 WebIQ → Track4 FoundryIQ
 [Track3](track3/WORKBOOK.md),
 [Track4](track4/WORKBOOK.md) 실습지를 따릅니다.
 
+스피커가 승인된 클라우드 환경을 구성해 네 트랙을 시연하는 방법은
+[스피커 데모 가이드](demo/README.md)와 [HTML 슬라이드](demo/slides.html)를 참조하세요.
+참가자 실습과 달리 스피커가 조작하며, 실제 호출과 simulation을 구분합니다.
+
 ### 인터랙티브 Playground
 
 [`industry_playground/`](industry_playground/)는 Ontology Playground와 유사한 학습 경험으로
